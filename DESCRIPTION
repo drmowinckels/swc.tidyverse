@@ -18,12 +18,11 @@ Suggests:
     knitr,
     roxygen2,
     usethis,
-    remotes,
-    rlang (>= 0.4.11.9000)
+    remotes
 RoxygenNote: 7.1.1
 Imports: 
     learnr,
     gradethis
 Remotes:
     rstudio/gradethis,
-    r-lib/rlang 
+    r-lib/rlang (>= 0.4.11.9000)
