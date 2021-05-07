@@ -1,0 +1,401 @@
+---
+title: "Pivoting data - long and wide formats"
+output: 
+  learnr::tutorial:
+    progressive: true 
+    allow_skip: true 
+runtime: shiny_prerendered
+description: |
+  Changing the shape of your data is often necessary for certain other functions
+  to work best, or just to tidy up the data. This tutorial covers the two
+  pivot functions in the tidyverse to help you get the data from long to wide, and vice versa.
+---
+
+```{r setup, include=FALSE}
+library(swc.tidyverse)
+library(learnr)
+library(gradethis)
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  exercise.warn_invisible = FALSE
+)
+
+# enable code checking
+tutorial_options(
+  exercise.checker = grade_learnr,
+  exercise.lines = 8,
+  exercise.reveal_solution = TRUE
+)
+
+penguins_long <- penguins %>% 
+  mutate(smaple = row_number()) %>% 
+  pivot_longer(contains("_"),
+               names_to = c("part", "measure" , "unit"),
+               names_sep = "_")
+
+penguins_long_simple <- penguins %>% 
+  mutate(smaple = row_number()) %>% 
+  pivot_longer(contains("_"))
+```
+
+
+
+## Challenge 1
+### 1a
+> Read in the penguins data set from file.
+
+```{r read-1a, exercise = TRUE}
+penguin_path <- palmerpenguins::path_to_file("penguins.csv" )
+read.csv(__, header = TRUE)
+```
+
+```{r read-1a-solution}
+penguin_path <- palmerpenguins::path_to_file("penguins.csv" )
+read.csv(penguin_path, header = TRUE)
+```
+
+```{r read-1a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r read-1a-hint-1}
+Make sure you provide the object with the path saved in it to read.csv.
+```
+
+
+### 1b
+> Read in the penguins raw data set from file
+
+```{r read-1b, exercise = TRUE}
+penguin_path <- palmerpenguins::path_to_file(__)
+read.csv(__, header = TRUE)
+```
+
+```{r read-1b-solution}
+penguin_path <- palmerpenguins::path_to_file("penguins_raw.csv" )
+read.csv(penguin_path, header = TRUE)
+```
+
+```{r read-1b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r read-1b-hint-1}
+Make sure you provide the object with the path saved in it to read.csv.
+```
+
+```{r read-1b-hint-2}
+Did you change the file to look for to "penguins_raw.csv"?
+```
+
+### 1c
+> Read in the penguins data set from file and assign it to the object `penguins`
+
+```{r read-1c, exercise = TRUE}
+penguin_path <- palmerpenguins::path_to_file(__)
+read.csv(__, header = TRUE)
+```
+
+```{r read-1b-solution}
+penguin_path <- palmerpenguins::path_to_file("penguins.csv" )
+penguins <- read.csv(penguin_path, header = TRUE)
+```
+
+```{r read-1b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r read-1b-hint-1}
+Make sure you provide the object with the path saved in it to read.csv.
+```
+
+```{r read-1b-hint-2}
+Did you change the file to look for to "penguins.csv"?
+```
+
+```{r read-1b-hint-3}
+Make sure you assign the output of `read.csv` to `penguins` using `<-`
+```
+
+
+## Challenge 2
+### 2a
+> Start by pivoting the penguins data so that all the bill measurements (starts with "bill") are in the same column.
+
+```{r pivot-l-2a, exercise = TRUE}
+penguins %>% 
+  pivot_longer(_)
+```
+
+```{r pivot-l-2a-solution}
+penguins %>% 
+  pivot_longer(starts_with("bill"))
+```
+
+```{r pivot-l-2a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r pivot-l-2a-hint-1}
+Have you selected the columns using `starts_with()`?
+```
+
+```{r pivot-l-2a-hint-2}
+Do not worry about column naming, just get the measures into a column, and the measure names into another. 
+```
+
+### 2b
+> Pivot longer all columns with an underscore.
+
+```{r pivot-l-2b, exercise = TRUE}
+penguins %>% 
+  pivot_longer(_)
+```
+
+```{r pivot-l-2b-solution}
+penguins %>% 
+  pivot_longer(contains("_"))
+```
+
+```{r pivot-l-2b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r pivot-l-2b-hint-1}
+Have you selected the columns using `contains()`?
+```
+
+```{r pivot-l-2b-hint-2}
+Do not worry about column naming, just get the measures into a column, and the measure names into another. 
+```
+
+### 2c
+> As mentioned, pivot_longer accepts tidy-selectors. Pivot longer all numerical columns.
+
+```{r pivot-l-2c, exercise = TRUE}
+penguins %>% 
+  pivot_longer(_)
+```
+
+```{r pivot-l-2c-solution}
+penguins %>% 
+  pivot_longer(where(is.numeric))
+```
+
+```{r pivot-l-2c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r pivot-l-2c-hint-1}
+Do you remember the `where` and `is.numeric` functions?
+```
+
+```{r pivot-l-2c-hint-2}
+Try using `where(is.numeric)`
+```
+
+## Challenge 3
+### 3a
+> Pivot longer all the bill measurements, and alter the names in one go, so that there are three columns named "part", "measure" and "unit" after the pivot.
+
+```{r pivot-l-3a, exercise = TRUE}
+penguins %>% 
+  pivot_longer(_,
+               names_to = c(_, _ , _),
+               names_sep = _)
+```
+
+```{r pivot-l-3a-solution}
+penguins %>% 
+  pivot_longer(starts_with("bill"),
+               names_to = c("part", "measure" , "unit"),
+               names_sep = "_")
+```
+
+```{r pivot-l-3a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r pivot-l-3a-hint-1}
+Have you selected the columns using `starts_with()`?
+```
+
+### 3b
+> Pivot longer all the bill measurements, and use the `names_prefix` argument. Give it the string "bill_". What did that do?
+
+```{r pivot-l-3b, exercise = TRUE}
+penguins %>% 
+  pivot_longer(_,
+               names__ = "_")
+```
+
+```{r pivot-l-3b-solution}
+penguins %>% 
+  pivot_longer(starts_with("bill"),
+               names_prefix = "bill_")
+```
+
+```{r pivot-l-3b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r pivot-l-3b-hint-1}
+be sure to use `names_prefix = "bill_"`
+```
+
+### 3c
+> Pivot longer all the bill measurements, and use the `names_prefix`, `names_to` and `names_sep` arguments. What do you need to change in `names_to` from the previous example to make it work now that we also use `names_prefix`?
+
+```{r pivot-l-3c, exercise = TRUE}
+penguins %>% 
+  pivot_longer(starts_with("bill"),
+               names_prefix = _,
+               names_to = ,
+               names_sep = _)
+```
+
+```{r pivot-l-3c-solution}
+penguins %>% 
+  pivot_longer(starts_with("bill"),
+               names_prefix = "bill_",
+               names_to = c("bill_measure" , "unit"),
+               names_sep = "_")
+```
+
+```{r pivot-l-3c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r pivot-l-3c-hint-1}
+Now that the "bill_" prefix is removed, there are only two columns produced and not three!
+```
+
+```{r pivot-l-3c-hint-2}
+To be clear about the column content, name the first pivoted column "bill_measure".
+```
+
+
+
+## Challenge 4
+
+### 4a
+> Turn the penguins_long_simple dataset back to its original state
+
+```{r pivot-w-4a, exercise = TRUE}
+penguins_long_simple %>% 
+  pivot_wider(_ = _,
+              _ = _)
+```
+
+```{r pivot-w-4a-solution}
+penguins_long_simple %>% 
+  pivot_wider(names_from = name,
+              values_from = value)
+```
+
+```{r pivot-w-4a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r pivot-w-4a-hint-1}
+Make sure you spell all column names correctly
+```
+
+
+## Challenge 5
+
+### 5a
+> Turn the penguins_long dataset back to its original state
+
+```{r pivot-w-5a, exercise = TRUE}
+penguins_long %>% 
+  pivot_wider(_ = _,
+              _ = _,
+              _ = _)
+```
+
+```{r pivot-w-5a-solution}
+penguins_long %>% 
+  pivot_wider(names_from = c("part", "measure", "unit"),
+              names_sep = "_",
+              values_from = value)
+```
+
+```{r pivot-w-5a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r pivot-w-5a-hint-1}
+Make sure you spell all column names correctly
+```
+
+
+<!-- ## Quiz -->
+
+<!-- ```{r quiz} -->
+<!-- quiz( -->
+<!--   question("What functions can you use to subset a data set by rows?", -->
+<!--     answer("dplyr's `filter()`", correct = TRUE), -->
+<!--     answer("dplyr's `select()`"), -->
+<!--     answer("`subset()`", correct = TRUE),
+    allow_retry = TRUE -->
+<!--   ), -->
+<!--   question("What functions can you use to subset a data set by columns", -->
+<!--     answer("dplyr's `filter()`"), -->
+<!--     answer("dplyr's `select()`", correct = TRUE), -->
+<!--     answer("`subset()`", correct = TRUE),
+    allow_retry = TRUE -->
+<!--   ), -->
+<!--   question("If you want to select all columns in data 'df' that contains the string 'something', you can do that by", -->
+<!--     answer("`df[grepl('something', names(df))]`", correct = TRUE), -->
+<!--     answer("`select(df, starts_with('something')`"), -->
+<!--     answer("`df[,'something']`"), -->
+<!--     answer("`select(df, contains('something')`", correct = TRUE),
+    allow_retry = TRUE -->
+<!--   ), -->
+<!--     question("If you want to subset rows so that you only have those below 18 years of age, you can do that by", -->
+<!--     answer("`df$age < 18`"), -->
+<!--     answer("`filter(df, age < 18)`", correct = TRUE), -->
+<!--     answer("`df[df$age < 18,]`", correct = TRUE), -->
+<!--     answer("`filter(df, age <= 18)`"),
+    allow_retry = TRUE -->
+<!--   )
+<!-- ) -->
+<!-- ``` -->
+
+
+

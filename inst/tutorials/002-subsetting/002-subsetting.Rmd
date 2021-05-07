@@ -2,7 +2,6 @@
 title: "Subsetting data"
 output: 
   learnr::tutorial:
-   # css: css/uio.css
     progressive: true # third level heading (###) is progressively revealed
     allow_skip: true # allows skipping exercises
 runtime: shiny_prerendered
@@ -13,171 +12,64 @@ description: |
 ---
 
 ```{r setup, include=FALSE}
-
-library(tidyquintro)
+library(swc.tidyverse)
 library(learnr)
 library(gradethis)
 
-knitr::opts_chunk$set(echo = FALSE,
-                 exercise.warn_invisible = FALSE)
+knitr::opts_chunk$set(
+  echo = FALSE,
+  exercise.warn_invisible = FALSE
+)
 
 # enable code checking
-tutorial_options(exercise.checker = grade_learnr)
-```
-
-
-## Subsetting rows - filter
-
-Let us start with some exercises in filtering, i.e. subsetting rows. 
-Fill in the code below so that you subset the data by the `species` column, so you only have the gentoo's in your output.
-
-```{r filter1, exercise = TRUE, exercise.lines = 3}
-filter(penguins, __ == "Gentoo")
-```
-
-```{r filter1-solution}
-filter(penguins, species == "Gentoo")
-```
-
-```{r filter1-check}
-grade_code(
-  correct = random_praise(),
-  incorrect = random_encouragement()
+tutorial_options(
+  exercise.checker = grade_learnr,
+  exercise.lines = 8,
+  exercise.reveal_solution = TRUE
 )
 ```
 
-```{r filter1-hint-1}
-the column names is 'species'
-```
-
-```{r filter1-hint-2}
-When evaluating something as TRUE or FALSE, remember to use '==' and not '='
-```
-
-### Subset evaluating numerical columns
-
-When we are subsetting based on numerical columns, we can use arithmetic evaluations. 
-Complete the code below so you are left with only data where the flipper length is larger that 180.
-
-```{r filter2, exercise = TRUE, exercise.lines = 3}
-filter(penguins, flipper_length_mm _ 180)
-```
-
-```{r filter2-solution}
-filter(penguins, flipper_length_mm > 180)
-```
-
-```{r filter2-check}
-grade_code(
-  correct = random_praise(),
-  incorrect = random_encouragement()
-)
-```
-
-```{r filter2-hint-1}
-arithmetic evaluations can be done with '==', '>', '<'
-```
-
-
-### Subset evaluating numerical columns 2
-
-The above code will not include any row where flipper length is _exactly_ 180. 
-For this to happen you have to indicate that it can be larger or equal to 180.
-
-```{r filter3, exercise = TRUE, exercise.lines = 3}
-filter(penguins, flipper_length_mm >_ 180)
-```
-
-```{r filter3-solution}
-filter(penguins, flipper_length_mm >= 180)
-```
-
-```{r filter3-check}
-grade_code(
-  correct = random_praise(),
-  incorrect = random_encouragement()
-)
-```
-
-```{r filter3-hint-1}
-arithmetic evaluations can also be done with '>=' (larger than) and '<=' (smaller than)
-```
-
-
-### Subset with multiple conditions
-
-We can add several conditions when we are evaluating. 
-Using a comma (','), each expression must be TRUE for the end result.
-Here, choose all data where flipper length is larger or equal to 180, and the species is "Gentoo"
-
-```{r filter4, exercise = TRUE, exercise.lines = 3}
-filter(penguins, 
-       flipper_length_mm __ 180,
-       ____ == "Gentoo")
-```
-
-```{r filter4-solution}
-filter(penguins, 
-       flipper_length_mm >= 180,
-       species == "Gentoo")
-```
-
-```{r filter4-check}
-grade_code(
-  correct = random_praise(),
-  incorrect = random_encouragement()
-)
-```
-
-```{r filter4-hint-1}
-make sure each expressions works individually, if you are not succeeding
-```
-
-```{r filter4-hint-2}
-separate the different expressions with a comma
-```
-
-
-## Subsetting columns - select
+## Challenge 1 
+### 1a
 
 Subsetting columns is a great way to reduce karge datasets to more manageable sizes. 
 Using the `select()` function from dplyr, select the first, second, fourth and sixth column from the penguins dataset
 using their numerical values.
 
-```{r select1, exercise = TRUE, exercise.lines = 3}
+```{r select_1a, exercise = TRUE,}
 select(penguins, _, _, _, _)
 ```
 
-```{r select1-solution}
+```{r select_1a-solution}
 select(penguins, 1, 2, 4, 6)
 ```
 
-```{r select1-check}
+```{r select_1a-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r select1-hint-1}
+```{r select_1a-hint-1}
 Each column number should be separated by a comma
 ```
 
-### Subsetting ranges
+### 1b
 
 Sometimes we want to subset whole ranges, and maybe a couple of extra columns.
 We can do this usind the colon. 
 Complete the code below so you select columns 1 through 4, and also column 6.
 
-```{r select2, exercise = TRUE, exercise.lines = 3}
+```{r select_1b, exercise = TRUE,}
 select(penguins, _:_, _)
 ```
 
-```{r select2-solution}
+```{r select_1b-solution}
 select(penguins, 1:4, 6)
 ```
 
-```{r select2-check}
+```{r select_1b-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
@@ -185,7 +77,7 @@ grade_code(
 ```
 
 
-### Subsetting ranges
+### 1c
 
 While using numbers for the columns can be convenient, in most cases you'll likely want to base your selection on the names of column.
 The syntax you learned above works exactly the same for column names.
@@ -193,88 +85,479 @@ Take the same code as before, but this time instead of using the index numbers f
 
 Column 1 is `species`, column 4 is `bill_depth_mm`, and column 6 is `body_mass_g`
 
-```{r select3, exercise = TRUE, exercise.lines = 3}
+```{r select_1c, exercise = TRUE,}
 select(penguins, _:_, _)
 ```
 
-```{r select3-solution}
+```{r select_1c-solution}
 select(penguins, species:bill_depth_mm, body_mass_g)
 ```
 
-```{r select3-check}
+```{r select_1c-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-### Subsetting based on naming convention
+## Challenge 2
+### 2a
 
 Other times, is might be handy to grab columns based on their naming.
 If you are lucky, your dataset has some overarching naming convention, that makes it possible to grab columns based on their names.
 
 Complete the code below so that you are selecting species, island and all the columns starting with "bill".
 
-```{r select4, exercise = TRUE, exercise.lines = 3}
+```{r select-2a, exercise = TRUE,}
 select(penguins, _, _, starts_with("_"))
 ```
 
-```{r select4-solution}
+```{r select-2a-solution}
 select(penguins, species, island, starts_with("bill"))
 ```
 
-```{r select4-check}
+```{r select-2a-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-### Subsetting based on naming convention 2
+### 2b
 
 Now we lost flipper length! to make sure we keep flipper length, instead select columns what end with "mm".
 
-```{r select5, exercise = TRUE, exercise.lines = 3}
+```{r select-2b, exercise = TRUE,}
 select(penguins, _, _, ends_with("_"))
 ```
 
-```{r select5-solution}
+```{r select-2b-solution}
 select(penguins, species, island, ends_with("mm"))
 ```
 
 
-```{r select5-check}
+```{r select-2b-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-### Selecting based on column type
+### 2c
+
+Take the same code below, and add to it the tidy-selector `everything()`, what does it do?
+
+```{r select-2c, exercise = TRUE,}
+select(penguins, _, _, ends_with("_"))
+```
+
+```{r select-2c-solution}
+select(penguins, species, island, ends_with("mm"), everything())
+```
+
+
+```{r select-2c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+### `everything()`
+This function is a tidyselector that select all columns not yet mentioned. 
+It's a very convenient way of re-arranging your columns, so that you keep everything, but the columns you are most interested in are at the beginning of the data.
+
+## Challenge 3
+### 3a
 
 We should get a better idea of what columns in our data are coded as what.
 Particularly factors, what columns are factors in this data set?
 
 Complete the code to select only columns that are factors.
 
-```{r select7, exercise = TRUE, exercise.lines = 3}
+```{r select-3a, exercise = TRUE,}
 select(penguins, where(is._))
 ```
 
-```{r select7-solution}
+```{r select-3a-solution}
 select(penguins, where(is.factor))
 ```
 
 
-```{r select7-check}
+```{r select-3a-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r select7-hint}
+```{r select-3a-hint}
 the function to checking if a vector is a function is `is.vector`
+```
+
+### 3b
+
+Select only columns that are integerr
+
+```{r select-3b, exercise = TRUE,}
+select(penguins, where(is._))
+```
+
+```{r select-3b-solution}
+select(penguins, where(is.integer))
+```
+
+
+```{r select-3b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r select-3b-hint}
+Try using the `is.integer` function.
+```
+
+### 3c
+
+Select only columns that are integer
+
+```{r select-3c, exercise = TRUE,}
+select(penguins, _, _, where(_))
+```
+
+```{r select-3c-solution}
+select(penguins, island, species, where(is.numeric))
+```
+
+
+```{r select-3c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r select-3c-hint}
+Try using the `is.numeric` function.
+```
+
+## Challenge 4
+### 4a
+Let us start with some exercises in filtering, i.e. subsetting rows. 
+Fill in the code below so that you subset the data by the `species` column, so you only have the gentoo's in your output.
+
+```{r filter-4a, exercise = TRUE,}
+filter(penguins, __ __ "Gentoo")
+```
+
+```{r filter-4a-solution}
+filter(penguins, species == "Gentoo")
+```
+
+```{r filter-4a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r filter-4a-hint-1}
+the column names is 'species'
+```
+
+```{r filter-4a-hint-2}
+When evaluating something as TRUE or FALSE, remember to use '==' and not '='
+```
+
+### 4b
+
+When we are subsetting based on numerical columns, we can use arithmetic evaluations. 
+Complete the code below so you are left with only data where the flipper length is larger than 180.
+
+```{r filter-4b, exercise = TRUE,}
+filter(penguins, flipper_length_mm _ 180)
+```
+
+```{r filter-4b-solution}
+filter(penguins, flipper_length_mm > 180)
+```
+
+```{r filter-4b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r filter-4b-hint-1}
+arithmetic evaluations can be done with '==', '>', '<'
+```
+
+
+### 4c
+
+The above code will not include any row where flipper length is _exactly_ 180. 
+For this to happen you have to indicate that it can be larger or equal to 180.
+
+```{r filter-4c, exercise = TRUE,}
+filter(penguins, flipper_length_mm >_ 180)
+```
+
+```{r filter-4c-solution}
+filter(penguins, flipper_length_mm >= 180)
+```
+
+```{r filter-4c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r filter-4c-hint-1}
+arithmetic evaluations can also be done with '>=' (larger than or equal to) and '<=' (smaller than or equal to)
+```
+
+## Challenge 5
+### 5a
+
+Using a comma (','), each expression must be TRUE for the end result.
+Choose all data where flipper length is larger or equal to 180, and the species is "Gentoo"
+
+```{r filter-5a, exercise = TRUE,}
+filter(penguins, 
+       flipper_length_mm __ 180_
+       ____ == "Gentoo")
+```
+
+```{r filter-5a-solution}
+filter(penguins, 
+       flipper_length_mm >= 180,
+       species == "Gentoo")
+```
+
+```{r filter-5a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r filter-5a-hint-1}
+make sure each expressions works individually, if you are not succeeding
+```
+
+```{r filter-5a-hint-2}
+separate the different expressions with a comma
+```
+
+### 5b
+
+> Do the same using the `&` (and)  sign.
+
+```{r filter-5b, exercise = TRUE,}
+filter(penguins, 
+       flipper_length_mm >= 180,
+       species == "Gentoo")
+```
+
+```{r filter-5b-solution}
+filter(penguins, 
+       flipper_length_mm >= 180 &
+         species == "Gentoo")
+```
+
+```{r filter-5b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r filter-5b-hint-1}
+make sure each expressions works individually, if you are not succeeding
+```
+
+```{r filter-5b-hint-2}
+separate the different expressions with a `&`
+```
+
+### 5c
+
+> Filter the penguins data so that you have either chinstrap penguins, or penguins with body mass below or equal to 3 kilos.
+
+```{r filter-5c, exercise = TRUE,}
+filter(penguins, 
+       species __ "Chinstrap" _ body_mass_g __ 3000)
+```
+
+```{r filter-5c-solution}
+filter(penguins, 
+       species == "Chinstrap" | body_mass_g < 3000
+)
+```
+
+```{r filter-5c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r filter-5c-hint-1}
+make sure each expressions works individually, if you are not succeeding
+```
+
+```{r filter-5c-hint-2}
+separate the different expressions with a `|`
+```
+
+## Challenge 6
+### 6a
+> Create an object named `gentoos` that contains only data from the speces "Gentoo" in the penguins data set.
+
+```{r filter-6a, exercise = TRUE,}
+gentoos <- filter(penguins,
+                  __ == __)
+```
+
+```{r filter-6a-solution}
+gentoos <- filter(penguins,
+                  species == "Gentoo")
+```
+
+```{r filter-6a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r filter-6a-hint-1}
+make sure you spell `species` in small letters and `Gentoo` with capital G! R is case-sensitive.
+```
+
+### 6b
+> Create another object with only penguins that are over 4 kilos, and call it `large_penguins`.
+
+```{r filter-6b, exercise = TRUE,}
+__ <- filter(penguins, 
+             body_mass_g _ ___)
+```
+
+```{r filter-6b-solution}
+large_penguins <- filter(penguins, 
+                         body_mass_g > 4000)
+```
+
+```{r filter-6b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+### 6c
+> Create a third object with observations from the Dream island, and keep only the columns island, and the bill measurements, and call it `dream_penguins`. Do all this by chaining the commands with the pipe.
+
+```{r filter-6c, exercise = TRUE,}
+__ <- penguins __
+filter(__ == "_") __ 
+select(_, __("bill"))
+```
+
+```{r filter-6c-solution}
+dream_penguins <- penguins %>% 
+  filter(island == "Dream") %>% 
+  select(island, starts_with("bill"))
+```
+
+```{r filter-6c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r filter-6c-hint-1}
+make sure you spell `species` in small letters and `Gentoo` with capital G! R is case-sensitive.
+```
+
+## Challenge 7
+### 7a
+> Arrange the penguins data by body mass.
+
+```{r filter-7a, exercise = TRUE,}
+penguins %>% 
+  __(body_mass_g)
+```
+
+```{r filter-7a-solution}
+penguins %>% 
+  arrange(body_mass_g)
+```
+
+```{r filter-7a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r filter-7a-hint-1}
+use the `arrange` function
+```
+
+### 7b
+> Arrange the penguins data by descending order of flipper length.
+
+```{r filter-7b, exercise = TRUE,}
+penguins %>% 
+  __(__(flipper_length_mm))
+```
+
+```{r filter-7b-solution}
+penguins %>% 
+  arrange(desc(flipper_length_mm))
+```
+
+```{r filter-7b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r filter-7b-hint-1}
+use the `arrange` function
+```
+
+### 7c
+> You can arrange on multiple columns. Try arranging the data by ascending island and descending flipper length.
+
+```{r filter-7c, exercise = TRUE,}
+penguins %>% 
+  __(island,
+     __(flipper_length_mm))
+```
+
+```{r filter-7c-solution}
+penguins %>% 
+  arrange(island,
+          desc(flipper_length_mm))
+```
+
+```{r filter-7c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r filter-7c-hint-1}
+use two arguments, with a comma in between.
 ```
 
 ## Quiz
@@ -282,30 +565,30 @@ the function to checking if a vector is a function is `is.vector`
 ```{r quiz}
 quiz(
   question("What functions can you use to subset a data set by rows?",
-    answer("dplyr's `filter()`", correct = TRUE),
-    answer("dplyr's `select()`"),
-    answer("`subset()`", correct = TRUE),
-    allow_retry = TRUE
+           answer("dplyr's `filter()`", correct = TRUE),
+           answer("dplyr's `select()`"),
+           answer("`subset()`", correct = TRUE),
+           allow_retry = TRUE
   ),
   question("What functions can you use to subset a data set by columns",
-    answer("dplyr's `filter()`"),
-    answer("dplyr's `select()`", correct = TRUE),
-    answer("`subset()`", correct = TRUE),
-    allow_retry = TRUE
+           answer("dplyr's `filter()`"),
+           answer("dplyr's `select()`", correct = TRUE),
+           answer("`subset()`", correct = TRUE),
+           allow_retry = TRUE
   ),
   question("If you want to select all columns in data 'df' that contains the string 'something', you can do that by",
-    answer("`df[grepl('something', names(df))]`", correct = TRUE),
-    answer("`select(df, starts_with('something')`"),
-    answer("`df[,'something']`"),
-    answer("`select(df, contains('something')`", correct = TRUE),
-    allow_retry = TRUE
+           answer("`df[grepl('something', names(df))]`", correct = TRUE),
+           answer("`select(df, starts_with('something')`"),
+           answer("`df[,'something']`"),
+           answer("`select(df, contains('something')`", correct = TRUE),
+           allow_retry = TRUE
   ),
-    question("If you want to subset rows so that you only have those below 18 years of age, you can do that by",
-    answer("`df$age < 18`"),
-    answer("`filter(df, age < 18)`", correct = TRUE),
-    answer("`df[df$age < 18,]`", correct = TRUE),
-    answer("`filter(df, age <= 18)`"),
-    allow_retry = TRUE
+  question("If you want to subset rows so that you only have those below 18 years of age, you can do that by",
+           answer("`df$age < 18`"),
+           answer("`filter(df, age < 18)`", correct = TRUE),
+           answer("`df[df$age < 18,]`", correct = TRUE),
+           answer("`filter(df, age <= 18)`"),
+           allow_retry = TRUE
   )
 )
 ```

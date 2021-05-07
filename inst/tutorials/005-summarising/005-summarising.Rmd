@@ -1,0 +1,600 @@
+---
+title: "Summarising data"
+output: 
+  learnr::tutorial:
+    progressive: true 
+    allow_skip: true 
+runtime: shiny_prerendered
+description: |
+  Getting some good summaries of your data is a nice way to quickly get an iadea of what you are working with.
+  This tutorial covers some of the ways you can summarise data using the tidyverse.
+---
+
+```{r setup, include=FALSE}
+library(swc.tidyverse)
+library(learnr)
+library(gradethis)
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  exercise.warn_invisible = FALSE
+)
+
+# enable code checking
+tutorial_options(
+  exercise.checker = grade_learnr,
+  exercise.lines = 8,
+  exercise.reveal_solution = TRUE
+)
+```
+
+## Challenge 1
+### 1a 
+> First start by trying to summarise a single column, `bill_length_mm` by calculating its mean.
+
+```{r sum-1a, exercise = TRUE}
+penguins %>% 
+  summarise(_(_, na.rm = _))
+```
+
+```{r sum-1a-solution}
+penguins %>% 
+  summarise(mean(bill_length_mm, na.rm = TRUE))
+```
+
+```{r sum-1a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r sum-1a-hint-1}
+'Did you remember to place the function first, then the colum name inside the function?'
+```
+
+### 1b
+> add a column with the standard deviation of bill length.
+
+```{r sum-1b, exercise = TRUE}
+penguins %>% 
+  summarise(
+    mean(bill_length_mm, na.rm = TRUE),
+    _(_, na.rm = _),
+  )
+```
+
+```{r sum-1b-solution}
+penguins %>% 
+  summarise(
+    mean(bill_length_mm, na.rm = TRUE),
+    sd(bill_length_mm, na.rm = TRUE)
+  )
+```
+
+```{r sum-1b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r sum-1b-hint-1}
+The function for standard deviation is `sd()`
+```
+
+### 1c
+> Now add the same tro metrics for  bill depth and give the columns clear names
+
+```{r sum-1c, exercise = TRUE}
+penguins %>% 
+  summarise(
+    bill_length__ = mean(bill_length_mm, na.rm = TRUE),
+    bill_length__ = sd(bill_length_mm, na.rm = TRUE),
+    _ = mean(__, na.rm = TRUE),
+    
+    _ = sd(__, na.rm = TRUE)
+  )
+```
+
+```{r sum-1c-solution}
+penguins %>% 
+  summarise(
+    bill_length_mean = mean(bill_length_mm, na.rm = TRUE),
+    bill_length_sd = sd(bill_length_mm, na.rm = TRUE),
+    bill_depth_mean = mean(bill_depth_mm, na.rm = TRUE),
+    bill_depth_sd = sd(bill_depth_mm, na.rm = TRUE)
+  )
+```
+
+```{r sum-1c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r sum-1c-hint-1}
+The function for standard deviation is `sd`
+```
+
+
+## Challenge 2
+
+### 2a
+> Get the mean of all columns containing an underscore ("_")
+
+```{r sum-2a, exercise = TRUE}
+penguins %>% 
+  summarise(across(__, 
+                     .fns = ~ __))
+```
+
+```{r sum-2a-solution}
+penguins %>% 
+  summarise(across(contains("_"), 
+                   .fns = ~ mean(.x, na.rm = TRUE)))
+```
+
+```{r sum-2a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r sum-2a-hint-1}
+Remember to use the tidy selectors like "ends_with", "contains", and "starts_with"
+```
+
+```{r sum-2a-hint-2}
+use the `mean` function
+```
+
+```{r sum-2a-hint-3}
+Remember to use the interal .x, and na.rm = TRUE in the mean function
+```
+
+
+### 2b
+> Get the mean, minimum and maximum of all columns containing an underscore ("_")
+
+```{r sum-2b, exercise = TRUE}
+penguins %>% 
+  summarise(across(contains("_"), 
+                   .fns = list(
+                     ~ mean(.x, na.rm = TRUE),
+                     ~ __(__, na.rm = TRUE),
+                     ~ __(__, na.rm = TRUE)
+                   ))
+  )
+```
+
+```{r sum-2b-solution}
+penguins %>% 
+  summarise(across(contains("_"), 
+                   .fns = list(
+                     ~ mean(.x, na.rm = TRUE),
+                     ~ min(.x, na.rm = TRUE),
+                     ~ max(.x, na.rm = TRUE)
+                   ))
+  )
+```
+
+```{r sum-2b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r sum-2b-hint-1}
+Remember the `min` and `max` functions.
+```
+
+
+### 2c
+> Do the same as the above, but now make sure the columns are given nicer names by naming the functions in the list.
+
+```{r sum-2c, exercise = TRUE}
+penguins %>% 
+  summarise(across(contains("_"), 
+                   .fns = list(
+                     _ = ~ mean(.x, na.rm = TRUE),
+                      _ = ~ __(__, na.rm = TRUE),
+                      _ = ~ __(__, na.rm = TRUE)
+                   ))
+  )
+```
+
+```{r sum-2c-solution}
+penguins %>% 
+  summarise(across(contains("_"), 
+                   .fns = list(
+                     mean = ~ mean(.x, na.rm = TRUE),
+                     min = ~ min(.x, na.rm = TRUE),
+                     max = ~ max(.x, na.rm = TRUE)
+                   ))
+  )
+```
+
+```{r sum-2c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+
+### 2d
+> Simplify the code to not use the tilde (~) but assign na.rm = TRUE to all functions at once.
+
+```{r sum-2d, exercise = TRUE}
+penguins %>% 
+  summarise(across(contains("_"), 
+                   .fns = list(mean = __,
+                               min = __,
+                               max = __), 
+                   __ = __)
+  )
+```
+
+```{r sum-2d-solution}
+penguins %>% 
+  summarise(across(starts_with("bill"), 
+                   .fns = list(mean = mean,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE)
+  )
+```
+
+```{r sum-2d-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r sum-2d-hint-1}
+The expectation here is to name the output with the exact same name as the function
+```
+
+```{r sum-2d-hint-2}
+be sure to use all small letters here
+```
+
+
+## Challenge 3
+### 3a
+> Group the data by species and get the mean of the `bill_length_mm` column
+
+```{r sum-3a, exercise = TRUE}
+penguins %>% 
+  group_by(__) %>% 
+  summarise(_(_, na.rm = _))
+```
+
+```{r sum-3a-solution}
+penguins %>% 
+  group_by(species) %>% 
+  summarise(mean(bill_length_mm, na.rm = TRUE))
+```
+
+```{r sum-3a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r sum-3a-hint-1}
+Did you remember to place the function first, then the colum name inside the function
+```
+
+### 3b
+> Group the data by island instead, and take the summary of the bill length and bill depth columns
+
+
+```{r sum-3b, exercise = TRUE}
+penguins %>% 
+  group_by(_) %>% 
+  summarise(bill_length_mm = mean(__, na.rm = _),
+            bill_depth_mm = mean(__, na.rm = _))
+```
+
+```{r sum-3b-solution}
+penguins %>% 
+  group_by(island) %>% 
+  summarise(bill_length_mm = mean(bill_length_mm, na.rm = TRUE),
+            bill_depth_mm = mean(bill_depth_mm, na.rm = TRUE))
+```
+
+```{r sum-3b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r sum-3b-hint-1}
+Make sure the correct column names go to the correct summary
+```
+
+### 3c
+> Group the data by island AND species, what happened? 
+
+
+```{r sum-3c, exercise = TRUE}
+penguins %>% 
+  group_by(__, __) %>% 
+  summarise(
+    bill_length_mm = mean(bill_length_mm, na.rm = TRUE),
+    bill_depth_mm = mean(bill_depth_mm, na.rm = TRUE)
+  )
+```
+
+```{r sum-3c-solution}
+penguins %>% 
+  group_by(island, species) %>% 
+  summarise(
+    bill_length_mm = mean(bill_length_mm, na.rm = TRUE),
+    bill_depth_mm = mean(bill_depth_mm, na.rm = TRUE)
+  )
+```
+
+```{r sum-3c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r sum-3c-hint-1}
+Make sure the correct column names go to the correct summary
+```
+
+## Challenge 4
+
+### 4a
+> Get the descriptive statistics (mean, sd, min and max) for all the columns ending with "mm", grouped by species
+
+```{r sum-4a, exercise = TRUE}
+penguins %>% 
+  summarise(across(__, .fns = list(mean = mean,
+                                   _ = _,
+                                   _ = _,
+                                   _ = _), 
+                     na.rm = TRUE)
+  )
+```
+
+```{r sum-4a-solution}
+penguins %>% 
+  group_by(species) %>% 
+  summarise(across(ends_with("mm"), 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE)
+  )
+```
+
+```{r sum-4a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r sum-4a-hint-1}
+The expectation here is to name the output with the exact same name as the function
+```
+
+```{r sum-4a-hint-2}
+be sure to use all small letters here
+```
+
+### 4b
+> Now add a count of how many observations there are of each species and place that in the column named `n`. 
+
+```{r sum-4b, exercise = TRUE}
+penguins %>% 
+  summarise(across(ends_with("mm"), 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE),
+            n = length(species)
+  )
+```
+
+```{r sum-4b-solution}
+penguins %>% 
+  group_by(species) %>% 
+  summarise(across(ends_with("mm"), 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE),
+            n = length(species)
+  )
+```
+
+```{r sum-4b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r sum-4b-hint-1}
+add the new summary vaiable after closing the `across` parentheses.
+```
+
+### 4c
+> Try grouping by more variables. Like sex, or island. or add more summary variables. 
+
+```{r sum-4c, exercise = TRUE}
+penguins %>% 
+  group_by(species) %>% 
+  summarise(across(ends_with("mm"), 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE),
+            n = length(species)
+  )
+```
+
+
+
+## Challenge 5
+
+### 5a
+> Pivot longer a grouped summary over species for the columns containing underscores, with the metrics mean, standard deviation, minimum and maximum values. When you pivot the data, split the column names up into 4 parts describing the part, measurement, unit and statistic used. 
+
+```{r sum-5a, exercise = TRUE}
+penguins %>% 
+  group_by(species, island, sex) %>% 
+  summarise(across(ends_with("mm"), 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE)
+  ) %>% 
+  ___
+```
+
+```{r sum-5a-solution}
+penguins %>% 
+  group_by(species, island, sex) %>% 
+  summarise(across(ends_with("mm"), 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE)
+  ) %>% 
+  pivot_longer(contains("mm"),
+               names_to = c("part", "measurement", "unit", "stat"),
+               names_sep = "_") 
+```
+
+```{r sum-5a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+
+
+
+### 5b
+> Add to the code you just wrote and pivot the data wider again by the statistic column.
+
+```{r sum-5b, exercise = TRUE}
+penguins %>% 
+  group_by(species, island, sex) %>% 
+  summarise(across(ends_with("mm"), 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE),
+            n = length(species)
+  ) %>% 
+  pivot_longer(contains("mm"),
+               names_to = c("part", "measurement", "unit", "stat"),
+               names_sep = "_") %>% 
+  ___
+```
+
+```{r sum-5b-solution}
+penguins %>% 
+  group_by(species, island, sex) %>% 
+  summarise(across(ends_with("mm"), 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE),
+            n = length(species)
+  ) %>% 
+  pivot_longer(contains("mm"),
+               names_to = c("part", "measurement", "unit", "stat"),
+               names_sep = "_") %>% 
+  pivot_wider(names_from = stat, 
+              values_from  = value)
+```
+
+```{r sum-5b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+
+### 5c
+> Try different statistics, grouping variables and pivoting in different ways. What works, and what does not? Learning what you can and cannot do it often the result of trial and error. 
+
+```{r sum-5c, exercise = TRUE}
+penguins %>% 
+  group_by(species, island, sex) %>% 
+  summarise(across(ends_with("mm"), 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE),
+            n = length(species)
+  ) %>% 
+  pivot_longer(contains("mm"),
+               names_to = c("part", "measurement", "unit", "stat"),
+               names_sep = "_") %>% 
+  pivot_wider(names_from = stat, 
+              values_from  = value)
+```
+
+
+<!-- ## Quiz -->
+
+<!-- ```{r quiz} -->
+<!-- quiz( -->
+<!--   question("What functions can you use to subset a data set by rows?", -->
+<!--     answer("dplyr's `filter()`", correct = TRUE), -->
+<!--     answer("dplyr's `select()`"), -->
+<!--     answer("`subset()`", correct = TRUE),
+allow_retry = TRUE -->
+<!--   ), -->
+<!--   question("What functions can you use to subset a data set by columns", -->
+<!--     answer("dplyr's `filter()`"), -->
+<!--     answer("dplyr's `select()`", correct = TRUE), -->
+<!--     answer("`subset()`", correct = TRUE),
+allow_retry = TRUE -->
+<!--   ), -->
+<!--   question("If you want to select all columns in data 'df' that contains the string 'something', you can do that by", -->
+<!--     answer("`df[grepl('something', names(df))]`", correct = TRUE), -->
+<!--     answer("`select(df, starts_with('something')`"), -->
+<!--     answer("`df[,'something']`"), -->
+<!--     answer("`select(df, contains('something')`", correct = TRUE),
+allow_retry = TRUE -->
+<!--   ), -->
+<!--     question("If you want to subset rows so that you only have those below 18 years of age, you can do that by", -->
+<!--     answer("`df$age < 18`"), -->
+<!--     answer("`filter(df, age < 18)`", correct = TRUE), -->
+<!--     answer("`df[df$age < 18,]`", correct = TRUE), -->
+<!--     answer("`filter(df, age <= 18)`"),
+allow_retry = TRUE -->
+<!--   )
+<!-- ) -->
+<!-- ``` -->
+
+

@@ -1,0 +1,497 @@
+---
+title: "Altering or adding variables to data sets"
+output: 
+  learnr::tutorial:
+    progressive: true 
+    allow_skip: true 
+runtime: shiny_prerendered
+description: |
+  Adding or altering variables in a dataset is usually necessary to achieve your end goals.
+  In the tidyverse this functions are done through the `mutate()` function, which this tutorial
+  covers some basic use of. 
+---
+
+```{r setup, include=FALSE}
+library(tidyquintro)
+library(learnr)
+library(gradethis)
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  exercise.warn_invisible = FALSE
+)
+
+# enable code checking
+tutorial_options(
+  exercise.checker = grade_learnr,
+  exercise.lines = 8,
+  exercise.reveal_solution = TRUE
+)
+```
+
+
+## Challenge 1
+### 1a
+
+> Create a column named `bill_ld_ratio` that is the value of `bill_length_mm` divided by `bill_depth_mm`
+
+```{r mutate-1a, exercise = TRUE}
+penguins %>% 
+  mutate(_ = _ / _) %>% 
+  select(species, island, contains("bill"))
+```
+
+```{r mutate-1a-solution}
+penguins %>% 
+  mutate(bill_ld_ratio = bill_length_mm / bill_depth_mm) %>% 
+  select(species, island, contains("bill"))
+```
+
+```{r mutate-1a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-1a-hint-1}
+This exercise expects piped data into the mutate function
+```
+
+```{r mutate-1a-hint-2}
+Make sure you have given the new column the correct name
+```
+
+### 1b
+> transform the body mass column to the logarithmic scale using the `log` function
+
+```{r mutate-1b, exercise = TRUE}
+penguins %>% 
+  mutate(body_mass_g_log = __(body_mass_g))
+```
+
+```{r mutate-1b-solution}
+penguins %>% 
+  mutate(body_mass_g_log = log(body_mass_g))
+```
+
+```{r mutate-1b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-1b-hint-1}
+use the `log()` function around body mass.
+```
+
+### 1c
+> Divide all values in the flipper lenght column with 10, and store it in a variable called flipper_length_cm.
+
+```{r mutate-1c, exercise = TRUE}
+penguins %>% 
+  mutate(_  = _/10)
+```
+
+```{r mutate-1c-solution}
+penguins %>% 
+  mutate(flipper_length_cm  = flipper_length_mm/10)
+```
+
+```{r mutate-1c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-1c-hint-1}
+use the `log()` function around body mass.
+```
+
+## Challenge 2
+### 2a
+> Adapt the code below to evaluate if body mass is **below** 4.5kg, and assign rows that are TRUE to be "normal" and rows that are FALSE to "large"
+
+```{r mutate-2a, exercise = TRUE}
+penguins %>% 
+  mutate(body_type = ifelse(body_mass_g _ 4500, "_", "_")) %>% 
+  select(species, island, contains("body"))
+```
+
+```{r mutate-2a-solution}
+penguins %>% 
+  mutate(body_type = ifelse(body_mass_g < 4500, "normal", "large")) %>% 
+  select(species, island, contains("body"))
+```
+
+```{r mutate-2a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-2a-hint-1}
+After the logical expressions in ifelse, the first value should be the `TRUE` value, and the second the `FALSE`
+```
+
+### 2b
+```{r mutate-2b, exercise = TRUE}
+penguins %>% 
+  mutate(biscoe = ifelse(island __ "Biscoe", __, __)) %>% 
+  select(species, island, biscoe)
+```
+
+```{r mutate-2b-solution}
+penguins %>% 
+  mutate(biscoe = ifelse(island == "Biscoe", TRUE, FALSE)) %>% 
+  select(species, island, biscoe)
+```
+
+```{r mutate-2b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-2b-hint-2}
+Have you used the correct sign for equals `==`
+```
+
+```{r mutate-2b-hint-1}
+in ifelse, after the logical expressions the first value should be the `TRUE` value, and the second the `FALSE`. 
+```
+
+## Challenge 3
+### 3a
+
+> Adapt the below code so that penguins with body mass below 3 kg are "petite"
+
+```{r mutate-3a, exercise = TRUE}
+penguins %>% 
+  mutate(
+    body_type = case_when(
+      body_mass_g _ 4500 ~ "large",
+      body_mass_g _ 3000 ~ "petite",
+      _ ~ "normal") # the rest
+  ) %>% 
+  select(species, island, contains("body"))
+```
+
+```{r mutate-3a-solution}
+penguins %>% 
+  mutate(
+    body_type = case_when(
+      body_mass_g > 4500 ~ "large",
+      body_mass_g < 3000 ~ "petite",
+      !is.na(body_mass_g) ~ "normal") # the rest
+  ) %>% 
+  select(species, island, contains("body"))
+```
+
+```{r mutate-3a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-3a-hint-1}
+Have you used the correct sign for 'larger than'?
+```
+
+```{r mutate-3a-hint-2}
+Have you used the correct sign for 'smaller than'?
+```
+
+```{r mutate-3a-hint-3}
+evaluate if something is NA with the `is.na` function. 
+```
+
+
+```{r mutate-3a-hint-4}
+To flip a logical, so that TRUE becomes FALSE and vice verse, add `!` in the expression. it means "not".
+```
+
+
+## Challenge 4
+
+> **4a**: Transform all the colmns with milimetres measurements so they are scaled, and the _prefix_ "sc_" to the columns names.
+
+
+```{r mutate-4a, exercise = TRUE}
+penguins %>% 
+  mutate(across(ends_with("mm"),
+                scale, 
+                .names = "{.col}_sc")) %>% 
+  select(contains("mm"))
+```
+
+```{r mutate-4a-solution}
+penguins %>% 
+  mutate(across(ends_with("mm"),
+                scale, 
+                .names = "sc_{.col}")) %>% 
+  select(contains("mm"))
+```
+
+```{r mutate-4a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-4a-hint-1}
+Move the change "_sc" to "sc_" and move it before "{.col}".
+```
+
+### 4b
+> Do the same, but now only for the bill measurements.
+
+```{r mutate-4b, exercise = TRUE}
+penguins %>% 
+  mutate(across(__("__"),
+                scale, 
+                .names = "{.col}")) %>% 
+  select(__("__"))
+```
+
+```{r mutate-4b-solution}
+penguins %>% 
+  mutate(across(starts_with("mm"),
+                scale, 
+                .names = "sc_{.col}")) %>% 
+  select(starts_with("mm"))
+```
+
+```{r mutate-4b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-4b-hint-1}
+Change ends_with to starts_with
+```
+
+### 4c
+> Do the same, but now for all the numeric columns.
+
+```{r mutate-4c, exercise = TRUE}
+penguins %>% 
+  mutate(across(__(is.__),
+                scale, 
+                .names = "sc_{.col}")) %>% 
+  select(__(is.__))
+```
+
+```{r mutate-4c-solution}
+penguins %>% 
+  mutate(across(where(is.numeric),
+                scale, 
+                .names = "sc_{.col}")) %>% 
+  select(where(is.numeric))
+```
+
+```{r mutate-4c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-4c-hint-1}
+Try remembering the `where` function and how it works
+```
+
+```{r mutate-4c-hint-2}
+try `where(is.numeric)`
+```
+
+## Challenge 5
+
+### 5a
+> Adapt the code below, so that you de-mean the bill length column. Do it in two steps, first by making a column for the species means, then using that data to de-mean the bill length.
+
+```{r mutate-5a, exercise = TRUE}
+penguins %>% 
+  group_by(_) %>% 
+  mutate(
+    bill_length_sp_mean = __(bill_length_mm, na.rm = TRUE),
+    bill_length_cent = __ - __
+  ) %>% 
+  select(species, island, starts_with("bill"))
+```
+
+```{r mutate-5a-solution}
+penguins %>% 
+  group_by(species) %>% 
+  mutate(
+    bill_length_sp_mean = mean(bill_length_mm, na.rm = TRUE),
+    bill_length_cent = bill_length_mm - bill_length_sp_mean
+  ) %>% 
+  select(species, island, starts_with("bill"))
+```
+
+```{r mutate-5a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-5a-hint-1}
+Did you make sure the column names are correct?
+```
+
+### 5b
+> Do the same, but now in a single step (i.e. do not store the species mean in its own column)
+
+```{r mutate-5b, exercise = TRUE}
+penguins %>% 
+  group_by(_) %>% 
+  mutate(
+    bill_length_cent = 
+  ) %>% 
+  select(species, island, starts_with("bill"))
+```
+
+```{r mutate-5b-solution}
+penguins %>% 
+  group_by(species) %>% 
+  mutate(
+    bill_length_cent = bill_length_mm - mean(bill_length_mm, na.rm = TRUE)
+  ) %>% 
+  select(species, island, starts_with("bill"))
+```
+
+```{r mutate-5b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-5b-hint-1}
+Did you make sure the column names are correct?
+```
+
+
+### 5c
+> Based on the code in the previous example, adapt it to be grouped by island in stead of species.
+
+```{r mutate5, exercise = TRUE}
+penguins %>% 
+  group_by(island) %>% 
+  mutate(
+    bill_length_sp_max = 
+    bill_length_pc = bill_length_mm/max(bill_length_mm, na.rm = TRUE
+  ) %>% 
+  select(species, island, contains("bill"))
+```
+
+```{r mutate5-solution}
+penguins %>% 
+  group_by(island) %>% 
+  mutate(
+    bill_length_sp_max = max(bill_length_mm, na.rm = TRUE),
+    bill_length_pc = (bill_length_mm/bill_length_sp_max)*100
+  ) %>% 
+  select(species, island, contains("bill"))
+```
+
+```{r mutate5-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate5-hint-1}
+Did you make sure the column names are correct?
+```
+
+### 5d
+>  De-mean all the numerical columns, and give them a suffix of "dm".
+
+```{r mutate-5d, exercise = TRUE}
+penguins %>% 
+  group_by(__) %>% 
+  mutate(
+    across(__(__),
+           ~ _ - mean(_, na.rm = TRUE),
+           .names = "_")
+  ) %>% 
+  select(species, where(is.numeric))
+```
+
+```{r mutate-5d-solution}
+penguins %>% 
+  group_by(species) %>% 
+  mutate(
+    across(where(is.numeric),
+           ~ .x - mean(.x, na.rm = TRUE),
+           .names = "{.col}_dm")
+  ) %>% 
+  select(species, where(is.numeric))
+```
+
+```{r mutate-5d-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-5d-hint-1}
+Do you remember the `where` and `is.numeric` functions?
+```
+
+```{r mutate-5d-hint-2}
+The across internal placeholder for column values is `.x`
+```
+
+```{r mutate-5d-hint-3}
+The across internal placeholder for column names is `.col`
+```
+
+<!-- ## Quiz -->
+
+<!-- ```{r quiz} -->
+<!-- quiz( -->
+<!--   question("What functions can you use to subset a data set by rows?", -->
+<!--     answer("dplyr's `filter()`", correct = TRUE), -->
+<!--     answer("dplyr's `select()`"), -->
+<!--     answer("`subset()`", correct = TRUE),
+    allow_retry = TRUE -->
+<!--   ), -->
+<!--   question("What functions can you use to subset a data set by columns", -->
+<!--     answer("dplyr's `filter()`"), -->
+<!--     answer("dplyr's `select()`", correct = TRUE), -->
+<!--     answer("`subset()`", correct = TRUE),
+    allow_retry = TRUE -->
+<!--   ), -->
+<!--   question("If you want to select all columns in data 'df' that contains the string 'something', you can do that by", -->
+<!--     answer("`df[grepl('something', names(df))]`", correct = TRUE), -->
+<!--     answer("`select(df, starts_with('something')`"), -->
+<!--     answer("`df[,'something']`"), -->
+<!--     answer("`select(df, contains('something')`", correct = TRUE),
+    allow_retry = TRUE -->
+<!--   ), -->
+<!--     question("If you want to subset rows so that you only have those below 18 years of age, you can do that by", -->
+<!--     answer("`df$age < 18`"), -->
+<!--     answer("`filter(df, age < 18)`", correct = TRUE), -->
+<!--     answer("`df[df$age < 18,]`", correct = TRUE), -->
+<!--     answer("`filter(df, age <= 18)`"),
+    allow_retry = TRUE -->
+<!--   )
+<!-- ) -->
+<!-- ``` -->
+
+
+

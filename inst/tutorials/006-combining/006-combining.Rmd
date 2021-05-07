@@ -1,0 +1,344 @@
+---
+title: "Working with nested data sets"
+output: 
+  learnr::tutorial:
+    progressive: true 
+    allow_skip: true 
+runtime: shiny_prerendered
+description: |
+  In these sessions we have gone through some of the core functionality in the tidyverse packages. Now, we we explore how we can combine everything we have been working on and learning to really explore these powerful tools.
+---
+
+```{r setup, include=FALSE}
+library(swc.tidyverse)
+library(learnr)
+library(gradethis)
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  exercise.warn_invisible = FALSE
+)
+
+# enable code checking
+tutorial_options(
+  exercise.checker = grade_learnr,
+  exercise.lines = 20,
+  exercise.reveal_solution = TRUE
+)
+```
+
+
+## Challenge 1
+### **1a**
+> In our new summary function, alter the code so that the columns are no longer prefixed with `value_`. 
+
+
+```{r comb-1a, exercise = TRUE}
+penguins %>% 
+  pivot_longer(ends_with("mm")) %>% 
+  group_by(name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE,
+            n = length(species)
+  ) 
+```
+
+```{r comb-1a-solution}
+penguins %>% 
+  pivot_longer(ends_with("mm")) %>% 
+  group_by(name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE,
+                   .names = "{.fn}"),
+            n = length(species)
+  ) 
+```
+
+```{r comb-1a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r comb-1a-hint-1}
+Try using the `.names` argument in across.
+```
+
+```{r comb-1a-hint-2}
+The internal placeholder for the function names in across is `.fn`.
+```
+
+### 1b
+> Adapt the code so that `NA`s in the values are removed during the pivot_longer, and try to remove `na.rm = TRUE` from the across. Does that work? Why?
+
+
+```{r comb-1b, exercise = TRUE}
+penguins %>% 
+  pivot_longer(ends_with("mm")) %>% 
+  group_by(name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   .names = "{.fn}"),
+            n = length(species)
+  ) 
+```
+
+```{r comb-1b-solution}
+penguins %>% 
+  pivot_longer(ends_with("mm"),
+               values_drop_na = TRUE) %>% 
+  group_by(name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   .names = "{.fn}"),
+            n = length(species)
+  ) 
+```
+
+```{r comb-1b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r comb-1b-hint-1}
+Check out the `values_drop_na` argument in pivot longer
+```
+
+
+### 1c
+> Adapt the code so that the "n" is captured within the across function list, like the other four functions. How is the output different?
+
+```{r comb-1c, exercise = TRUE}
+penguins %>% 
+  pivot_longer(ends_with("mm")) %>% 
+  group_by(name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   .names = "{.fn}"),
+            n = length(species)
+  ) 
+```
+
+```{r comb-1c-solution}
+penguins %>% 
+  pivot_longer(ends_with("mm"),
+               values_drop_na = TRUE) %>% 
+  group_by(name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max,
+                               n = length), 
+                   .names = "{.fn}")
+  )
+```
+
+```{r comb-1c-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+
+### 1d
+> Try grouping by more variables. Is the outcome as you expect?
+
+```{r comb-1d, exercise = TRUE}
+penguins %>% 
+  pivot_longer(ends_with("mm"),
+               values_drop_na = TRUE) %>% 
+  group_by(name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max,
+                               n = length), 
+                   .names = "{.fn}")
+  )
+```
+
+## Challenge 2
+### 2a
+> Create a bar chart based om the penguins summary data, where the mean values are on the x axis and species are on the y axis. Make sure to dodge the bar for easier comparisons. Create subplots on the different metrics.
+
+
+```{r comb-2a, exercise = TRUE}
+__ %>% 
+  ggplot(aes(x = __, 
+             y = __,
+             fill = __)) +
+  geom_bar(stat = __) +
+  facet___(~ __, scales = "free")
+```
+
+```{r comb-2a-solution}
+penguins_sum %>% 
+  ggplot(aes(x = mean, 
+             y = species,
+             fill = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_wrap(~ name, scales = "free")
+```
+
+```{r comb-2a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+### 2b
+> Adapt the code the plot the standard deviation rather than the mean
+
+```{r comb-2b, exercise = TRUE}
+penguins_sum %>% 
+  ggplot(aes(x = mean, 
+             y = species,
+             fill = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_wrap(~ name, scales = "free")
+```
+
+```{r comb-2b-solution}
+penguins_sum %>% 
+  ggplot(aes(x = sd, 
+             y = species,
+             fill = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_wrap(~ name, scales = "free")
+```
+
+```{r comb-2b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+### 2c
+> Swap around the plot to explore different ways of looking at the same data. Try swapping the axes, so that x is on the y, and vice versa. Or Try having species on one axis and using island as colour fill. What variation do you think best shows the differences between groups?
+
+```{r comb-2c, exercise = TRUE}
+penguins_sum %>% 
+  ggplot(aes(x = species, 
+             y = sd,
+             fill = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_wrap(~ name, scales = "free")
+```
+
+### 2d
+> Try adding an error bar that indicates the standard deviation of the measurement, while the bars indicate the mean values. What does the geom_errorbar need to plot the error bars?
+
+```{r comb-2d, exercise = TRUE}
+penguins_sum %>% 
+  ggplot(aes(x = mean, 
+             y = species,
+             fill = island,
+             group = __)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  geom___(aes(__ = _ ,
+              __ = _),
+          position = "dodge") +
+  facet_wrap(~ name, scales = "free")
+```
+
+```{r comb-2d-solution}
+penguins_sum %>% 
+  ggplot(aes(x = mean, 
+             y = species,
+             fill = island,
+             group = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  geom_errorbar(aes(xmin = mean - sd ,
+                    xmax = mean + sd),
+                position = "dodge") +
+  facet_wrap(~ name, scales = "free")
+```
+
+```{r comb-2d-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r comb-2d-hint-1}
+the geom for error bars is called `geom_errorbar`
+```
+
+```{r comb-2d-hint-2}
+Error bars are lines between two points. Try looking for a way to ass the minimum and maximum values for the x-axis.
+```
+
+### 2e
+> Try pivoting the data even longer! Pivot longer all the stats columns so that the column names are in a column named "stat". Now, create another plot using the "value" column on the y-axis, and creating subplots based on both the observation name AND the stat!
+
+```{r comb-2e, exercise = TRUE}
+penguins_sum %>% 
+  pivot_longer(all_of(c(__)),
+               __ = __) %>% 
+  ggplot(aes(x = mean, 
+             y = species,
+             fill = island,
+             group = __)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet___( __ ~ name, scales = "free")
+```
+
+```{r comb-2e-solution}
+penguins_sum %>% 
+  pivot_longer(all_of(c("mean", "sd", "min", "max")),
+               names_to = "stat") %>% 
+  ggplot(aes(x = species, 
+             y = value,
+             fill = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_grid(stat ~ name, scales = "free")
+```
+
+```{r comb-2e-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r comb-2e-hint-1}
+Try adding the names of the columns to pivot in quotation marks within the c().
+```
+
+```{r comb-2e-hint-2}
+Try the facet_grid function, which takes the syntax `facet_grid(row_column ~ columns_column).
+```
