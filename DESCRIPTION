@@ -21,6 +21,7 @@ Suggests:
     remotes
 RoxygenNote: 7.1.1
 Imports: 
+    learnr,
     gradethis
 Remotes:
-    rstudio-education/gradethis
+    rstudio/gradethis
