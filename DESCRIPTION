@@ -25,4 +25,4 @@ Imports:
     gradethis
 Remotes:
     rstudio/gradethis,
-    r-lib/rlang (>= 0.4.11.9000)
+    r-lib/rlang
