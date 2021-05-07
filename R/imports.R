@@ -1,23 +1,17 @@
-#' Internal tidyverse methods
+#' @title Internal tidyverse methods
 #'
 #' @import tidyverse
 #' @keywords internal
 NULL
 
-#' Internal broom methods
+#' @title Internal learnr methods
 #'
-#' @import broom
+#' @import learnr
 #' @keywords internal
 NULL
 
-#' Internal gapminder methods
+#' @title Internal palmerpenguins methods
 #'
-#' @import gapminder
-#' @keywords internal
-NULL
-#
-#' Internal learnr methods
-#'
-#' @import learnr
+#' @import palmerpenguins
 #' @keywords internal
 NULL
