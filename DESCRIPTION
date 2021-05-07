@@ -1,7 +1,7 @@
-Package: tidyquintro
+Package: swc.tidyverse
 Type: Package
-Title: Quick intro to Tidyverse
-Version: 0.1.01
+Title: Introduction to Tidyverse
+Version: 0.0.01
 Authors@R: person("Athanasia Mo", "Mowinckel", 
                     email = "a.m.mowinckel@psykologi.uio.no", 
                     role = c("aut", "cre"),
@@ -11,14 +11,14 @@ License: CC BY 4.0
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    R (>= 3.6.0),
-    broom,
+    R (>= 4.0.0),
     palmerpenguins,
     tidyverse (>= 1.3.0)
 Suggests: 
     knitr,
     roxygen2,
-    usethis
+    usethis,
+    remotes
 RoxygenNote: 7.1.1
 Imports: 
     gradethis,

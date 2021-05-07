@@ -10,9 +10,9 @@ NULL
 #' @keywords internal
 NULL
 
-#' Internal palmerpenguins methods
+#' Internal gapminder methods
 #'
-#' @import palmerpenguins
+#' @import gapminder
 #' @keywords internal
 NULL
 #
