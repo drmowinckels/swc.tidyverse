@@ -5,15 +5,12 @@
 
 <!-- badges: start -->
 
-[![R build
-status](https://github.com/Athanasiamo/tidyquintro/workflows/R-CMD-check/badge.svg)](https://github.com/Athanasiamo/tidyquintro/actions)
-[![Travis build
-status](https://travis-ci.com/Athanasiamo/tidyquintro.svg?branch=master)](https://travis-ci.com/Athanasiamo/tidyquintro)
+[![R-CMD-check](https://github.com/Athanasiamo/swc.tidyverse/workflows/R-CMD-check/badge.svg)](https://github.com/Athanasiamo/swc.tidyverse/actions)
 <!-- badges: end -->
 
-A 4 hour workshop with quick introduction to
+A 3 day workshop with introduction to
 [tidyverse](https://www.tidyverse.org/).
 
 Please visit [the course
-website](https://athanasiamo.github.io/tidyquintro/) for more
+website](https://athanasiamo.github.io/swc.tidyverse/) for more
 information about the course, workshop set-up instructions and slides.
