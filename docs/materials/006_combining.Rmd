@@ -1,0 +1,302 @@
+---
+title: "Working with datasets in R and the Tidyverse"
+subtitle: "Combining everything we have learned"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: true
+date: "27th May 2021"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      fig.retina = 3)
+penguins <- palmerpenguins::penguins
+```
+
+> **Questions**
+>
+> How can I use the functions I have learned these days together to improve my workflow?
+>
+> Where do I go for help to learn more about using the tidyverse functions?
+>
+> **Objectives**
+>
+> To be able to combine the different functions we have covered in tandem to create seamless chains of data handling
+>
+> To be able to search for more information about the tidyverse and its functions
+>
+
+Before the break, and a little scattered through the sessions, we have been combining the things we have learned. It's when we start using the tidyverse as a whole, all functions together that they start really becoming powerful. In this last session, we will be working on the things we have learned and applying them together in ways that uncover some of the cool things we can get done.
+
+The last summary code we made was a little tedious. First pivoting long and then pivoting wide again. 
+
+```{r}
+library(tidyverse)
+penguin_path <-  palmerpenguins::path_to_file("penguins.csv")
+penguins <- read.csv(penguin_path)
+
+penguins %>% 
+  group_by(species, island, sex) %>% 
+  summarise(across(ends_with("mm"), 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE),
+            n = length(species)
+  ) %>% 
+  pivot_longer(contains("mm"),
+               names_to = c("part", "measurement", "unit", "stat"),
+               names_sep = "_") %>% 
+  pivot_wider(names_from = stat, 
+              values_from  = value)
+```
+
+While this does work, it seems cumbersome and the end result is still not awesome. We can explore making it better. Pivoting longer is a good idea here, but what if we do it earlier?
+
+```{r}
+penguins %>% 
+  pivot_longer(ends_with("mm"))
+```
+
+We've done this before, why is it a clue now? Now that we have learned grouping and summarising, what if we now also group by the new name column to get summaries for each colum as a row already here!
+
+```{r}
+penguins %>% 
+  pivot_longer(ends_with("mm")) %>% 
+  group_by(name) %>% 
+    summarise(across(ends_with("mm"), 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE),
+            n = length(species)
+  ) 
+```
+but that didn't work as expected. Well, we already pivoted the "mm" column into name, so using that in across didn't work. But across can also just take a single column name instead of a tidy selector.
+
+```{r}
+penguins %>% 
+  pivot_longer(ends_with("mm")) %>% 
+  group_by(name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE),
+            n = length(species)
+  ) 
+```
+
+SO we substitute the tidy selector with just the name of the column  we want to summarise from. The column names are a little odd now, though. Since there is only a single column there, prefixing it with `value_` is redundant. Remember how we did that?
+
+
+## **Challenge 1.** {.tabset}
+
+You can run assignments in your own RStudio, or run the first challenge in the combining tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("006-combining", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **1a**: In our new summary function, alter the code so that the columns are no longer prefixed with `value_`. 
+>
+> **1b**: Adapt the code so that `NA`s in the values are removed during the pivot_longer, and try to remove `na.rm = TRUE` from the across. Does that work? Why?
+>
+> **1c**: Adapt the code so that the "n" is captured within the across function list, like the other four functions. How is the output different?
+>
+> **1d**: Try grouping by more variables. Is the outcome as you expect?
+>
+
+### Solution
+
+```{r "solutions-1"}
+## 1a
+penguins %>% 
+  pivot_longer(ends_with("mm")) %>% 
+  group_by(name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   na.rm = TRUE,
+                   .names = "{.fn}"),
+            n = length(species)
+  ) 
+
+# 1b
+penguins %>% 
+  pivot_longer(ends_with("mm"),
+               values_drop_na = TRUE) %>% 
+  group_by(name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max), 
+                   .names = "{.fn}"),
+            n = length(species)
+  ) 
+
+## 1c
+penguins %>% 
+  pivot_longer(ends_with("mm"),
+               values_drop_na = TRUE) %>% 
+  group_by(name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max,
+                               n = length), 
+                   .names = "{.fn}")
+  ) 
+
+## 1d
+penguins %>% 
+  pivot_longer(ends_with("mm"),
+               values_drop_na = TRUE) %>% 
+  group_by(island, species, name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max,
+                               n = length), 
+                   .names = "{.fn}")
+  ) 
+```
+
+# Plotting summaries
+
+Now that we have the summaries, we can use them in plots too! But keep typing or copying the same code over and over is tedious. So let us save the summary in its own object, and keep using that.
+
+```{r}
+penguins_sum <- penguins %>% 
+  pivot_longer(ends_with("mm"),
+               values_drop_na = TRUE) %>% 
+  group_by(island, species, name) %>% 
+    summarise(across(value, 
+                   .fns = list(mean = mean,
+                               sd = sd,
+                               min = min,
+                               max = max,
+                               n = length), 
+                   .names = "{.fn}")
+  ) 
+```
+
+We can for instance make a bar chart with the values from the summary statistics.
+
+```{r, eval = FALSE}
+penguins_sum %>% 
+  ggplot(aes(x = mean, 
+             y = island,
+             fill = species)) +
+  geom_bar() +
+  facet_wrap(~ name, scales = "free")
+```
+```
+Error: stat_count() can only have an x or y aesthetic.
+```
+
+This error message is telling us that we have used an aesthetic that is not needed in geom_bar. That is because geom_bar calculates frequencies by calling `stat_count`. But we don't want to count, we already have the values we want to plot. The ggplot geoms that calculates statistics for plots (like geom bar), have a "stat" option. When we already have calculated the stat, we can let the geom know to use the values as they are by using `stat = "identity"`.
+
+
+```{r}
+penguins_sum %>% 
+  ggplot(aes(x = max, 
+             y = island,
+             fill = species)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~ name, scales = "free")
+```
+
+That is starting to look like something nice. But the way the bars for the species are stacking on top of each other is making it a little hard to read. 
+In ggplot, there is an argument called "position", that could help us. By default in the bar charts position is set to "stacked". We should try the "dodge" option.
+
+```{r}
+penguins_sum %>% 
+  ggplot(aes(x = max, 
+             y = island,
+             fill = species)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_wrap(~ name, scales = "free")
+```
+
+
+## **Challenge 2.** {.tabset}
+
+You can run assignments in your own RStudio, or run the second challenge in the combining tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("006-combining", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **2a**: Create a bar chart based om the penguins summary data, where the mean values are on the x axis and species are on the y axis. Make sure to dodge the bar for easier comparisons. Create subplots on the different metrics.
+>
+> **2b**: Adapt the code the plot the standard deviation rather than the mean
+>
+> **2c**: Swap around the plot to explore different ways of looking at the same data. Try swapping the axes, so that x is on the y, and vice versa. Or Try having species on one axis and using island as colour fill. What variation do you think best shows the differences between groups?
+>
+> **2d**: Revert the code back so that you have the mean on the x-axis. Try adding an error bar that indicates the standard deviation of the measurement, while the bars indicate the mean values. What does the geom_errorbar need to plot the error bars?
+>
+> **2e**: Try pivoting the data even longer! Pivot longer all the stats columns so that the column names are in a column named "stat". Now, create another plot using the "value" column on the y-axis, and creating subplots based on both the observation name AND the stat!
+>
+
+
+### Solution
+
+```{r "solutions-2"}
+## 2a
+penguins_sum %>% 
+  ggplot(aes(x = mean, 
+             y = island,
+             fill = species)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_wrap(~ name, scales = "free")
+
+
+# 2b
+penguins_sum %>% 
+  ggplot(aes(x = sd, 
+             y = island,
+             fill = species)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_wrap(~ name, scales = "free")
+
+## 2c
+penguins_sum %>% 
+  ggplot(aes(x = species, 
+             y = sd,
+             fill = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_wrap(~ name, scales = "free")
+
+## 2d
+penguins_sum %>% 
+  pivot_longer(all_of(c("mean", "sd", "min", "max")),
+               names_to = "stat") %>% 
+  ggplot(aes(x = species, 
+             y = value,
+             fill = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_grid(stat ~ name, scales = "free")
+```
+

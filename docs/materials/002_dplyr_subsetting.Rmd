@@ -1,0 +1,589 @@
+---
+title: "Working with datasets in R and the Tidyverse"
+subtitle: "Subsetting data with dplyr"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: true
+date: "25th May 2021"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      fig.retina = 3)
+penguins <- palmerpenguins::penguins
+```
+
+> **Questions**
+>
+> How can I reduce my data set in rows or select only a certain set of columns?
+>
+> **Objectives**
+>
+> To be able to reduce the number of rows in a data set
+>
+> To be able to select the columns wanted of a data set
+>
+
+In many cases, we are working with data sets that contain more data than we need, or we want to inspect certain parts of the data set before we continue.
+Subsetting data sets can be challenging in base R, because there is a fair bit of repetition. Repeating yourself will cost you time, both now and later, and potentially introduce some nasty bugs.
+
+
+# The `dplyr` package
+
+The [`dplyr`](https://cran.r-project.org/web/packages/dplyr/dplyr.pdf) package provides a number of very useful functions for manipulating data sets in a way that will reduce, reduce the probability of making errors, and probably even save you some typing. As an added bonus, you might even find the `dplyr` grammar easier to read.
+
+Here we're going to cover 6 of the most commonly used functions as well as using pipes (`%>%`) to combine them.
+
+1. `select()` (covered in this session)
+2. `filter()` (covered in this session)
+3. `arrange()` (covered in this session)
+4. `mutate()` (covered in Day 2 session)
+5. `group_by()` (covered in Day 2 session)
+6. `summarize()` (covered in Day 3 session)
+
+# Selecting columns pt.1
+
+Let us first talk about selecting columns. In dplyr, the function name for selecting columns is `select()`! That should be easy to remember.
+In fact, the tidyverse names for functions are inspired by English grammar, which will help us when we are writing our code.
+
+```{r, echo = FALSE}
+knitr::include_graphics("gifs/selecting.gif")
+```
+
+We first need to make sure we have the tidyverse loaded and the penguins data set at hand.
+```{r}
+library(tidyverse)
+penguins <- palmerpenguins::penguins
+```
+
+To select data, we must first tell select which data set we are selecting from, and then give it our selection. Here, we are asking R to select from the penguins data set the island, species and sex columns
+
+```{r}
+select(penguins, island, species, sex)
+```
+
+When we use `select()` we don't need to use quotations etc, we just write in the names directly. We can also use the numeric indexes for the column, if we are 100% certain of the order of the columns.
+
+```{r}
+select(penguins, 1:3, 6)
+```
+
+In some cases, we want to remove columns, and not necessarily state all columns we want to keep. 
+Select also allows for this by adding a minus (-)  sign in front of the column name you dont want.
+
+```{r}
+select(penguins, -bill_length_mm, -bill_depth_mm)
+```
+
+## **Challenge 1.** {.tabset}
+
+You can run assignments in your own RStudio, or run the first challenge in the subsetting tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("002-subsetting", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **1a**: Using the `select()` function from dplyr, select the first, second, fourth and sixth column from the penguins dataset
+using their numerical values. 
+>
+> **1b**: Sometimes we want to subset whole ranges, and maybe a couple of extra columns.
+We can do this usind the colon. 
+Complete the code below so you select columns 1 through 4, and also column 6.
+>
+> **1c**: Take the same code as before, but this time instead of using the index numbers for the column, use the column names. Column 1 is `species`, column 4 is `bill_depth_mm`, and column 6 is `body_mass_g`
+
+### Solution
+
+```{r "solutions-1"}
+## 1a
+select(penguins, 1, 2, 4, 6)
+
+# 1b
+select(penguins, 1:4, 6)
+
+## 1c
+select(penguins, species:bill_depth_mm, body_mass_g)
+```
+
+# Selecting columns pt.2
+
+These selections are quite convenient and fast! But they can be even better. 
+
+For instance, what if we want to choose all the columns with millimetre measurements? That could be quite convenient, making sure the variables we are working with have the same meareument scale.
+
+We could of course type them all out, but the penguins data set has names that make it even easier for us, using something called tidy-selectors.
+
+Here, we use a tidy-selector `ends_with()`, can you guess what it does? yes, it looks for columns that end with the string you provide it, here "mm".
+
+```{r}
+select(penguins,ends_with("mm"))
+```
+
+so convenient! There are several other tidy-selectors you can choose, [which you can find here](https://dplyr.tidyverse.org/reference/select.html), but often people resort to three specific ones:
+
+- `ends_with("string")` - column names ending with "string"  
+- `starts_with("string")` - column names starting with "string"  
+- `contains("string")` - column names containing "string"  
+
+If you are working with a well named data set, these functions should make your data selecting much simpler. And if you are making your own data, you can think of such convenient naming for your data, so your work can be easier for you and others.
+
+Lets only pick the measurements of the bill, we are not so interested in the flipper. Then we might want to change to "starts_with" in stead.
+
+```{r}
+select(penguins, starts_with("bill"))
+```
+
+The tidy selector can be combined with each other and other selectors. So you can build exactly the data you want!
+
+```{r}
+select(penguins, island, species, year, starts_with("bill"))
+```
+
+## **Challenge 2.** {.tabset}
+
+You can run assignments in your own RStudio, or run the second challenge in the subsetting tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("002-subsetting", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **2a**: Select from the penguins data set the columns species, island and all the columns starting with "bill".
+>
+> **2b**: Now we lost flipper length! To make sure we keep flipper length, instead select columns what end with "mm".
+>
+> **2c**: Take the same code as before, and add to it the tidy-selector `everything()`, what does it do?
+
+### Solution
+
+```{r "solutions-2"}
+## 2a
+select(penguins, 1, 2, 4, 6)
+
+# 2b
+select(penguins, 1:4, 6)
+
+## 2c
+select(penguins, species:bill_depth_mm, body_mass_g)
+```
+
+`everything()` is a tidy-selector that select all columns not yet mentioned. 
+It's a very convenient way of re-arranging your columns, so that you keep everything, but the columns you are most interested in are at the beginning of the data.
+
+# Selecting columns pt.3
+
+The last tidy-selector we'll mention is `where()`. `where()` is a very special tidy selector, that uses logical evaluations to select the data. 
+oy! That sounds complicated. Let's have a look at it in action, and see if we can explain it better that way.
+
+Say you are running a correlation analysis. For correlations, you need all the columns in your data to be numeric, as you cannot correlate strings or categories. Going through each individual column and seeing if it is numeric is a bit of a chore. That is where `where` comes in!
+
+```{r}
+select(penguins, where(is.numeric))
+```
+
+magic! Let's break that down. 
+`is.numeric` is a function in R that checks if a vector is numeric. If the vector is numeric, it returns `TRUE` if not it returns `FALSE`.
+
+```{r}
+is.numeric(5)
+is.numeric("something")
+```
+
+Let ur look at the penguins data set again
+```{r}
+penguins
+```
+
+The penguins data is stored as a "tibble", which is a special kind of data set in R that gives a nice print out of the data.
+Notice, right below the column name, there is some information in `<>` marks. This tells us the class of the columns. 
+Species and island are factors, while bill columns are "double" which is a decimal numeric class. 
+
+`where()` goes through all the columns and checks if they are numeric, and returns the ones that are. We could try the same for factors!
+
+```{r}
+select(penguins, where(is.factor))
+```
+
+## **Challenge 3.** {.tabset}
+
+You can run assignments in your own RStudio, or run the third challenge in the subsetting tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("002-subsetting", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **3a**: Select from the penguins data set only columns that are factors.
+>
+> **3b**: Now we lost flipper length! To make sure we keep flipper length, instead select columns what end with "mm".
+>
+> **3c**: Now select the columns island, species, and all numeric columns
+
+### Solution
+
+```{r "solutions-3"}
+## 3a
+select(penguins, where(is.factor))
+
+# 3b
+select(penguins, where(is.integer))
+
+## 3c
+select(penguins, island, species, where(is.numeric))
+```
+
+# Filtering rows pt.1
+
+Now that we know how to select the columns we want, we should take a look at how we filter the rows. 
+Row filtering is done with the function `filter`, which takes statements that can be evaluated to `TRUE` or `FALSE`. 
+yikes, that sounds scary!
+
+```{r, echo = FALSE}
+knitr::include_graphics("gifs/filtering.gif")
+```
+
+Like with where, we can break this down a little more, so we can start understanding what is happening. 
+
+What do we mean with statements that can be evaluated to `TRUE` or `FALSE`?
+In the example with `where` we used the `is.numeric` function to evaluate if the columns where numeric or not. We will e doing the same for rows!
+
+Now, using `is.numeric` on a row won't help, because every row-value in a column will be of the same type, that is how the data set works. All values in a column must be of the same type. 
+
+So what can we do? Well, we can check f the values meet certain criteria or not. Like values being above 20, or factors being a specific factor. 
+
+```{r}
+filter(penguins, body_mass_g < 3000)
+```
+
+Here, we've filtered so that we only have observations where the body mass was less than 3 kilos. 
+We can also filter for specific values, but beware! you must use double equals (==) for comparisons, as single equals (=) are for argument names in functions. 
+
+```{r}
+filter(penguins, body_mass_g == 2900)
+```
+What is happening, is that R will check if the values in body_mass_g are the same as 2900 (TRUE) or not (FALSE), and will do this for every row in the data set. Then at the end, it will discard all those that are FALSE, and keep those that are TRUE.
+
+
+## **Challenge 4.** {.tabset}
+
+You can run assignments in your own RStudio, or run the forth challenge in the subsetting tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("002-subsetting", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **4a**: Filter the penguins data set so that you only have the species "Gentoo"
+>
+> **4b**: Filter the penguns data so that you are left with only data where the flipper length is larger than 180.
+>
+> **4c**: The above code will not include any row where flipper length is _exactly_ 180. 
+For this to happen you have to indicate that it can be _larger than_ or _equal to_ 180.
+
+### Solution
+
+```{r solutions-4}
+## 4a 
+filter(penguins, species == "Gentoo")
+
+## 4b
+filter(penguins, flipper_length_mm > 180)
+
+## 4c
+filter(penguins, flipper_length_mm >= 180)
+```
+
+# Filtering rows pt.2
+
+Many times, we will want to have several filters applied at once. What if you only want Adelie that are below 3 kilos?
+`filter` can take as many statements as you want! Combine them by adding commas (,) between each statement, and that will work as 'and'
+
+```{r}
+filter(penguins, 
+       species == "Chinstrap",
+       body_mass_g < 3000
+)
+```
+
+You can also use the `&` sign, which in R is the comparison character for `and`, like `==` is for `equals`.
+```{r}
+filter(penguins, 
+       species == "Chinstrap" &
+         body_mass_g < 3000
+)
+```
+
+Here we are filtering the penguins data set keeping only the species "Chinstrap" **and** those below 3.5 kilos.
+And we can keep going!
+
+```{r}
+filter(penguins, 
+       species == "Chinstrap",
+       body_mass_g < 3000,
+       sex == "male"
+)
+```
+
+None! All the smallest chinstraps are female.
+
+but! What if we want all the Chinstrap penguins OR if body mass is below 3.5kilos? When we use the comma (or the &), we make sure that all statements are TRUE. But what if we want it so that _either_ statement is true? Then we can use the OR character `|` .
+
+```{r}
+filter(penguins, 
+       species == "Chinstrap" | body_mass_g < 3000
+)
+```
+This now gives us both all chinstrap penguins, and the smallest Adelie penguins!
+By combining AND and OR statements this way, we can slowly create the filtering we are after.
+
+
+## **Challenge 5.** {.tabset}
+
+You can run assignments in your own RStudio, or run the fifth challenge in the subsetting tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("002-subsetting", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **5a**: Using a comma (','), each expression must be TRUE for the end result. Choose all data where flipper length is larger or equal to 180, and the species is "Gentoo"
+>
+> **5b**: Do the same using the `&` (and)  sign.
+>
+> **5c**: Filter the penguins data so that you have either chinstrap penguins, or penguins with body mass below or equal to 3 kilos.
+
+### Solution
+
+```{r solutions-5}
+## 5a 
+filter(penguins, 
+       flipper_length_mm >= 180,
+       species == "Gentoo")
+
+## 5b
+filter(penguins, 
+       flipper_length_mm >= 180 &
+       species == "Gentoo")
+
+## 5c
+filter(penguins, 
+       species == "Chinstrap" | body_mass_g < 3000
+)
+```
+
+# Creating subsetted objects
+
+So far, we have kept working on the penguins data set, without actually altering it. For users of programs like SPSS and excel, this might seem odd. But in R, you must explicitly state that you want the results of your actions stored somehow. So far, all our actions have been executed, then forgotten by R. Like it never happened. This is acutally quite smart, since it makes it harder to do mistakes you can have difficulties changing. 
+
+To store the changes, we have to "assign" the data to a new object in the R environment. Like the penguins data set, which already is an object in our environment we have called "penguins". 
+
+We will now store a filtered version including only the chinstrap penguins, in an object we call `chinstraps`.
+
+```{r}
+chinstraps <- filter(penguins, species == "Chinstrap")
+```
+
+You will likely notice that when we execute this command, nothing is outputed to the console. That is expected. When we assign the output of a function somewhere, and everything works (i.e. no errors), nothing happens in the console.
+
+But you should be able to see the new chinstraps object in your environment, and when we type `chinstraps` in the R console, it prints our chinstraps data.
+
+```{r}
+chinstraps
+```
+
+Maybe in this chinstrap data we are also not so interested in the bill measurements, so we want to remove them.
+
+```{r}
+chinstraps <- select(chinstraps, -starts_with("bill"))
+chinstraps
+```
+Now our data has two less columns, and many fewer rows. A simpler data set for us to work with. But assigning the chinstrap data twice like this is a lot of typing, and there is a simpler way, using something we call the "pipe".
+
+## The pipe `%>%`
+
+We often want to string together a series of functions. This is achieved using pipe operator, `%>%`. This takes the value on the left, and passes it as the first argument to the function call on the right. 
+
+`%>%` isn’t limited to `dplyr` functions. It's an alternative way of writing any `R` code:
+
+The shortcut to insert the pipe operator is `Ctrl`+`Shift`+`M` for Windows/Linux, and `Cmd`+`Shift`+`M` for Mac.
+
+In the chnstrap example, we had the following code to filter the rows and then select our columns.
+
+```{r}
+chinstraps <- filter(penguins, species == "Chinstrap")
+chinstraps <- select(chinstraps, -starts_with("bill"))
+```
+
+Here we first create the chinstraps data from the filtered penguins data set. Then use that chinstraps data to reduce the columns and write it again back to the same chinstraps object.
+It's a little messy. With the pipe, we can make it more streamlined.
+
+```{r}
+chinstraps <- penguins %>% 
+  filter(species == "Chinstrap") %>% 
+  select(-starts_with("bill"))
+```
+
+The end result is the same, but there is less typing and we can "read" the pipeline of data subsetting more like language, if we know how. You can read the pipe operator as "and then". 
+
+So if we translate the code above to human language we could read it as:
+
+> take the penguins data set, and then
+> keep only rows for the chinstrap penguins, and then
+> remove the columns starting with bill
+> and assign the end result to chinstraps.
+
+Learning to read pipes is a great skill, R is not the only programming language that can do this (though the operator is different between languages, the functionality exists in many). 
+
+We can do the entire pipe chain step by step to see what is happening. 
+
+```{r}
+penguins
+```
+
+```{r}
+penguins %>% 
+  filter(species == "Chinstrap")
+```
+
+```{r}
+penguins %>% 
+  filter(species == "Chinstrap") %>% 
+  select(-starts_with("bill"))
+```
+
+So, for each chain step, the output of the previous step is fed into the next step, and that way the commands build on each other until a final end result is made.
+
+And as before, we still are seeing the output of the command chain in the console, meaning we are not storing it.
+Let us do that, again using the assignment.
+
+```{r}
+chinstraps <- penguins %>% 
+  filter(species == "Chinstrap") %>% 
+  select(-starts_with("bill"))
+
+chinstraps
+```
+
+
+## **Challenge 6.** {.tabset}
+
+You can run assignments in your own RStudio, or run the sixth challenge in the subsetting tutorial by entering the following in the R console:
+
+```r
+learnr::run_tutorial("002-subsetting", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **6a**: Create an object named `gentoos` that contains only data from the speces "Gentoo" in the penguins data set.
+>
+> **6b**: Create another object with only penguins that are over 4 kilos, and call it `large_penguins`.
+>
+> **6c**: Create a third object with observations from the Dream island, and keep only the columns island, and the bill measurements, and call it `dream_penguins`. Do all this by chaining the commands with the pipe.
+
+### Solution
+
+```{r solutions-6}
+## 6a 
+gentoos <- filter(penguins,
+                  species == "Gentoo")
+
+## 6b
+large_penguins <- filter(penguins, 
+                         body_mass_g > 4000)
+
+## 6c
+dream_penguins <- penguins %>% 
+  filter(island == "Dream") %>% 
+  select(island, starts_with("bill"))
+```
+
+# Sorting rows
+ So far, we have looked at subsetting the data. But some times, we want to reorganise the data without altering it. In tables, we are used to be able to sort columns in ascending or descending order.
+ 
+This can also be done with dplyr's `arrange` function. arrange does not alter the data per se, just the order in which the rows are stored.
+
+```{r}
+penguins %>% 
+  arrange(island)
+```
+
+Here we have sorted the data by the island column. Since island is a factor, it will order by the facor levels, which in this case has Biscoe island as the first category.
+If we sort a numeric column, it will sort by numeric value.
+
+By default, arrange sorts in ascending order. If you want it sorted by descending order, wrap the column name in `desc`
+
+```{r}
+penguins %>% 
+  arrange(desc(island))
+```
+
+## **Challenge 7.** {.tabset}
+
+You can run assignments in your own RStudio, or run the sixth challenge in the subsetting tutorial by entering the following in the R console:
+
+```r
+learnr::run_tutorial("002-subsetting", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **7a**: Arrange the penguins data by body mass.
+>
+> **7b**: Arrange the penguins data by descending order of flipper length.
+>
+> **7c**: You can arrange on multiple columns. Try arranging the data by ascending island and descending flipper length, using a comma between the two arguments.
+
+### Solution
+
+```{r solutions-7}
+## 7a 
+penguins %>% 
+  arrange(body_mass_g)
+
+## 7b
+penguins %>% 
+  arrange(desc(flipper_length_mm))
+
+## 7c
+penguins %>% 
+  arrange(island,
+          desc(flipper_length_mm))
+```
+
+
+# Combining with ggplots!
+
+Some times, we want to subset data just to reduce the data in a plot, not necessarily for our whole pipeline.
+For instance, maybe you want to plot the data just from the Gentoo species, but dont want to make another dataset.
+
+We can do that with pipes!
+
+```{r}
+penguins %>% 
+  filter(species == "Gentoo") %>% 
+  ggplot(aes(x = bill_depth_mm,
+             y = bill_length_mm,
+             colour = species)) +
+  geom_point()
+```
+
+Here, we first filter the penguins data, and then pass that output to ggplot with a pipe. This reduces the data immediately, without storing the intermediate.
+
+
+# Wrap-up
+
+Now we've learned about subsetting and sorting our data, so we can create data sets that are suited to our needs.
+We also learned about chaining commands, the use of the pipe to create a series of commands that build on eachother to create a final wanted output.

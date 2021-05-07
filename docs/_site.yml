@@ -1,7 +1,7 @@
 name: "docs"
-title: "Tidyquintro course website"
+title: "Introduction to Tidyverse"
 description: |
-  Tidyquintro course website
+  Introduction to Tidyverse - course website
 output_dir: "."
 navbar:
   right:
@@ -9,21 +9,19 @@ navbar:
       href: index.html
     - text: "Workshop preparations"
       href: prep.html
-    - text: "Slides"
+    - text: "Materials"
       menu:
-        - text: "Introduction"
-          href: 000-tidyverse-introduction.html
-        - text: "Part 1 - Tidy data wrangling"
-          href: 001-tidy-wrangling.html
-        - text: "Part 2 - Tidy data summaries"
-          href: 002-tidy-summaries.html
-        - text: "Conclusion"
-          href: 003-tidyverse-conclusion.html
-    - text: "Demonstrations"
-      menu:
-        - text: "Part 1 - Tidy data wrangling"
-          href: 001-tidy-wrangling-demo.html
-        - text: "Part 2 - Tidy data summaries"
-          href: 002-tidy-summaries-demo.html
+        - text: "Day 1 - Pt 1 - Tidy data visualisation"
+          href: materials/001-ggplot2.html
+        - text: "Day 1 - Pt 2 - Tidy data subsetting"
+          href: materials/002-dplyr-subsetting.html
+        - text: "Day 2 - Pt 1 - Adding or altering variables"
+          href: materials/003-dplyr-mutating.html
+        - text: "Day 2 - Pt 2 - Tidy reshaping"
+          href: materials/004-tidyr-pivoting.html
+        - text: "Day 3 - Pt 1 - Tidy data summaries"
+          href: materials/005-summarise.html
+        - text: "Day 3 - Pt 2 - Summaries, pivots and visualisation"
+          href: materials/006-combining-demo.html
 
 output: distill::distill_article

@@ -1,11 +1,6 @@
 ---
 title: "Workshop preparations"
-output: html_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 ## Recommended setup
 This workshop is a combination of presentation, live coding and exercises. 
@@ -13,12 +8,13 @@ If you are attending it as a webinar, having a dual monitor set-up is recommende
 This would enable you to follow the live coding, by also typing in the commands and experience the effects you self.
 Programming is a skill where you learn best by doing.
 
-That being said, as there are also exercises you can also follow using a single monitor. 
+That being said, as there are also exercises, so you can also follow using a single monitor. 
 
 ## Install R
 Make sure to have R installed on your computer.
-It is recommended that you have a newer version of R installed, preferably higher than 4.0.0, but at minimum higher than 3.5.3.
+It is recommended that you have a newer version of R installed, and it must be newer than version 4.0.0.
 Download R from [the R-project](https://www.r-project.org/)
+If you attend the course with an older R version than this, you cannot expect the results of your code to be the same as the other particpants and the instructors.
 
 #### Windows computers
 The tidyverse packages require [rtools](https://cran.r-project.org/bin/windows/Rtools/) to be installed. 
@@ -36,19 +32,31 @@ It is not necessary, but highly recommended.
 
 This package contains materials that are necessary for the workshop. 
 
-You can install tidyquintro from [github](https://github.com/Athanasiamo/tidyquintro), which will also install the packages that the tutorial will cover, with
+You can install swc.tidyverse from [github](https://github.com/Athanasiamo/swc.tidyverse), which will also install the packages that the tutorial will cover. To install the package, open your RStudio installed before, and copy these two lines into the tab called "Console". If you have a newly installed RStudio, this should be the tab on the left once RStudio is opened.
 
 ```r
 install.packages("remotes")
-remotes::install_github("Athanasiamo/tidyquintro")
+remotes::install_github("Athanasiamo/swc.tidyverse")
+```
+
+### Loading the package
+Loading the package will also load the necessary libraries directly
+```r
+library(swc.tidyverse)
+```
+
+Additionally, there are exercises connected to each of the topics which will also be accessible via the [learnr](https://rstudio.github.io/learnr/)-package.
+
+```r
+learnr::available_tutorials("swc.tidyverse")
 ```
 
 #### If install fails
-If the above install fails, you can try installing everything individually and then the package from source.
+If the package install fails, you can try installing everything individually and then the package from source.
 Start by installing the dependent packages for the course:
 
 ```r
-install.packages(c("tidyverse", "palmerpenguins", "learnr", "remotes"))
+install.packages(c("tidyverse", "palmerpenguins", "learnr", "remotes"), Ncpus = 2)
 remotes::install_github("rstudio-education/gradethis")
 ``` 
 
@@ -57,19 +65,7 @@ Download the newest tar-version from the [source](source/) directory, make sure 
 
 ```r
 # Alter the /path/to section to the path where the downloaded file is. 
-install.packages("/path/to/tidyquintro_0.1.01.tar.gz", repos = NULL)
+install.packages("/path/to/swc.tidyverse_0.1.01.tar.gz", repos = NULL)
 ```
 
-If you are still struggling to install the package, please create [a ticket](https://github.com/Athanasiamo/tidyquintro/issues) pasting the command and output you get so I can help you get it sorted.
-
-### Loading the package
-Loading the package will also load the necessary libraries directly
-```r
-library(tidyquintro)
-```
-
-Additionally, there are exercises connected to each of the topics which will also be accessible via the [learnr](https://rstudio.github.io/learnr/)-package.
-
-```{r}
-learnr::available_tutorials("tidyquintro")
-```
+If you are still struggling to install the package, please create [a ticket](https://github.com/Athanasiamo/swc.tidyverse/issues) pasting the command and output you get so I can help you get it sorted.

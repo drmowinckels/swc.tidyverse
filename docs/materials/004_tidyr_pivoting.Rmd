@@ -1,0 +1,476 @@
+---
+title: "Working with datasets in R and the Tidyverse"
+subtitle: "Reading in data and pivoting / reshaping"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: true
+date: "26th May 2021"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      fig.retina = 3)
+
+# to reduce data.frame output in examples
+library(knitr)
+hook_output <- knit_hooks$get("output")
+knit_hooks$set(output = function(x, options) {
+  lines <- options$output.lines
+  if (is.null(lines)) {
+    return(hook_output(x, options))  # pass to default hook
+  }
+  x <- unlist(strsplit(x, "\n"))
+  more <- "..."
+  if (length(lines)==1) {        # first n lines
+    if (length(x) > lines) {
+      # truncate the output, but add ....
+      x <- c(head(x, lines), more)
+    }
+  } else {
+    x <- c(more, x[lines], more)
+  }
+  # paste these lines together
+  x <- paste(c(x, ""), collapse = "\n")
+  hook_output(x, options)
+})
+```
+
+**Questions**
+
+>
+> I have my data stored in a local file, how do I read it in in R?
+>
+> How can I make my data into a longer format?
+>
+> How can I get my data into a wider format?
+
+
+**Objectives**
+
+>
+> To be able to use functions to read in data from file into R.
+>
+> To be able to use the pivot_longer function to create long data formats
+>
+> To be able to ude the pivot_wider function to create wide data formats
+>
+
+# **Reading in data from files**
+
+We have so far used data that is already available in R from the palmerpenguins package. These data sets that are built-in to R packages or R it self are quite common, in particular for showing examples of code, since they are available to anyone with R or a specific R package installed. 
+
+But usually, you would read in data from a file you have on your computer. So how we have made the penguins data accessible so far will not at all be similar to how your get your own data in to R. 
+
+The palmerpenguins package also comes with text files that contain the data we have been working on, and a convenient function that can help us locate this file.
+
+```{r}
+palmerpenguins::path_to_file()
+```
+
+Calling it without an argument gives ut two file options. The penguins raw data, and just the penguins data. We have been working on the penguins data, so we will use that again now.
+
+If you provide a file name to the function, it will give you the entire file path to that file.
+
+```{r}
+palmerpenguins::path_to_file("penguins.csv" )
+```
+
+Knowing where this file is, will make us possible for us to read it in with functions that are more like what you would use to read your own files into R.
+
+If we look at the content of the file with a text editor (like notepad or textedit), the top rows should look like this
+
+```
+species,island,bill_length_mm,bill_depth_mm,flipper_length_mm,body_mass_g,sex,year
+Adelie,Torgersen,39.1,18.7,181,3750,male,2007
+Adelie,Torgersen,39.5,17.4,186,3800,female,2007
+Adelie,Torgersen,40.3,18,195,3250,female,2007
+Adelie,Torgersen,NA,NA,NA,NA,NA,2007
+Adelie,Torgersen,36.7,19.3,193,3450,female,2007
+Adelie,Torgersen,39.3,20.6,190,3650,male,2007
+Adelie,Torgersen,38.9,17.8,181,3625,female,2007
+Adelie,Torgersen,39.2,19.6,195,4675,male,2007
+```
+
+This content should be a little familiar by now. It looks like the first row is the penguins column names, and then are rows with the data. We can see both from the file extension "csv" and from the file content that the columns are separated by commas. Knowing what character the data is separated by is important when we want to read in the data. 
+
+In R, we have the function `read.csv` to read in comma separated files.
+
+```{r output.lines = 10}
+penguin_path <- palmerpenguins::path_to_file("penguins.csv" )
+read.csv(penguin_path, header = TRUE)
+```
+
+And there is our data! That looks almost the same as the data from R, the main difference being that what are factor in the built in data set are characters here. We're not going to focus on this here, but if you want to learn more about working with factors and characters, the tidyverse has the [`forcats`](https://forcats.tidyverse.org/) package for factors, and [`stringr`](https://stringr.tidyverse.org/) for strings/characters.
+
+If you are working with other types of text data, you might need to use the `read.table` function, and specify the separator character through the `sep` argument. Another common text file type is tab-separated (often saved with the `.tsv` extension, but not always. This is why looking at the data is important). To read in tab-separated data, use the argument `sep = "\t"`, where `\t` is a common character combination letting programs know there is a tab space there. 
+
+If you want to read in other data types into R (like SPSS, excel, SAS etc), this can also be done. We recommend the [rio](https://cloud.r-project.org/web/packages/rio/vignettes/rio.html) package as a beginner friendly alternative to reading in such files.
+
+But we didn't save our data to an object. We should do that, so we can continue working on it in R. As before, if we don't assign the output of a function anywhere, R will just display it and forget it. 
+
+```{r}
+penguins <- read.csv(penguin_path, header = TRUE)
+```
+
+## **Challenge 1.** {.tabset}
+
+You can run assignments in your own RStudio, or run the first challenge in the pivoting tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("004-pivoting", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **1a**: Read in the penguins data set from file.
+>
+> **1b**: Read in the penguins raw data set from file. How does this file look different from the penguins data set we have been using?
+>
+> **1c**: Read in the penguins data set from file and assign it to the object `penguins`
+>
+
+### Solution
+
+```{r "solutions-1a", output.lines = 10}
+## 1a
+penguin_path <- palmerpenguins::path_to_file("penguins.csv" )
+read.csv(penguin_path, header = TRUE)
+```
+
+```{r "solutions-1b", output.lines = 10}
+# 1b
+penguin_path <- palmerpenguins::path_to_file("penguins_raw.csv" )
+read.csv(penguin_path, header = TRUE)
+```
+
+```{r "solutions-1c", output.lines = 10}
+## 1c
+penguin_path <- palmerpenguins::path_to_file("penguins.csv" )
+penguins <- read.csv(penguin_path, header = TRUE)
+```
+
+
+
+# **Pivoting or reshaping data**
+
+Data come in a myriad of different shapes, and talking about data set can often become confusing as people are used to data being in different formats, and they call these formats different things.
+In the tidyverse, "tidy" data is a very opinionated term so that we can all talk about data with more common ground.
+
+The goal of the tidyr package is to help you create tidy data. 
+
+Tidy data is data where:
+
+- Every column is variable.  
+- Every row is an observation.  
+- Every cell is a single value.  
+
+Tidy data describes a standard way of storing data that is used wherever possible throughout the tidyverse. 
+If you ensure that your data is tidy, you'll spend less time fighting with the tools and more time working on your analysis. Learn more about tidy data in `vignette("tidy-data")`.
+
+### Tall/long vs. wide data
+
+- Tall (or long) data are considered "tidy", in that they adhere to the three tidy-data principles  
+
+- Wide data are not necessarily "messy", but have a shape less ideal for easy handling in the tidyverse  
+
+Example in longitudinal data design:
+
+- wide data: each participant has a single row of data, with all longitudinal observations in separate columns  
+- tall data: a participant has as many rows as longitudinal time points, with measures in separate columns
+
+
+```{r, echo = FALSE}
+knitr::include_graphics("gifs/tall_wide.gif")
+```
+
+# Creating longer data
+
+Let us first talk about creating longer data.
+In most cases, you will encounter data that is in wide format, this is what is often taught in many disciplines and also necessary to run certain analyses in statistical programs like SPSS. In R, and specifically the tidyverse, working on long data has clear advantages, which we wil be exploring here while we also do the transformations.
+
+As before, we need to start off by making sure we have the tidyverse package loaded, and the penguins dataset ready at hand.
+
+```{r}
+library(tidyverse)
+penguins <- palmerpenguins::penguins
+```
+
+In tidyverse, there is a single function to create longer data sets, called `pivot_longer`. Those of you who might have some prior experience with tidyverse, or you might encounter it when googling for help,  might have seen the `gather` function. This is an older function of similar capabilities which we will not cover here, as the `pivot_longer` function supersedes it. 
+
+```{r}
+penguins %>% 
+  pivot_longer(contains("_")) 
+```
+
+pivot_longer takes tidy-select column arguments, so it is easy to grab all the columns you are after. Here, we are pivoting longer all columns that contain an underscore. And what happens? We now have less columns, but also two new columns we did not have before! In the `name` column, all our previous columns names are, one after the other. And in the `value` column, all the cell values for the observations! 
+So before, the data was wider, in that each of the columns with `_` had their own column, while now, they are all collected into two columns instead of 4.
+
+Why would we want to do that? Well, perhaps we want to plot all the variables in a single ggplot call? Now that the measurement types are collected in these two ways, we can facet over the `name` column to create a subplot per measurement type!
+
+```{r}
+penguins %>% 
+  pivot_longer(contains("_")) %>% 
+  ggplot(aes(y = value, 
+             x = species,
+             fill = species)) +
+  geom_boxplot() +
+  facet_wrap(~name, scales = "free_y")
+```
+
+That's pretty neat. By pivoting the data into this longer shape we are able to create subplots for all measurements easily with the same ggplot call and have them consistent, and nicely aligned. This longer format is also great for summaries, which we will be covering tomorrow.
+
+## **Challenge 2.** {.tabset}
+
+You can run assignments in your own RStudio, or run the second challenge in the pivoting tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("004-pivoting", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **2a**: Start by pivoting the penguins data so that all the bill measurements (starts with "bill") are in the same column.
+>
+> **2b**: Pivot longer all columns containing an underscore (_) in their name.
+>
+> **2c**: As mentioned, pivot_longer accepts tidy-selectors. Pivot longer all numerical columns.
+>
+
+### Solution
+
+```{r "solutions-2"}
+## 1a
+penguins %>% 
+  pivot_longer(starts_with("bill"))
+
+# 1b
+penguins %>% 
+  pivot_longer(contains("_"))
+
+## 1c
+penguins %>% 
+  pivot_longer(where(is.numeric))
+```
+
+
+# Altering names during pivots
+
+While often you can get away with leaving the default naming of the two columns as is, especially if you are just doing something quick like making a plot, most times you will likely want to control the names of your two new columns.
+
+```{r}
+penguins %>% 
+  pivot_longer(contains("_"),
+               names_to = "columns",
+               values_to = "content")
+```
+
+Here, we changes the "names" to "columns" and "values" to "content". The pivot defaults are usually quite sensible, making it clear what is the column names and what are the cell values. But English might not be your working language or you might find something more obvious for you self. 
+
+But we have even more power in the renaming of columns. Pivots actually have quite a lot of options, making it possible for us to create outputs looking just like we want. Notice how the names of the columns we pivoted follow a specific structure. First is the name of the body part, then the type of measurement, then the unit of the measurement. This clear logic we can use to our advantage.
+
+```{r}
+penguins %>% 
+  pivot_longer(contains("_"),
+               names_to = c("part", "measure" , "unit"),
+               names_sep = "_")
+```
+
+now, the pivot gave us 4 columns in stead of two! We told pivot that the column name could be split into the columns part, measure and unit, and that these were separated by underscore. Again we see how great consistent and logical naming of columns can be such a great help when working with data!
+
+## **Challenge 3.** {.tabset}
+
+You can run assignments in your own RStudio, or run the third challenge in the pivoting tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("004-pivoting", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **3a**: Pivot longer all the bill measurements, and alter the names in one go, so that there are three columns named "part", "measure" and "unit" after the pivot.
+>
+> **3b**:  Pivot longer all the bill measurements, and use the `names_prefix` argument. Give it the string "bill_". What did that do?
+>
+> **3c**: Pivot longer all the bill measurements, and use the `names_prefix`, `names_to` and `names_sep` arguments. What do you need to change in `names_to` from the previous example to make it work now that we also use `names_prefix`?
+>
+
+### Solution
+
+```{r "solutions-3"}
+## 1a
+penguins %>% 
+  pivot_longer(starts_with("bill"),
+               names_to = c("part", "measure" , "unit"),
+               names_sep = "_")
+
+# 1b
+penguins %>% 
+  pivot_longer(starts_with("bill"),
+               names_prefix = "bill_")
+
+## 1c
+penguins %>% 
+  pivot_longer(starts_with("bill"),
+               names_prefix = "bill_",
+               names_to = c("bill_measure" , "unit"),
+               names_sep = "_")
+```
+
+# Cleaning up values during pivots.
+
+When pivoting, it is common that quite some `NA` values appear in the values column. 
+We can remove these immediately by making the argument `values_drop_na` be  `TRUE`
+
+```{r}
+penguins %>% 
+  pivot_longer(starts_with("bill"),
+               values_drop_na = TRUE)
+```
+
+This extra argument will ensure that all `NA` values in the `value` column are removed. This is some times convenient as we might move on to analyses etc of the data, which often are made more complicated (or impossible) when there is missing data. 
+
+We should put everything together and create a new object that is our long formatted penguin data set.
+
+```{r}
+penguins_long <- penguins %>% 
+  pivot_longer(contains("_"),
+               names_to = c("part", "measure" , "unit"),
+               names_sep = "_",
+               values_drop_na = TRUE)
+penguins_long
+```
+
+# Pivoting data wider
+
+While long data formats are ideal when you are working in the tidyverse, you might encounter packages or pipelines in R that require wide-format data. Knowing how to transform a long data set into wide is just as important ad knowing how to go from wide to long. 
+You will also experience that this skill can be convenient when creating data summaries tomorrow.
+
+Before we start using the penguins_longer dataset we made, let us make another simpler longer data set, for the first look a the pivor wider function.
+
+```{r}
+penguins_long_simple <- penguins %>% 
+  pivot_longer(contains("_"))
+penguins_long_simple
+```
+
+`penguins_long_simple` now contains the lover penguins dataset, with column names in the "name" column, and values in the "value" column. 
+
+If we want to make this wider again we can try the following:
+
+```{r}
+penguins_long_simple %>% 
+  pivot_wider(names_from = name, 
+              values_from = value)
+```
+
+ok what is happening here? It does not at all look as we expected! Our columns have something very weird in them, with this strange `<dbl [7]>` thing, what does that mean?
+Lets look at the warning message our code gave us and see if we can figure it out.
+**Values are not uniquely identified; output will contain list-cols**. We are being told the pivot wider cannot uniquely identify the observations, and so cannot plave a single value into the columns. Is returning lists of values. 
+
+yikes! That's super annoying. Let's go back to our penguins data set and see if we can do something to help.
+
+```{r}
+penguins
+```
+Have you noticed that there is no column that uniquely identifies an observation? Other than each observation being on its own row, we have nothing to make sure that we can identify which observations belong together. As long as they are in the original format, this is ok, but once we pivoted the data longer, we lost the ability to identify which rows of observations belong together. 
+
+We can remedy that by adding row numbers to the original data before we pivot. The `row_number()`  function is great for this. 
+
+```{r}
+penguins_long_simple <- penguins %>% 
+  mutate(sample = row_number()) %>% 
+  pivot_longer(contains("_"))
+penguins_long_simple
+```
+
+Notice now that in the sample column, the numbers repeat several rows. Where sample equals 1, all those are observations from the first row of data in the original penguins data set! Let us try to pivot that wider again.
+
+```{r}
+penguins_long_simple %>% 
+  pivot_wider(names_from = name, 
+              values_from = value)
+```
+
+And now it worked! Now, the remaining columns were able to uniquely identify which observations belonged together. And the data looks just like the original penguins data set now, with the addition of the sample column, and the columns being slightly rearranged.
+
+We should re-create our penguins long data set, to make sure we don't have this problem again.
+
+```{r}
+penguins_long <- penguins %>% 
+  mutate(sample = row_number()) %>% 
+  pivot_longer(contains("_"),
+               names_to = c("part", "measure" , "unit"),
+               names_sep = "_",
+               values_drop_na = TRUE)
+penguins_long
+```
+
+
+## **Challenge 4.** {.tabset}
+
+You can run assignments in your own RStudio, or run the forth challenge in the pivoting tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("004-pivoting", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **4a**: Turn the penguins_long_simple dataset back to its original state
+>
+
+### Solution
+
+```{r "solutions-4"}
+## 3a
+penguins_long_simple %>% 
+  pivot_wider(names_from = name,
+              values_from = value)
+```
+
+
+# Pivoting data wider pt.2
+
+Much as the first example of pivot_longer, pivot_wider in its simplest form is relatively straight forward. But your penguins long data set is much more complex. The column names are split into several columns, how do we fix that?
+
+```{r}
+penguins_long
+```
+
+Much like pivot_longer, pivot_wider has arguments that will let us get back to the original state, with much of the same syntax as with pivot_longer!
+
+```{r}
+penguins_long %>% 
+  pivot_wider(names_from = c("part", "measure", "unit"),
+              names_sep = "_",
+              values_from = value)
+```
+
+Those arguments and inputs should be familiar to the call from pivot_longer. So we are lucky that if you understand one of them, it is easier to understand the other.
+
+## **Challenge 5.** {.tabset}
+
+You can run assignments in your own RStudio, or run the fifth challenge in the pivoting tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("004-pivoting", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+>
+> **5a**: Turn the penguins_long dataset back to its original state
+>
+
+### Solution
+
+```{r "solutions-5"}
+## 4a
+penguins_long %>% 
+  pivot_wider(names_from = c("part", "measure", "unit"),
+              names_sep = "_",
+              values_from = value)
+```
