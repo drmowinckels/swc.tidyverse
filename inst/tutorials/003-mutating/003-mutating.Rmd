@@ -12,7 +12,7 @@ description: |
 ---
 
 ```{r setup, include=FALSE}
-library(tidyquintro)
+library(swc.tidyverse)
 library(learnr)
 library(gradethis)
 
