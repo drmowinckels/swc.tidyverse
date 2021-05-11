@@ -39,6 +39,14 @@ install.packages("remotes")
 remotes::install_github("Athanasiamo/swc.tidyverse")
 ```
 
+If the console fills up with a numbered list with names of packages and has the question:
+```
+Enter one or more numbers, or an empty line to skip updates: 
+```
+
+Please enter `1` . This will update all your packages (since you have them installed), to make sure you are working on the same version of packages as the remaining participants.
+This might occur several times, please enter `1` each time.
+
 ### Loading the package
 Loading the package will also load the necessary libraries directly
 ```r
