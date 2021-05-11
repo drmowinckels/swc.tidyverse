@@ -24,5 +24,4 @@ Imports:
     learnr,
     gradethis
 Remotes:
-    rstudio/gradethis,
-    r-lib/rlang
+    rstudio/gradethis
