@@ -17,8 +17,7 @@ Depends:
 Suggests: 
     knitr,
     roxygen2,
-    usethis,
-    remotes
+    usethis
 RoxygenNote: 7.1.1
 Imports: 
     learnr,

@@ -12,9 +12,9 @@ description: |
 ---
 
 ```{r setup, include=FALSE}
-library(swc.tidyverse)
 library(learnr)
 library(gradethis)
+library(tidyverse)
 
 knitr::opts_chunk$set(
   echo = FALSE,
@@ -28,13 +28,13 @@ tutorial_options(
   exercise.reveal_solution = TRUE
 )
 
-penguins_long <- penguins %>% 
+penguins_long <- palmerpenguins::penguins %>% 
   mutate(smaple = row_number()) %>% 
   pivot_longer(contains("_"),
                names_to = c("part", "measure" , "unit"),
                names_sep = "_")
 
-penguins_long_simple <- penguins %>% 
+penguins_long_simple <- palmerpenguins::penguins %>% 
   mutate(smaple = row_number()) %>% 
   pivot_longer(contains("_"))
 ```
@@ -103,27 +103,27 @@ penguin_path <- palmerpenguins::path_to_file(__)
 read.csv(__, header = TRUE)
 ```
 
-```{r read-1b-solution}
+```{r read-1c-solution}
 penguin_path <- palmerpenguins::path_to_file("penguins.csv" )
 penguins <- read.csv(penguin_path, header = TRUE)
 ```
 
-```{r read-1b-check}
+```{r read-1c-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r read-1b-hint-1}
+```{r read-1c-hint-1}
 Make sure you provide the object with the path saved in it to read.csv.
 ```
 
-```{r read-1b-hint-2}
+```{r read-1c-hint-2}
 Did you change the file to look for to "penguins.csv"?
 ```
 
-```{r read-1b-hint-3}
+```{r read-1c-hint-3}
 Make sure you assign the output of `read.csv` to `penguins` using `<-`
 ```
 

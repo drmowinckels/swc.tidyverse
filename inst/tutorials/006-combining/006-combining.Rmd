@@ -10,7 +10,6 @@ description: |
 ---
 
 ```{r setup, include=FALSE}
-library(swc.tidyverse)
 library(learnr)
 library(gradethis)
 
