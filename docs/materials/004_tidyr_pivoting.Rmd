@@ -97,11 +97,12 @@ Adelie,Torgersen,39.2,19.6,195,4675,male,2007
 
 This content should be a little familiar by now. It looks like the first row is the penguins column names, and then are rows with the data. We can see both from the file extension "csv" and from the file content that the columns are separated by commas. Knowing what character the data is separated by is important when we want to read in the data. 
 
-In R, we have the function `read.csv` to read in comma separated files.
+In R, we have the function `read_csv` to read in comma separated files.
 
 ```{r output.lines = 10}
+library(tidyverse)
 penguin_path <- palmerpenguins::path_to_file("penguins.csv" )
-read.csv(penguin_path, header = TRUE)
+read_csv(penguin_path)
 ```
 
 And there is our data! That looks almost the same as the data from R, the main difference being that what are factor in the built in data set are characters here. We're not going to focus on this here, but if you want to learn more about working with factors and characters, the tidyverse has the [`forcats`](https://forcats.tidyverse.org/) package for factors, and [`stringr`](https://stringr.tidyverse.org/) for strings/characters.
@@ -113,7 +114,7 @@ If you want to read in other data types into R (like SPSS, excel, SAS etc), this
 But we didn't save our data to an object. We should do that, so we can continue working on it in R. As before, if we don't assign the output of a function anywhere, R will just display it and forget it. 
 
 ```{r}
-penguins <- read.csv(penguin_path, header = TRUE)
+penguins <- read_csv(penguin_path)
 ```
 
 ## **Challenge 1.** {.tabset}
@@ -138,19 +139,19 @@ learnr::run_tutorial("004-pivoting", "swc.tidyverse")
 ```{r "solutions-1a", output.lines = 10}
 ## 1a
 penguin_path <- palmerpenguins::path_to_file("penguins.csv" )
-read.csv(penguin_path, header = TRUE)
+read_csv(penguin_path)
 ```
 
 ```{r "solutions-1b", output.lines = 10}
 # 1b
 penguin_path <- palmerpenguins::path_to_file("penguins_raw.csv" )
-read.csv(penguin_path, header = TRUE)
+read_csv(penguin_path)
 ```
 
 ```{r "solutions-1c", output.lines = 10}
 ## 1c
 penguin_path <- palmerpenguins::path_to_file("penguins.csv" )
-penguins <- read.csv(penguin_path, header = TRUE)
+penguins <- read_csv(penguin_path)
 ```
 
 

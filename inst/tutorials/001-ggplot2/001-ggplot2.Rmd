@@ -53,14 +53,14 @@ For instance, try looking at the penguins dataset by typing `penguins`, or takin
 > How does body mass change over time? What do you observe? Note that many points are plotted on top of each other. This is called "overplotting". 
 
 Make a scatter plot of the `penguins` data set with bill length on the x-axis and bill depth on the y.
-```{r challenge_1a, exercise = TRUE}
+```{r challenge-1a, exercise = TRUE}
 ggplot(data = __) +
   geom_point(
     mapping = aes(x = __, y = __)
   )
 ```
 
-```{r challenge_1a-solution}
+```{r challenge-1a-solution}
 ggplot(data = penguins) +
   geom_point(
     mapping = aes(x = year, 
@@ -68,18 +68,18 @@ ggplot(data = penguins) +
   )
 ```
 
-```{r challenge_1a-check}
+```{r challenge-1a-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_1a-hint-1}
+```{r challenge-1a-hint-1}
 The name of the data object is `penguins`
 ```
 
-```{r challenge_1a-hint-2}
+```{r challenge-1a-hint-2}
 If you forgot the column names, try looking at the data by typing the 
 data object name `penguing` in the console and select "run".
 ```
@@ -87,52 +87,52 @@ data object name `penguing` in the console and select "run".
 ### 1b
 > Try a different `geom_` function called `geom_jitter`. It will spread the points apart a little bit using random noise.
 
-```{r challenge_1b, exercise = TRUE}
+```{r challenge-1b, exercise = TRUE}
 ggplot(data = penguins) +
   geom___(mapping = aes(x = year, 
                         y = __bill_length_mm))
 ```
 
-```{r challenge_1b-solution}
+```{r challenge-1b-solution}
 ggplot(data = penguins) +
   geom_jitter(mapping = aes(x = year, 
                             y = __bill_length_mm))
 ```
 
-```{r challenge_1b-check}
+```{r challenge-1b-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_1b-hint-1}
+```{r challenge-1b-hint-1}
 The geom's name is `geom_jitter`
 ```
 
 ### 1c
 > See if you can visualize body mass by island. Which island tends to have higher body mass (notice the density of the points along the y-axis)? Lowest body mass? Which island has highest spread in body mass values? How about lowest spread? 
 
-```{r challenge_1c, exercise = TRUE}
+```{r challenge-1c, exercise = TRUE}
 ggplot(data = penguins) +
   geom_jitter(mapping = aes(x = __, 
                             y = __bill_length_mm))
 ```
 
-```{r challenge_1c-solution}
+```{r challenge-1c-solution}
 ggplot(data = penguins) +
   geom_jitter(mapping = aes(x = island,
                             y = __bill_length_mm))
 ```
 
-```{r challenge_1c-check}
+```{r challenge-1c-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_1c-hint-1}
+```{r challenge-1c-hint-1}
 Try using `island` on the x axis.
 ```
 
@@ -142,7 +142,7 @@ Try using `island` on the x axis.
 
 > What will happen if you switch the mappings of `island` and `year` in the previous example? Is the graph still useful? Why? Try mapping year to colour.
 
-```{r challenge_2a, exercise = TRUE}
+```{r challenge-2a, exercise = TRUE}
 ggplot(data = penguins) + 
   geom_jitter(
     mapping = aes(x = __,
@@ -151,7 +151,7 @@ ggplot(data = penguins) +
   )
 ```
 
-```{r challenge_2a-solution}
+```{r challenge-2a-solution}
 ggplot(data = penguins) + 
   geom_jitter(
     mapping = aes(x = bill_length_mm, 
@@ -160,25 +160,25 @@ ggplot(data = penguins) +
   )
 ```
 
-```{r challenge_2a-check}
+```{r challenge-2a-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_2a-hint-1}
+```{r challenge-2a-hint-1}
 Try using bill_length_mm on the x-axis and year on the y-axis.
 ```
 
-```{r challenge_2a-hint-2}
+```{r challenge-2a-hint-2}
 Try adding year to colour
 ```
 
 ### 2b
 > What if you map `colour` aesthetic to `species`? What has changed? How is `year` different from `species`? What is the limitation of the `colour` aesthetic, when used to visualize different types of data? 
 
-```{r challenge_2b, exercise = TRUE}
+```{r challenge-2b, exercise = TRUE}
 ggplot(data = penguins) + 
   geom_jitter(
     mapping = aes(x = bill_length_mm, 
@@ -187,7 +187,7 @@ ggplot(data = penguins) +
   )
 ```
 
-```{r challenge_2b-solution}
+```{r challenge-2b-solution}
 ggplot(data = penguins) + 
   geom_jitter(
     mapping = aes(x = island, 
@@ -196,14 +196,14 @@ ggplot(data = penguins) +
   )
 ```
 
-```{r challenge_2b-check}
+```{r challenge-2b-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_2b-hint-1}
+```{r challenge-2b-hint-1}
 Try using `speces` for colour.
 ```
 
@@ -211,7 +211,7 @@ Try using `speces` for colour.
 
 > Can you add a little colour to our initial graph of body mass by bill length? colour the points by island. 
 
-```{r challenge_2c, exercise = TRUE}
+```{r challenge-2c, exercise = TRUE}
 ggplot(data = penguins) + 
   geom_jitter(
     mapping = aes(x = __, 
@@ -221,7 +221,7 @@ ggplot(data = penguins) +
 
 ```
 
-```{r challenge_2c-solution}
+```{r challenge-2c-solution}
 ggplot(data = penguins) + 
   geom_jitter(
     mapping = aes(x = body_mass_g, 
@@ -230,14 +230,14 @@ ggplot(data = penguins) +
   )
 ```
 
-```{r challenge_2c-check}
+```{r challenge-2c-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_2c-hint-1}
+```{r challenge-2c-hint-1}
 x = body_mass_g, 
 y = bill_length_mm,
 colour = island
@@ -246,7 +246,7 @@ colour = island
 ### 2d
 > How about using colour gradient to illustrate change over time?
 
-```{r challenge_2d, exercise = TRUE}
+```{r challenge-2d, exercise = TRUE}
 ggplot(data = penguins) + 
   geom_jitter(
     mapping = aes(x = body_mass_g, 
@@ -256,7 +256,7 @@ ggplot(data = penguins) +
 
 ```
 
-```{r challenge_2d-solution}
+```{r challenge-2d-solution}
 ggplot(data = penguins) + 
   geom_jitter(
     mapping = aes(x = body_mass_g, 
@@ -265,14 +265,14 @@ ggplot(data = penguins) +
   )
 ```
 
-```{r challenge_2d-check}
+```{r challenge-2d-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_2d-hint-1}
+```{r challenge-2d-hint-1}
 Try adding year to colour
 ```
 
@@ -280,7 +280,7 @@ Try adding year to colour
 
 > Blow your mind by visualizing five(!) dimensions in the same graph. Modify the previous example mapping year to colour and shape to island. 
 
-```{r challenge_3, exercise = TRUE}
+```{r challenge-3, exercise = TRUE}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(x = body_mass_g, 
@@ -292,7 +292,7 @@ ggplot(data = penguins) +
 
 ```
 
-```{r challenge_3-solution}
+```{r challenge-3-solution}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(x = body_mass_g, 
@@ -303,18 +303,18 @@ ggplot(data = penguins) +
   )
 ```
 
-```{r challenge_3-check}
+```{r challenge-3-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_3-hint-1}
+```{r challenge-3-hint-1}
 Try adding island to shape
 ```
 
-```{r challenge_3-hint-2}
+```{r challenge-3-hint-2}
 Try adding bill_depth_mm to size
 ```
 
@@ -323,7 +323,7 @@ Try adding bill_depth_mm to size
 
 > Try mapping `colour` aesthetic to `island` and then to `year`. What do you notice? What might be the reason for different treatment of these variables by `ggplot`?
 
-```{r challenge_4a, exercise = TRUE}
+```{r challenge-4a, exercise = TRUE}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(x = body_mass_g, 
@@ -332,7 +332,7 @@ ggplot(data = penguins) +
   )
 ```
 
-```{r challenge_4a-solution}
+```{r challenge-4a-solution}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(x = body_mass_g, 
@@ -341,21 +341,21 @@ ggplot(data = penguins) +
   )
 ```
 
-```{r challenge_4a-check}
+```{r challenge-4a-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_4a-hint-1}
+```{r challenge-4a-hint-1}
 Try adding island to colour, and then do the same for year.
 ```
 
 ### 4b
 > Change the transparency of the data points by year.
 
-```{r challenge_4b, exercise = TRUE}
+```{r challenge-4b, exercise = TRUE}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(x = body_mass_g, 
@@ -364,7 +364,7 @@ ggplot(data = penguins) +
   )
 ```
 
-```{r challenge_4b-solution}
+```{r challenge-4b-solution}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(x = body_mass_g, 
@@ -373,21 +373,21 @@ ggplot(data = penguins) +
   )
 ```
 
-```{r challenge_4b-check}
+```{r challenge-4b-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_4b-hint-1}
+```{r challenge-4b-hint-1}
 Try adding year to alpha
 ```
 
 ### 4c
 > Move the transparency outside the `aes()` and set it to `0.7`. What can be the benefit of each one of these methods?
 
-```{r challenge_4c, exercise = TRUE}
+```{r challenge-4c, exercise = TRUE}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(x = body_mass_g, 
@@ -395,7 +395,7 @@ ggplot(data = penguins) +
     __ = __)
 ```
 
-```{r challenge_4c-solution}
+```{r challenge-4c-solution}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(x = body_mass_g, 
@@ -403,21 +403,21 @@ ggplot(data = penguins) +
     alpha = 0.7)
 ```
 
-```{r challenge_4c-check}
+```{r challenge-4c-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_4c-hint-1}
+```{r challenge-4c-hint-1}
 Try setting `alpha = 0.7` outside the `aes()`
 ```
 
 ### 4d
 > Run the below code, and see what is produces. Then, move the colour argument, with 'blue' in quotations, into the aes and see what happens. Did you expect that?
 
-```{r challenge_4d, exercise = TRUE}
+```{r challenge-4d, exercise = TRUE}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(x = body_mass_g, 
@@ -425,7 +425,7 @@ ggplot(data = penguins) +
     colour = "blue")
 ```
 
-```{r challenge_4d-solution}
+```{r challenge-4d-solution}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(x = body_mass_g, 
@@ -434,18 +434,18 @@ ggplot(data = penguins) +
     )
 ```
 
-```{r challenge_4d-check}
+```{r challenge-4d-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_4d-hint-1}
+```{r challenge-4d-hint-1}
 move `colour = "blue"`, into the `aes()` 
 ```
 
-```{r challenge_4d-hint-2}
+```{r challenge-4d-hint-2}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(x = body_mass_g, 
@@ -464,39 +464,75 @@ When an argument is placed inside an aes and remains quoted, like "red" here, gg
 
 > Modify the graph to force R to create single regression line for all data points. Keep the points coloured by island.
 
-```{r challenge_5a, exercise = TRUE}
+```{r challenge-5a, exercise = TRUE}
 ggplot(data = penguins, 
-       mapping = aes(x = body_mass_g, 
+       mapping = aes(x = bill_depth_mm, 
                      y = bill_length_mm,
-                     colour = island)
-) +
+                     colour = species)) +
   geom_point(mapping = aes(),
              alpha = 0.5) +
   geom_smooth(method = "lm")
 ```
 
-```{r challenge_5a-solution}
+```{r challenge-5a-solution}
 ggplot(data = penguins, 
-       mapping = aes(x = body_mass_g, 
-                     y = bill_length_mm)
-) +
-  geom_point(mapping = aes(colour = island),
+       mapping = aes(x = bill_depth_mm, 
+                     y = bill_length_mm)) +
+  geom_point(mapping = aes(colour = species),
              alpha = 0.5) +
   geom_smooth(method = "lm")
 ```
 
-```{r challenge_5a-check}
+```{r challenge-5a-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_5a-hint-1}
+```{r challenge-5a-hint-1}
 Try moving `colour = island` into `geom_point()` `aes()`.
 ```
 
-### Solution
+#### Solution
+
+In the graph above, each geom inherited all three mappings: x, y and colour. If we want only single linear model to be built, we would need to limit the effect of `colour` aesthetic to only `geom_point()` function, by moving it from the "parent" function to the layer where we want it to apply. Note, though, that because we want the `colour` to be still mapped to the `island` variable, it needs to be wrapped into `aes()` function and supplied to `mapping` argument.
+
+### 5b
+
+> Add a regression line to the plot that plots one line for each species, while also plotting one across all species. Make sure it is plotted _below_ the one for all species. Make the regression line across all black.
+
+```{r challenge-5b, exercise = TRUE}
+ggplot(data = penguins, 
+       mapping = aes(x = bill_depth_mm, 
+                     y = bill_length_mm)) +
+  geom_point(mapping = aes(colour = species),
+             alpha = 0.5) +
+  geom_smooth(method = "lm")
+```
+
+```{r challenge-5b-solution}
+ggplot(data = penguins, 
+       mapping = aes(x = bill_depth_mm, 
+                     y = bill_length_mm)) +
+  geom_point(mapping = aes(colour = species),
+             alpha = 0.5) +
+  geom_smooth(method = "lm", aes(colour = species)) +
+  geom_smooth(method = "lm", colour = "black")
+```
+
+```{r challenge-5b-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r challenge-5b-hint-1}
+Try moving `colour = island` into `geom_point()` `aes()`.
+```
+
+#### Solution
 
 In the graph above, each geom inherited all three mappings: x, y and colour. If we want only single linear model to be built, we would need to limit the effect of `colour` aesthetic to only `geom_point()` function, by moving it from the "parent" function to the layer where we want it to apply. Note, though, that because we want the `colour` to be still mapped to the `island` variable, it needs to be wrapped into `aes()` function and supplied to `mapping` argument.
 
@@ -507,7 +543,7 @@ In the graph above, each geom inherited all three mappings: x, y and colour. If 
 > Make a boxplot of body mass by year. When was interquartile range of body mass the smallest? 
 
 
-```{r challenge_6a, exercise = TRUE}
+```{r challenge-6a, exercise = TRUE}
 ggplot(penguins) +
   geom___(
     mapping = aes(y = body_mass_g, 
@@ -515,7 +551,7 @@ ggplot(penguins) +
   )
 ```
 
-```{r challenge_6a-solution}
+```{r challenge-6a-solution}
 ggplot(penguins) +
   geom_boxplot(
     mapping = aes(y = body_mass_g, 
@@ -524,32 +560,32 @@ ggplot(penguins) +
   )
 ```
 
-```{r challenge_6a-check}
+```{r challenge-6a-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_6a-hint-1}
+```{r challenge-6a-hint-1}
 You may need to do something with the `year` variable to force it to be categorical.
 ```
 
-```{r challenge_6a-hint-2}
+```{r challenge-6a-hint-2}
 Try adding `year` to `group`
 ```
 
 ### 6b
 > Make a histogram of `body_mass_g`. What is the shape of the distribution? Try setting bin to 50. Why is the bin parameter important for interpretation of the histogram? 
 
-```{r challenge_6b, exercise = TRUE}
+```{r challenge-6b, exercise = TRUE}
 ggplot(penguins) +
   geom___(
     mapping = aes(x = body_mass_g)
   )
 ```
 
-```{r challenge_6b-solution}
+```{r challenge-6b-solution}
 ggplot(penguins) +
   geom_histogram(
     mapping = aes(x = body_mass_g),
@@ -557,28 +593,28 @@ ggplot(penguins) +
   )
 ```
 
-```{r challenge_6b-check}
+```{r challenge-6b-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_6b-hint-1}
+```{r challenge-6b-hint-1}
 Try setting bin to 50
 ```
 
 ### 6c
 > Build a density function. How would you compare density functions of different islands?
 
-```{r challenge_6c, exercise = TRUE}
+```{r challenge-6c, exercise = TRUE}
 ggplot(penguins) +
   geom___(
     mapping = aes(x = body_mass_g)
   ) 
 ```
 
-```{r challenge_6c-solution}
+```{r challenge-6c-solution}
 ggplot(penguins) +
   geom_density(
     mapping = aes(x = body_mass_g, 
@@ -586,25 +622,25 @@ ggplot(penguins) +
   ) 
 ```
 
-```{r challenge_6c-check}
+```{r challenge-6c-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_6c-hint-1}
+```{r challenge-6c-hint-1}
 Try geom_density
 ```
 
-```{r challenge_6c-hint-2}
+```{r challenge-6c-hint-2}
 Try using island to the colour argument
 ```
 
 ### 6d
 > Based on graph produced using `geom_density2d()` function of log bill length vs body mass, how many clusters of data points can you identify? What if you look at it by island?
 
-```{r challenge_6d, exercise = TRUE}
+```{r challenge-6d, exercise = TRUE}
 ggplot(penguins) +
   geom___(
     mapping = aes(x = body_mass_g,
@@ -613,7 +649,7 @@ ggplot(penguins) +
   )
 ```
 
-```{r challenge_6d-solution}
+```{r challenge-6d-solution}
 ggplot(penguins) +
   geom_density2d(
     mapping = aes(x = body_mass_g,
@@ -622,14 +658,14 @@ ggplot(penguins) +
   )
 ```
 
-```{r challenge_6d-check}
+```{r challenge-6d-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_6d-hint-1}
+```{r challenge-6d-hint-1}
 Try geom_density2
 ```
 
@@ -639,7 +675,7 @@ Try geom_density2
 
 > Try faceting by year, keeping the linear smoother. Is there any change in slope of the linear trend over the years?
 
-```{r challenge_7a, exercise = TRUE}
+```{r challenge-7a, exercise = TRUE}
 ggplot(data = penguins, 
        mapping = aes(x = body_mass_g, 
                      y = bill_length_mm)
@@ -649,7 +685,7 @@ ggplot(data = penguins,
   __(~ __)
 ```
 
-```{r challenge_7a-solution}
+```{r challenge-7a-solution}
 ggplot(data = penguins, 
        mapping = aes(x = body_mass_g, 
                      y = bill_length_mm)
@@ -659,14 +695,14 @@ ggplot(data = penguins,
   facet_wrap(~ year)
 ```
 
-```{r challenge_7a-check}
+```{r challenge-7a-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_7a-hint-1}
+```{r challenge-7a-hint-1}
 Try using the facet_wrap function
 ```
 
@@ -674,7 +710,7 @@ Try using the facet_wrap function
 
 > What if you look at linear models per island?
 
-```{r challenge_7b, exercise = TRUE}
+```{r challenge-7b, exercise = TRUE}
 ggplot(data = penguins, 
        mapping = aes(x = body_mass_g, 
                      y = bill_length_mm)
@@ -684,7 +720,7 @@ ggplot(data = penguins,
   __( ~ __)
 ```
 
-```{r challenge_7b-solution}
+```{r challenge-7b-solution}
 ggplot(data = penguins, 
        mapping = aes(x = body_mass_g, 
                      y = bill_length_mm)
@@ -694,14 +730,14 @@ ggplot(data = penguins,
   facet_wrap( ~ island)
 ```
 
-```{r challenge_7b-check}
+```{r challenge-7b-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_7b-hint-1}
+```{r challenge-7b-hint-1}
 Try using the facet_wrap function
 ```
 
@@ -711,7 +747,7 @@ Try using the facet_wrap function
 
 > Make a boxplot of body mass by year. What happens if you add `factor()` around year? What do you need to change in the scale_fill function to make it work? 
 
-```{r challenge_8a, exercise = TRUE}
+```{r challenge-8a, exercise = TRUE}
 ggplot(penguins) +
   geom_boxplot(
     mapping = aes(y = body_mass_g, 
@@ -721,7 +757,7 @@ ggplot(penguins) +
   scale_fill___()
 ```
 
-```{r challenge_8a-solution}
+```{r challenge-8a-solution}
 ggplot(penguins) +
   geom_boxplot(
     mapping = aes(y = body_mass_g, 
@@ -731,18 +767,18 @@ ggplot(penguins) +
   scale_fill_viridis_d()
 ```
 
-```{r challenge_8a-check}
+```{r challenge-8a-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_8a-hint-1}
+```{r challenge-8a-hint-1}
 try changing `year` to `factor(year)`
 ```
 
-```{r challenge_8a-hint-2}
+```{r challenge-8a-hint-2}
 When year is a factor, we now need a colour palette that is "discrete" and not "continuous". 
 Try using `scale_fill_viridis_d()`. 
 ```
@@ -751,7 +787,7 @@ Try using `scale_fill_viridis_d()`.
 ### 8b
 > Make a histogram of `body_mass_g`? What is the shape of the distribution? Why is bin parameter important for interpretation of the histogram? 
 
-```{r challenge_8b, exercise = TRUE}
+```{r challenge-8b, exercise = TRUE}
 ggplot(penguins) +
   geom_boxplot(
     mapping = aes(y = body_mass_g, 
@@ -761,7 +797,7 @@ ggplot(penguins) +
   scale_fill___()
 ```
 
-```{r challenge_8b-solution}
+```{r challenge-8b-solution}
 ggplot(penguins) +
   geom_point(mapping = aes(x = body_mass_g,
                            y = bill_length_mm, 
@@ -770,18 +806,18 @@ ggplot(penguins) +
 
 ```
 
-```{r challenge_8b-check}
+```{r challenge-8b-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_8b-hint-1}
+```{r challenge-8b-hint-1}
 try changing `year` to `factor(year)`
 ```
 
-```{r challenge_8b-hint-2}
+```{r challenge-8b-hint-2}
 When year is a factor, we now need a colour palette that is "discrete" and not "continuous". 
 Try using `scale_fill_viridis_d()`. 
 ```
@@ -789,7 +825,7 @@ Try using `scale_fill_viridis_d()`.
 ### 8c
 > Build a density2d plot How would you compare density functions of different islands? Change the colour palette to brewer "Dark2".
 
-```{r challenge_8c, exercise = TRUE}
+```{r challenge-8c, exercise = TRUE}
 ggplot(penguins)+
   geom_density2d(
     aes(x = body_mass_g, 
@@ -797,7 +833,7 @@ ggplot(penguins)+
   ) 
 ```
 
-```{r challenge_8c-solution}
+```{r challenge-8c-solution}
 ggplot(penguins)+
   geom_density2d(
     aes(x = body_mass_g, 
@@ -807,18 +843,18 @@ ggplot(penguins)+
   scale_colour_brewer(palette = "Dark2")
 ```
 
-```{r challenge_8c-check}
+```{r challenge-8c-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_8c-hint-1}
+```{r challenge-8c-hint-1}
 Try adding island to colour in the density aes.
 ```
 
-```{r challenge_8c-hint-2}
+```{r challenge-8c-hint-2}
 Add `scale_colour_brewer(palette = "Dark2")` to alter the palette.
 ```
 
@@ -826,7 +862,7 @@ Add `scale_colour_brewer(palette = "Dark2")` to alter the palette.
 
 > **9a**: Create a plot and alter the theme. Try the dark theme, for instance!
 
-```{r challenge_9a, exercise = TRUE}
+```{r challenge-9a, exercise = TRUE}
 ggplot(penguins) +
   geom_boxplot(
     mapping = aes(y = body_mass_g, 
@@ -835,7 +871,7 @@ ggplot(penguins) +
   )
 ```
 
-```{r challenge_9a-solution}
+```{r challenge-9a-solution}
 ggplot(penguins) +
   geom_boxplot(
     mapping = aes(y = body_mass_g, 
@@ -845,14 +881,14 @@ ggplot(penguins) +
   theme_dark()
 ```
 
-```{r challenge_9a-check}
+```{r challenge-9a-check}
 grade_code(
   correct = random_praise(),
   incorrect = random_encouragement()
 )
 ```
 
-```{r challenge_9a-hint-1}
+```{r challenge-9a-hint-1}
 Try adding `theme_dark()` at the end
 ```
 
@@ -860,7 +896,7 @@ Try adding `theme_dark()` at the end
 > **9b**: Edit the theme and make the plot as ugly as you can! Use both the theme and scales for the colours to find the most horrible combinations! 
 > You can find colour names in r [at this link](https://www.r-graph-gallery.com/42-colors-names_files/figure-html/thecode-1.png)
 
-```{r challenge_9b, exercise = TRUE, exercise.lines = 20}
+```{r challenge-9b, exercise = TRUE, exercise.lines = 20}
 ggplot(penguins) +
   geom_boxplot(
     mapping = aes(y = body_mass_g, 

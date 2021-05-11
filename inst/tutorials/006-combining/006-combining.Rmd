@@ -1,5 +1,5 @@
 ---
-title: "Working with nested data sets"
+title: "Combining all the Tidyverse"
 output: 
   learnr::tutorial:
     progressive: true 

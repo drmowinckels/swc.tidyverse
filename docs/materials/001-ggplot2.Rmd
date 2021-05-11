@@ -348,17 +348,17 @@ Lastly we will learn how to label and annotate the chart using `labs` and `annot
 ```{r}
 ggplot(data = penguins) + 
   geom_point(
-    aes(x = body_mass_g, 
+    aes(x = bill_depth_mm, 
         y = bill_length_mm, 
         colour = island)
   ) +
   facet_wrap(~year) + 
   labs(
-    title="Body mass vs bill length over time",
-    subtitle="In the past 3 years, body mass of penguins do not seem to increase.",
-    caption="Originally published in doi:10.1371/journal.pone.0090081",
+    title = "Bill depth vs bill length over time",
+    subtitle = "In the past 3 years, relationship between bill depth and length in penguins do not seem to change",
+    caption = "Originally published in doi:10.1371/journal.pone.0090081",
     x = "Bill length, (mm)",
-    y = "Body mass (grams)",
+    y = "Bill depth, (mm)",
     colour = "Island"
   )
 ```
@@ -380,7 +380,7 @@ ggplot(data = penguins) +
   )
 ```
 
-That looks crazy! Line plots are not ideal for this data, as there are multiple lines per speces and year, so the lines do not line up nicely.
+That looks crazy! Line plots are not ideal for this data, as there are multiple lines per species and year, so the lines do not line up nicely.
 
 Another useful geom function is `geom_boxplot()`. It adds a layer with the "box and whiskers" plot illustrating the distribution of values within categories. The following chart breaks down body mass by island, where the box represents first and third quartile (the 25th and 75th percentiles), the middle bar signifies the median value and the whiskers extent to cover 95% confidence interval. Outliers (outside of the 95% confidence interval range) are shown separately.
 
@@ -428,9 +428,8 @@ We can use linear models to highlight differences in dependency between bill len
 
 ```{r}
 ggplot(data = penguins, 
-       mapping = aes(x = body_mass_g, 
-                     y = bill_length_mm,
-                     colour = island)
+       mapping = aes(x = bill_depth_mm, 
+                     y = bill_length_mm)
 ) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm")
@@ -447,7 +446,9 @@ learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
 
 ### Assignment
 > 
-> Modify the graph to force R to create single regression line for all data points. Keep the points coloured by island.
+> **5a.** Modify the graph to force R to create single regression line for all data points. Keep the points coloured by island.
+>
+> **5b.** Add a regression line to the plot that plots one line for each species, while also plotting one across all species
 >
 
 ### Solution
@@ -455,23 +456,32 @@ learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
 In the graph above, each geom inherited all three mappings: x, y and colour. If we want only single linear model to be built, we would need to limit the effect of `colour` aesthetic to only `geom_point()` function, by moving it from the "parent" function to the layer where we want it to apply. Note, though, that because we want the `colour` to be still mapped to the `island` variable, it needs to be wrapped into `aes()` function and supplied to `mapping` argument.
 
 ```{r, results="hide"}
+
+# 5a
 ggplot(data = penguins, 
-       mapping = aes(x = body_mass_g, 
-                     y = bill_length_mm)
-) +
-  geom_point(mapping = aes(colour = island),
+       mapping = aes(x = bill_depth_mm, 
+                     y = bill_length_mm)) +
+  geom_point(mapping = aes(colour = species),
              alpha = 0.5) +
   geom_smooth(method = "lm")
 
 # Alternative solution
 ggplot(data = penguins, 
-       mapping = aes(x = body_mass_g, 
+       mapping = aes(x = bill_depth_mm, 
                      y = bill_length_mm, 
-                     colour = island)
-) +
+                     colour = species)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", 
               colour = "black")
+
+# 5b
+ggplot(data = penguins, 
+       mapping = aes(x = bill_depth_mm, 
+                     y = bill_length_mm)) +
+  geom_point(mapping = aes(colour = species),
+             alpha = 0.5) +
+  geom_smooth(method = "lm", aes(colour = species)) +
+  geom_smooth(method = "lm", colour = "black")
 ```
 
 # Correcting the scale

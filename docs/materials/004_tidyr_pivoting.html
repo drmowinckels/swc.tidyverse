@@ -281,25 +281,58 @@ Adelie,Torgersen,39.3,20.6,190,3650,male,2007
 Adelie,Torgersen,38.9,17.8,181,3625,female,2007
 Adelie,Torgersen,39.2,19.6,195,4675,male,2007</code></pre>
 <p>This content should be a little familiar by now. It looks like the first row is the penguins column names, and then are rows with the data. We can see both from the file extension “csv” and from the file content that the columns are separated by commas. Knowing what character the data is separated by is important when we want to read in the data.</p>
-<p>In R, we have the function <code>read.csv</code> to read in comma separated files.</p>
+<p>In R, we have the function <code>read_csv</code> to read in comma separated files.</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
+## ✓ tibble  3.1.1     ✓ dplyr   1.0.5
+## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+## ✓ readr   1.4.0     ✓ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>penguin_path &lt;- palmerpenguins::path_to_file(&quot;penguins.csv&quot; )
-read.csv(penguin_path, header = TRUE)</code></pre>
-<pre><code>##       species    island bill_length_mm bill_depth_mm flipper_length_mm
-## 1      Adelie Torgersen           39.1          18.7               181
-## 2      Adelie Torgersen           39.5          17.4               186
-## 3      Adelie Torgersen           40.3          18.0               195
-## 4      Adelie Torgersen             NA            NA                NA
-## 5      Adelie Torgersen           36.7          19.3               193
-## 6      Adelie Torgersen           39.3          20.6               190
-## 7      Adelie Torgersen           38.9          17.8               181
-## 8      Adelie Torgersen           39.2          19.6               195
-## 9      Adelie Torgersen           34.1          18.1               193
+read_csv(penguin_path)</code></pre>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   species = col_character(),
+##   island = col_character(),
+##   bill_length_mm = col_double(),
+##   bill_depth_mm = col_double(),
+##   flipper_length_mm = col_double(),
+##   body_mass_g = col_double(),
+##   sex = col_character(),
+##   year = col_double()
+## )</code></pre>
+<pre><code>## # A tibble: 344 x 8
+##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+##    &lt;chr&gt;   &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Adelie  Torgersen           39.1          18.7               181        3750
+##  2 Adelie  Torgersen           39.5          17.4               186        3800
+##  3 Adelie  Torgersen           40.3          18                 195        3250
+##  4 Adelie  Torgersen           NA            NA                  NA          NA
+##  5 Adelie  Torgersen           36.7          19.3               193        3450
+##  6 Adelie  Torgersen           39.3          20.6               190        3650
+##  7 Adelie  Torgersen           38.9          17.8               181        3625
 ...</code></pre>
 <p>And there is our data! That looks almost the same as the data from R, the main difference being that what are factor in the built in data set are characters here. We’re not going to focus on this here, but if you want to learn more about working with factors and characters, the tidyverse has the <a href="https://forcats.tidyverse.org/"><code>forcats</code></a> package for factors, and <a href="https://stringr.tidyverse.org/"><code>stringr</code></a> for strings/characters.</p>
 <p>If you are working with other types of text data, you might need to use the <code>read.table</code> function, and specify the separator character through the <code>sep</code> argument. Another common text file type is tab-separated (often saved with the <code>.tsv</code> extension, but not always. This is why looking at the data is important). To read in tab-separated data, use the argument <code>sep = &quot;\t&quot;</code>, where <code>\t</code> is a common character combination letting programs know there is a tab space there.</p>
 <p>If you want to read in other data types into R (like SPSS, excel, SAS etc), this can also be done. We recommend the <a href="https://cloud.r-project.org/web/packages/rio/vignettes/rio.html">rio</a> package as a beginner friendly alternative to reading in such files.</p>
 <p>But we didn’t save our data to an object. We should do that, so we can continue working on it in R. As before, if we don’t assign the output of a function anywhere, R will just display it and forget it.</p>
-<pre class="r"><code>penguins &lt;- read.csv(penguin_path, header = TRUE)</code></pre>
+<pre class="r"><code>penguins &lt;- read_csv(penguin_path)</code></pre>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   species = col_character(),
+##   island = col_character(),
+##   bill_length_mm = col_double(),
+##   bill_depth_mm = col_double(),
+##   flipper_length_mm = col_double(),
+##   body_mass_g = col_double(),
+##   sex = col_character(),
+##   year = col_double()
+## )</code></pre>
 <div id="challenge-1." class="section level2 tabset">
 <h2 class="tabset"><strong>Challenge 1.</strong></h2>
 <p>You can run assignments in your own RStudio, or run the first challenge in the pivoting tutorial by entering the following in the R console:</p>
@@ -317,35 +350,80 @@ read.csv(penguin_path, header = TRUE)</code></pre>
 <h3>Solution</h3>
 <pre class="r"><code>## 1a
 penguin_path &lt;- palmerpenguins::path_to_file(&quot;penguins.csv&quot; )
-read.csv(penguin_path, header = TRUE)</code></pre>
-<pre><code>##       species    island bill_length_mm bill_depth_mm flipper_length_mm
-## 1      Adelie Torgersen           39.1          18.7               181
-## 2      Adelie Torgersen           39.5          17.4               186
-## 3      Adelie Torgersen           40.3          18.0               195
-## 4      Adelie Torgersen             NA            NA                NA
-## 5      Adelie Torgersen           36.7          19.3               193
-## 6      Adelie Torgersen           39.3          20.6               190
-## 7      Adelie Torgersen           38.9          17.8               181
-## 8      Adelie Torgersen           39.2          19.6               195
-## 9      Adelie Torgersen           34.1          18.1               193
+read_csv(penguin_path)</code></pre>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   species = col_character(),
+##   island = col_character(),
+##   bill_length_mm = col_double(),
+##   bill_depth_mm = col_double(),
+##   flipper_length_mm = col_double(),
+##   body_mass_g = col_double(),
+##   sex = col_character(),
+##   year = col_double()
+## )</code></pre>
+<pre><code>## # A tibble: 344 x 8
+##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+##    &lt;chr&gt;   &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Adelie  Torgersen           39.1          18.7               181        3750
+##  2 Adelie  Torgersen           39.5          17.4               186        3800
+##  3 Adelie  Torgersen           40.3          18                 195        3250
+##  4 Adelie  Torgersen           NA            NA                  NA          NA
+##  5 Adelie  Torgersen           36.7          19.3               193        3450
+##  6 Adelie  Torgersen           39.3          20.6               190        3650
+##  7 Adelie  Torgersen           38.9          17.8               181        3625
 ...</code></pre>
 <pre class="r"><code># 1b
 penguin_path &lt;- palmerpenguins::path_to_file(&quot;penguins_raw.csv&quot; )
-read.csv(penguin_path, header = TRUE)</code></pre>
-<pre><code>##     studyName Sample.Number                                   Species Region
-## 1     PAL0708             1       Adelie Penguin (Pygoscelis adeliae) Anvers
-## 2     PAL0708             2       Adelie Penguin (Pygoscelis adeliae) Anvers
-## 3     PAL0708             3       Adelie Penguin (Pygoscelis adeliae) Anvers
-## 4     PAL0708             4       Adelie Penguin (Pygoscelis adeliae) Anvers
-## 5     PAL0708             5       Adelie Penguin (Pygoscelis adeliae) Anvers
-## 6     PAL0708             6       Adelie Penguin (Pygoscelis adeliae) Anvers
-## 7     PAL0708             7       Adelie Penguin (Pygoscelis adeliae) Anvers
-## 8     PAL0708             8       Adelie Penguin (Pygoscelis adeliae) Anvers
-## 9     PAL0708             9       Adelie Penguin (Pygoscelis adeliae) Anvers
+read_csv(penguin_path)</code></pre>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   studyName = col_character(),
+##   `Sample Number` = col_double(),
+##   Species = col_character(),
+##   Region = col_character(),
+##   Island = col_character(),
+##   Stage = col_character(),
+##   `Individual ID` = col_character(),
+##   `Clutch Completion` = col_character(),
+##   `Date Egg` = col_date(format = &quot;&quot;),
+##   `Culmen Length (mm)` = col_double(),
+##   `Culmen Depth (mm)` = col_double(),
+##   `Flipper Length (mm)` = col_double(),
+##   `Body Mass (g)` = col_double(),
+##   Sex = col_character(),
+##   `Delta 15 N (o/oo)` = col_double(),
+##   `Delta 13 C (o/oo)` = col_double(),
+##   Comments = col_character()
+## )</code></pre>
+<pre><code>## # A tibble: 344 x 17
+##    studyName `Sample Number` Species       Region Island Stage   `Individual ID`
+##    &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;          
+##  1 PAL0708                 1 Adelie Pengu… Anvers Torge… Adult,… N1A1           
+##  2 PAL0708                 2 Adelie Pengu… Anvers Torge… Adult,… N1A2           
+##  3 PAL0708                 3 Adelie Pengu… Anvers Torge… Adult,… N2A1           
+##  4 PAL0708                 4 Adelie Pengu… Anvers Torge… Adult,… N2A2           
+##  5 PAL0708                 5 Adelie Pengu… Anvers Torge… Adult,… N3A1           
+##  6 PAL0708                 6 Adelie Pengu… Anvers Torge… Adult,… N3A2           
+##  7 PAL0708                 7 Adelie Pengu… Anvers Torge… Adult,… N4A1           
 ...</code></pre>
 <pre class="r"><code>## 1c
 penguin_path &lt;- palmerpenguins::path_to_file(&quot;penguins.csv&quot; )
-penguins &lt;- read.csv(penguin_path, header = TRUE)</code></pre>
+penguins &lt;- read_csv(penguin_path)</code></pre>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   species = col_character(),
+##   island = col_character(),
+##   bill_length_mm = col_double(),
+##   bill_depth_mm = col_double(),
+##   flipper_length_mm = col_double(),
+##   body_mass_g = col_double(),
+##   sex = col_character(),
+##   year = col_double()
+## )</code></pre>
 </div>
 </div>
 </div>
@@ -381,16 +459,8 @@ penguins &lt;- read.csv(penguin_path, header = TRUE)</code></pre>
 <h1>Creating longer data</h1>
 <p>Let us first talk about creating longer data. In most cases, you will encounter data that is in wide format, this is what is often taught in many disciplines and also necessary to run certain analyses in statistical programs like SPSS. In R, and specifically the tidyverse, working on long data has clear advantages, which we wil be exploring here while we also do the transformations.</p>
 <p>As before, we need to start off by making sure we have the tidyverse package loaded, and the penguins dataset ready at hand.</p>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
-## ✓ tibble  3.1.1     ✓ dplyr   1.0.5
-## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
-## ✓ readr   1.4.0     ✓ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>penguins &lt;- palmerpenguins::penguins</code></pre>
+<pre class="r"><code>library(tidyverse)
+penguins &lt;- palmerpenguins::penguins</code></pre>
 <p>In tidyverse, there is a single function to create longer data sets, called <code>pivot_longer</code>. Those of you who might have some prior experience with tidyverse, or you might encounter it when googling for help, might have seen the <code>gather</code> function. This is an older function of similar capabilities which we will not cover here, as the <code>pivot_longer</code> function supersedes it.</p>
 <pre class="r"><code>penguins %&gt;% 
   pivot_longer(contains(&quot;_&quot;)) </code></pre>

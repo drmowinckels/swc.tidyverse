@@ -74,7 +74,7 @@ penguins %>%
 ### reading in data
 ```{r}
 penguin_path <- palmerpenguins::path_to_file("penguins.csv" )
-read.csv(penguin_path, header = TRUE)
+read_csv(penguin_path)
 ```
 
 ### mutating 1
@@ -82,7 +82,7 @@ read.csv(penguin_path, header = TRUE)
 penguins %>% 
   mutate(
     bill_ratio = bill_depth_mm/bill_length_mm,
-    bill_type = ifelse(bill_ratio < .5, "elongated", "stumped")
+    bill_type = if_else(bill_ratio < .5, "elongated", "stumped")
   ) %>% 
   select(starts_with("bill"))
 ```
@@ -124,7 +124,7 @@ First, we must again prepare our workspace with our packages and data.
 ```{r}
 library(tidyverse)
 penguins_path <- palmerpenguins::path_to_file("penguins.csv")
-penguins <- read.csv(penguins_path, header = TRUE)
+penguins <- read_csv(penguins_path)
 ```
 
 We should start to feel quite familiar with our penguins by now. Let us start by finding the mean of the bill length
@@ -514,9 +514,44 @@ penguins %>%
   )
 ```
 
+# Ungrouping for future control
+
+We've been grouping a lot and not ungrouping. Which might seem fine now, because we have not really done anything more after the summarise. But in many cases we might continue our merry data handling way and do lots more, and then the preserving of the grouping can give us some unexpected results. Let us explore that a little.
+
+```{r}
+penguins %>% 
+  group_by(species) %>% 
+  summarise(n = length(species))
+```
+When we group by a single column and summarise, the output data is no longer grouped. In a way, the "summarise" uses up one group while summarising, as based on species, the data can not be condensed any further than this.
+
+```{r}
+penguins %>% 
+  group_by(species, island) %>% 
+  summarise(n = length(species))
+```
+When we group by two columns, it actually has the same behaviour. But because we used to have two groups, we now are left with one. In this case "species" is still a  grouping variable. Lets say we want a column now, that counts the total number of penguins observations. That would be the sum of the "n" column.
+
+```{r}
+penguins %>% 
+  group_by(species, island) %>% 
+  summarise(n = length(species)) %>% 
+  mutate(N = sum(n))
+```
+
+But that is not what we are expecting! why? Because the data is still grouped by species, it is now taking the sum within each species, rather than the whole. To get the whole we need first to ungroup, and then try again.
+
+```{r}
+penguins %>% 
+  group_by(species, island) %>% 
+  summarise(n = length(species)) %>% 
+  ungroup() %>% 
+  mutate(N = sum(n))
+```
+
 # Pivoting summaries to get better overview
 
-We now have outputs with lots of information, but its not in the tidiest format. There are just so many columns! We keep having to change lines to see more and more output, and this is just not convenient. We would like to create a more consensed table, but still retaining all the information. We learned about pivoting tables yesterday, so we could to that to our summaries too!
+We now have outputs with lots of information, but its not in the tidiest format. There are just so many columns! We keep having to change lines to see more and more output, and this is just not convenient. We would like to create a more condensed table, but still retaining all the information. We learned about pivoting tables yesterday, so we could to that to our summaries too!
 
 ```{r}
 penguins %>% 

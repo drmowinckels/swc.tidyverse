@@ -460,6 +460,43 @@ The across internal placeholder for column values is `.x`
 The across internal placeholder for column names is `.col`
 ```
 
+## Challenge 6
+### 6a
+>  What is the difference in the minimum body mass for the penguins data sat if the data is grouped by species, and when it is ungrouped?
+
+```{r mutate-6a, exercise = TRUE}
+## 6a
+penguins %>% 
+  group_by(species) %>% 
+  
+  mutate(
+    body_mass_min = min(body_mass_g, na.rm = TRUE)
+  )
+```
+
+```{r mutate-6a-solution}
+## 6a
+penguins %>% 
+  group_by(species) %>% 
+  ungroup() %>% 
+  mutate(
+    body_mass_min = min(body_mass_g, na.rm = TRUE)
+  )
+```
+
+```{r mutate-6a-check}
+grade_code(
+  correct = random_praise(),
+  incorrect = random_encouragement()
+)
+```
+
+```{r mutate-6a-hint-1}
+use `ungroup()` after the `group_by` to ungroup the data.
+```
+
+We will see more examples of how grouping and then ungrouping can give some real power when working with data.
+
 <!-- ## Quiz -->
 
 <!-- ```{r quiz} -->

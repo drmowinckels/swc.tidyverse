@@ -197,12 +197,12 @@ penguins %>%
 Sometimes, we want to assign certain data values based on other variables in the data set. 
 For instance, maybe we want to classify all penguins with body mass above 4.5 kg as "large" while the rest are "normal"?
 
-The `ifelse` function takes expressions much like `filter`.
+The `if_else` function takes expressions much like `filter`.
 The first value after the expression is the value assigned if the expression is `TRUE`, while the second is if the expression is `FALSE`
 
 ```{r}
 penguins %>% 
-  mutate(size = ifelse(body_mass_g > 4500,
+  mutate(size = if_else(body_mass_g > 4500,
                        "large", "normal"))
 ```
 
@@ -212,7 +212,7 @@ We can for instance use that in a plot.
 
 ```{r}
 penguins %>% 
-  mutate(size = ifelse(body_mass_g > 4500,
+  mutate(size = if_else(body_mass_g > 4500,
                        "large", "normal")) %>% 
   ggplot() +
   geom_jitter(aes(x = year,
@@ -273,11 +273,11 @@ learnr::run_tutorial("003-mutating", "swc.tidyverse")
 ```{r "solutions-2"}
 ## 2a
 penguins %>% 
-  mutate(body_type = ifelse(body_mass_g < 4500, "normal", "large")) 
+  mutate(body_type = if_else(body_mass_g < 4500, "normal", "large")) 
 
 # 2b
 penguins %>% 
-  mutate(biscoe = ifelse(island == "Biscoe", TRUE, FALSE)) %>% 
+  mutate(biscoe = if_else(island == "Biscoe", TRUE, FALSE)) %>% 
   select(species, island, biscoe)
 ```
 
@@ -295,7 +295,7 @@ mutate is so-called lazy-evaluated. This sounds weird, but it means that each ne
 penguins %>% 
   mutate(
     bill_ratio = bill_depth_mm/bill_length_mm,
-    bill_type = ifelse(bill_ratio < .5, "elongated", "stumped")
+    bill_type = if_else(bill_ratio < .5, "elongated", "stumped")
   ) %>% 
   select(starts_with("bill"))
 ```
@@ -307,24 +307,24 @@ If you switched the order of these two, R would produce and error, because there
 ```{r eval = FALSE}
 penguins %>% 
   mutate(
-    bill_type = ifelse(bill_ratio < .5, "elongated", "stumped"),
+    bill_type = if_else(bill_ratio < .5, "elongated", "stumped"),
     bill_ratio = bill_depth_mm/bill_length_mm
   ) %>% 
   select(starts_with("bill"))
 ```
 ```r
-Error: Problem with `mutate()` input `bill_type`. x object 'bill_ratio' not found ℹ Input `bill_type` is `ifelse(bill_ratio > 1, "elongated", "stumped")
+Error: Problem with `mutate()` input `bill_type`. x object 'bill_ratio' not found ℹ Input `bill_type` is `if_else(bill_ratio > 1, "elongated", "stumped")
 ```
 
-But what if we want to categorise based on more than one condition? Nested ifelse?
+But what if we want to categorise based on more than one condition? Nested if_else?
 
 ```{r}
 penguins %>% 
   mutate(
     bill_ratio = bill_depth_mm/bill_length_mm,
-    bill_type = ifelse(bill_ratio < .35, 
+    bill_type = if_else(bill_ratio < .35, 
                        "elongated", 
-                       ifelse(bill_ratio < .45, 
+                       if_else(bill_ratio < .45, 
                               "normal",
                               "stumped"))
   ) %>% 
@@ -337,9 +337,9 @@ ok, so it worked we think. Lets plot it to see if we agree.
 penguins %>% 
   mutate(
     bill_ratio = bill_depth_mm/bill_length_mm,
-    bill_type = ifelse(bill_ratio < .35, 
+    bill_type = if_else(bill_ratio < .35, 
                        "elongated", 
-                       ifelse(bill_ratio < .45, 
+                       if_else(bill_ratio < .45, 
                               "normal",
                               "stumped"))
   ) %>% 
@@ -349,7 +349,7 @@ penguins %>%
   geom_point()
 ```
 
-that looks ok, but the code is horrible! And what if you have even more conditionals? Thankfully, dplyr has a smarter way of doing this, called `case_when`. This function is similar to `ifelse`, but where you specify what each condition should be assigned.
+that looks ok, but the code is horrible! And what if you have even more conditionals? Thankfully, dplyr has a smarter way of doing this, called `case_when`. This function is similar to `if_else`, but where you specify what each condition should be assigned.
 On the left you have the logical expression, and the on the right of the tilde (`~`) is the value to be assigned if that expression is `TRUE`
 
 ```{r}
@@ -420,7 +420,7 @@ So far, we've been looking at adding variables one by one.
 This is of course something we do all the time, but some times we need to do the same change to multiple columns at once. Imagine you have a data set with 20 column and you want to scale them all to the same scale. Writing the same command with different columns 20 times is very tedious. 
 It is now the dplyr package truly starts to shine!
 
-In our case, let us say we want to scale the three columns with milimetre measurements so that they have a mean of 0 and standard deviation of 1. We've alrady used the `scale` function once before, so we will do it again.
+In our case, let us say we want to scale the three columns with millimetre measurements so that they have a mean of 0 and standard deviation of 1. We've alrady used the `scale` function once before, so we will do it again.
 
 In this simple example we might have done so:
 
@@ -435,7 +435,7 @@ penguins %>%
 
 Its just three columns, we can do that.But let us imagine we have 20 of these, typing all that out is tedious and error prone. You might forget to alter the name or keep the same type of naing convention. We are only human, we easily make mistakes.
 
-With dplyr's `across()` we can combine our knowlede of tidy-selectors and mutate to create the entire transformation for these columns at once.
+With dplyr's `across()` we can combine our knowledge of tidy-selectors and mutate to create the entire transformation for these columns at once.
 
 ```{r}
 penguins %>% 
@@ -668,6 +668,52 @@ penguins %>%
            .names = "{.col}_dm")
   ) %>% 
   select(species, where(is.numeric))
+```
+
+## Ungrouping
+
+Now that we have learned to group, its also a good stage to learn to ungroup.
+When data is grouped in R, all operations on it happen in a grouped fashion.
+In most cases, this will not really create any real problems for you, but you might find yourself getting results you were not expecting because the data is grouped when you expect it not to be.
+
+Thankfully, ungrouping data is quite simple.
+
+```{r}
+penguins %>% 
+  group_by(species) %>% 
+  mutate(
+    bill_length_sp_mean = mean(bill_length_mm, na.rm = TRUE),
+    bill_length_cent = bill_length_mm - bill_length_sp_mean
+  ) %>% 
+  select(species, island, starts_with("bill")) %>% 
+  ungroup()
+```
+
+The last line there ungroups the data. And you can see from the output, that the lines explaining the grouping of the data are now gone.
+If you have been grouping your data and at some point discover things are not happening as expected, remember to ungroup your data! 
+
+## **Challenge 6.** {.tabset}
+
+You can run assignments in your own RStudio, or run the third challenge in the mutating tutorial by entering the following in the R console:
+```r
+learnr::run_tutorial("003-mutating", "swc.tidyverse")
+```
+(helpers, please paste this into the chat at the right time.)
+
+### Assignment
+
+> **6a**: What is the difference in the minimum body mass for the penguins data sat if the data is grouped by species, and when it is ungrouped?
+
+### Solution
+
+```{r "solutions-6"}
+## 6a
+penguins %>% 
+  group_by(species) %>% 
+  ungroup() %>% 
+  mutate(
+    body_mass_min = min(body_mass_g, na.rm = TRUE)
+  )
 ```
 
 ## Wrap up

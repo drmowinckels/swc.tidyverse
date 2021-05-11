@@ -12,9 +12,9 @@ That being said, as there are also exercises, so you can also follow using a sin
 
 ## Install R
 Make sure to have R installed on your computer.
-It is recommended that you have a newer version of R installed, and it must be newer than version 4.0.0.
+It is recommended that you have a newer version of R installed, and it must be newer than version **4.0.0**.
 Download R from [the R-project](https://www.r-project.org/)
-If you attend the course with an older R version than this, you cannot expect the results of your code to be the same as the other particpants and the instructors.
+If you attend the course with an older R version than this, you cannot expect the results of your code to be the same as the other participants and the instructors.
 
 #### Windows computers
 The tidyverse packages require [rtools](https://cran.r-project.org/bin/windows/Rtools/) to be installed. 
@@ -45,13 +45,28 @@ Loading the package will also load the necessary libraries directly
 library(swc.tidyverse)
 ```
 
-Additionally, there are exercises connected to each of the topics which will also be accessible via the [learnr](https://rstudio.github.io/learnr/)-package.
+Additionally, there are exercises connected to each of the topics which will also be accessible via the [learnr](https://rstudio.github.io/learnr/)-package. You can either see the list of packages with the below code:
 
 ```r
 learnr::available_tutorials("swc.tidyverse")
 ```
 
-#### If install fails
+```
+Available tutorials:
+* swc.tidyverse
+  - 001-ggplot2     : "Plotting data"
+  - 002-subsetting  : "Subsetting data"
+  - 003-mutating    : "Altering or adding variables to data sets"
+  - 004-pivoting    : "Pivoting data - long and wide formats"
+  - 005-summarising : "Summarising data"
+  - 006-combining   : "Combining all the Tidyverse" 
+```
+
+or find them in your RStudio "Tutorials" pane.
+
+![RStudio Tutorials pane listing the tutorials in this package. To run a toturial, click "Run tutorial".](img/tutorials.png)
+
+### If install fails
 If the package install fails, you can try installing everything individually and then the package from source.
 Start by installing the dependent packages for the course:
 
@@ -61,7 +76,7 @@ remotes::install_github("rstudio-education/gradethis")
 ``` 
 
 When these are successful, you should be able to install the course package.
-Download the newest tar-version from the [source](source/) directory, make sure you know where it has downloaded to and install with
+Download the newest tar-version from the [source](source/) directory, make sure you know where it has downloaded to and install by opening RStudio and pasting the below code into the R console.
 
 ```r
 # Alter the /path/to section to the path where the downloaded file is. 
@@ -69,3 +84,7 @@ install.packages("/path/to/swc.tidyverse_0.1.01.tar.gz", repos = NULL)
 ```
 
 If you are still struggling to install the package, please create [a ticket](https://github.com/Athanasiamo/swc.tidyverse/issues) pasting the command and output you get so I can help you get it sorted.
+We will also be hosting a 1 hour guided install session from **11-12am** on **Friday 21at of May**. Please join this session for more "hands-on" direct help in getting you up to speed.
+
+### If you are on a MacBook with the M1 chip.
+The M1-processor for new MacBooks, it all its glory, does not run RStudio. We cannot control this. If you have a MacBook with the M1-chip let us know via e-mail, and we will create a learning environment for you in RStudio cloud. 
