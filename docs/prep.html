@@ -2106,41 +2106,12 @@ Materials
 <p>The best experience with the workshop is to have an RStudio newer than 1.3. It is not necessary, but highly recommended.</p>
 <p><a href="https://rstudio.com/products/rstudio/download/#download">RStudio downloads page</a></p>
 <h2 id="install-course-materials">Install course materials</h2>
-<p>This package contains materials that are necessary for the workshop.</p>
-<p>You can install swc.tidyverse from <a href="https://github.com/Athanasiamo/swc.tidyverse">github</a>, which will also install the packages that the tutorial will cover. To install the package, open your RStudio installed before, and copy these two lines into the tab called “Console”. If you have a newly installed RStudio, this should be the tab on the left once RStudio is opened.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;pak&quot;</span>, <span class="at">repos =</span> <span class="st">&quot;r-lib.github.io/p/pak/dev&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pak<span class="sc">::</span><span class="fu">pkg_install</span>(<span class="st">&quot;Athanasiamo/swc.tidyverse&quot;</span>)</span></code></pre></div>
-<p>If the console fills up with a numbered list with names of packages and has the question:</p>
-<pre><code>Enter one or more numbers, or an empty line to skip updates: </code></pre>
-<p>Please enter <code>1</code> . This will update all your packages (since you have them installed), to make sure you are working on the same version of packages as the remaining participants. This might occur several times, please enter <code>1</code> each time.</p>
-<h3 id="loading-the-package">Loading the package</h3>
-<p>Loading the package will also load the necessary libraries directly</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(swc.tidyverse)</span></code></pre></div>
-<p>Additionally, there are exercises connected to each of the topics which will also be accessible via the <a href="https://rstudio.github.io/learnr/">learnr</a>-package. You can either see the list of packages with the below code:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>learnr<span class="sc">::</span><span class="fu">available_tutorials</span>(<span class="st">&quot;swc.tidyverse&quot;</span>)</span></code></pre></div>
-<pre><code>Available tutorials:
-* swc.tidyverse
-  - 001-ggplot2     : &quot;Plotting data&quot;
-  - 002-subsetting  : &quot;Subsetting data&quot;
-  - 003-mutating    : &quot;Altering or adding variables to data sets&quot;
-  - 004-pivoting    : &quot;Pivoting data - long and wide formats&quot;
-  - 005-summarising : &quot;Summarising data&quot;
-  - 006-combining   : &quot;Combining all the Tidyverse&quot; </code></pre>
-<p>or find them in your RStudio “Tutorials” pane.</p>
-<figure>
-<img src="img/tutorials.png" alt="RStudio Tutorials pane listing the tutorials in this package. To run a toturial, click “Run tutorial”." /><figcaption aria-hidden="true">RStudio Tutorials pane listing the tutorials in this package. To run a toturial, click “Run tutorial”.</figcaption>
-</figure>
-<h3 id="if-install-fails">If install fails</h3>
-<p>If the package install fails, you can try installing everything individually and then the package from source. Start by installing the dependent packages for the course:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;palmerpenguins&quot;</span>, <span class="st">&quot;learnr&quot;</span>, <span class="st">&quot;remotes&quot;</span>), <span class="at">Ncpus =</span> <span class="dv">2</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;rstudio-education/gradethis&quot;</span>)</span></code></pre></div>
-<p>When these are successful, you should be able to install the course package. Download the newest tar-version from the <a href="https://github.com/Athanasiamo/swc.tidyverse/blob/main/source/">source</a> directory, make sure you know where it has downloaded to and install by opening RStudio and pasting the below code into the R console.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alter the /path/to section to the path where the downloaded file is. </span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;/path/to/swc.tidyverse_0.0.01.tar.gz&quot;</span>, <span class="at">repos =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<p>Open your RStudio and paste the following code into the pane called “Console”:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;palmerpenguins&quot;</span>), <span class="at">Ncpus =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p>If you are still struggling to install the package, please create <a href="https://github.com/Athanasiamo/swc.tidyverse/issues">a ticket</a> pasting the command and output you get so I can help you get it sorted. We will also be hosting a 1 hour guided install session from <strong>11-12am</strong> on <strong>Friday 21at of May</strong>. Please join this session for more “hands-on” direct help in getting you up to speed.</p>
 <h3 id="if-you-are-on-a-macbook-with-the-m1-chip.">If you are on a MacBook with the M1 chip.</h3>
 <p>The M1-processor for new MacBooks, it all its glory, does not run RStudio. We cannot control this. If you have a MacBook with the M1-chip let us know via e-mail, and we will create a learning environment for you in RStudio cloud.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
