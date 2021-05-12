@@ -35,8 +35,8 @@ This package contains materials that are necessary for the workshop.
 You can install swc.tidyverse from [github](https://github.com/Athanasiamo/swc.tidyverse), which will also install the packages that the tutorial will cover. To install the package, open your RStudio installed before, and copy these two lines into the tab called "Console". If you have a newly installed RStudio, this should be the tab on the left once RStudio is opened.
 
 ```r
-install.packages("remotes")
-remotes::install_github("Athanasiamo/swc.tidyverse")
+install.packages("pak", repos = "r-lib.github.io/p/pak/dev")
+pak::pkg_install("Athanasiamo/swc.tidyverse")
 ```
 
 If the console fills up with a numbered list with names of packages and has the question:
