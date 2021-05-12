@@ -84,11 +84,11 @@ remotes::install_github("rstudio-education/gradethis")
 ``` 
 
 When these are successful, you should be able to install the course package.
-Download the newest tar-version from the [source](source/) directory, make sure you know where it has downloaded to and install by opening RStudio and pasting the below code into the R console.
+Download the newest tar-version from the [source](https://github.com/Athanasiamo/swc.tidyverse/blob/main/source/) directory, make sure you know where it has downloaded to and install by opening RStudio and pasting the below code into the R console.
 
 ```r
 # Alter the /path/to section to the path where the downloaded file is. 
-install.packages("/path/to/swc.tidyverse_0.1.01.tar.gz", repos = NULL)
+install.packages("/path/to/swc.tidyverse_0.0.01.tar.gz", repos = NULL)
 ```
 
 If you are still struggling to install the package, please create [a ticket](https://github.com/Athanasiamo/swc.tidyverse/issues) pasting the command and output you get so I can help you get it sorted.
