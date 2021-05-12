@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 library(tidyquintro)
 ```
 
-# tidyquintro
+# swc.tidyverse
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/Athanasiamo/swc.tidyverse/workflows/R-CMD-check/badge.svg)](https://github.com/Athanasiamo/swc.tidyverse/actions)
