@@ -8,9 +8,12 @@ output:
       collapsed: true
 date: "25th May 2021"
 ---
+
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
-                      fig.retina = 3)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.retina = 3
+)
 ```
 
 > **Questions**
@@ -27,7 +30,7 @@ Plotting the data is one of the best ways to quickly explore it and generate hyp
 
 There are several plotting systems in R, but today we will focus on `ggplot2` which implements **grammar of graphics** - a coherent system for describing components that constitute visual representation of data. For more information regarding principles and thinking behind `ggplot2` graphic system, please refer to [Layered grammar of graphics](http://vita.had.co.nz/papers/layered-grammar.pdf) by Hadley Wickham (@hadleywickham). 
 
-The advantage of `ggplot2` is that it allows R users to create publication quality graphics with just a few lines of code. `ggplot2` has a large user base and is constantly developed and extended by the community.
+The advantage of `ggplot2` is that it allows R users to create publication quality graphics with a few lines of code. `ggplot2` has a large user base and is constantly developed and extended by the community.
 
 # Getting started
 
@@ -35,7 +38,7 @@ The advantage of `ggplot2` is that it allows R users to create publication quali
 
 ```{r}
 # install.packages("tidyverse")
-# install.packages("penguins")
+# install.packages("palmerpenguins")
 library(tidyverse)
 ```
 
@@ -51,7 +54,7 @@ penguins <- palmerpenguins::penguins
 
 Here, we grab the data called `penguins` from the palmerpenguins package, and assign (`<-`) it to an `object` in our R environment we call `penguins`.
 Notice how you can see it in your environment pane in RStudio.
-You can have a look at the content of the `penguins` data frame by simply typing `penguins` either in the R-chunk or in the console. Data frame is a rectangular collection of data, where variables are organized as columns and observations are listed as rows.
+You can have a look at the content of the `penguins` data frame by typing `penguins` either in the R-chunk or in the console. Data frame is a rectangular collection of data, where variables are organized as columns and observations are listed as rows.
 
 ```{r}
 penguins
@@ -69,25 +72,25 @@ The dataset contains the following fields:
 - **sex**:               penguin sex
 - **year**:              year of observation
 
-More information about the package and the data is available in help. Just type `?penguins` in console, located in the bottom panel of your RStudio, or type `penguins` in the search field of the *Help* tab of the bottom-right RStudio panel. Whenever you are unsure about anything in R, it is a good idea to check out the help file using one of the two methods described above.
+More information about the package and the data is available in help. Type `?penguins` in console, located in the bottom panel of your RStudio, or type `penguins` in the search field of the *Help* tab of the bottom-right RStudio panel. Whenever you are unsure about anything in R, it is a good idea to check out the help file using one of the two methods described above.
 
 # Creating the first plot
 
-> Here's a question that we would like to answer using `penguins` data: _Do penguins with high body mass also have long beaks?_ This might seem like a silly question, but it gets us exploring our data.
+> Here's a question that we would like to answer using `penguins` data: _Do penguins with deep beaks also have long beaks?_ This might seem like a silly question, but it gets us exploring our data.
 
-To plot `penguins`, run the following code in the R-chunk or in console. The following code will put `body_mass_g` on the x-axis and `bill_length_mm` on the y-axis:
+To plot `penguins`, run the following code in the R-chunk or in console. The following code will put `bill_depth_mm` on the x-axis and `bill_length_mm` on the y-axis:
 
 ```{r}
-ggplot(data = penguins) + 
+ggplot(data = penguins) +
   geom_point(
-    mapping = aes(x = body_mass_g,
+    mapping = aes(x = bill_depth_mm,
                   y = bill_length_mm)
   )
 ```
 
-Note that we split the function into several lines. 
+Note that we split the function into several lines.
 In R, any function has a name and is followed by parentheses. Inside the parentheses we place any information the function needs to run.
-Here, we are using two main functions, ggplot() and geom_point().
+Here, we are using two main functions, `ggplot()` and `geom_point()`.
 To save screen space, we have placed each function on its own line, and also split up arguments into several lines.
 How this is done depends on you, there are no real rules for this.
 We will use the tidyverse coding style throughout this course, to be consistent and also save space on the screen.
@@ -99,35 +102,20 @@ The plot shows positive linear relationship between bill length and body mass.
 
 Note that in order to create a plot using `ggplot2` system, you should start your command with `ggplot()` function. It creates an empty coordinate system and initializes the dataset to be used in the graph (which is supplied as a first argument into the `ggplot()` function). In order to create graphical representation of the data, we can add one or more layers to our otherwise empty graph. Functions starting with the prefix `geom_` create a visual representation of data. In this case we added scattered points, using `geom_point()` function. There are many `geoms` in `ggplot2`, some of which we will learn in this lesson.
 
-`geom_` functions create *mapping* of variables from the earlier defined dataset to certain aesthetic elements of the graph, such as axis, shapes or colours. The first argument of any `geom_` function expects the user to specify these mappings, wrapped in the `aes()` (short for *aesthetics*) function. In this case, we mapped `body_mass_g` and `bill_length_mm` variables from `penguins` dataset to x and y-axis, respectively (using `x` and `y` arguments of `aes()` function). 
-
-Generally speaking, the template for visualizing data in `ggplot2` can be summarized as follows:
-
-
-```{r, eval=FALSE}
-`ggplot(data = <DATA>) + 
-  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))`
-```
-
-In the remainder of this lesson we will learn how to extend and complete this template using different elements to produce various visualizations. First, we will look closer at the `<MAPPINGS>` component.
+`geom_` functions create *mapping* of variables from the earlier defined dataset to certain aesthetic elements of the graph, such as axis, shapes or colours. The first argument of any `geom_` function expects the user to specify these mappings, wrapped in the `aes()` (short for *aesthetics*) function. In this case, we mapped `bill_depth_mm` and `bill_length_mm` variables from `penguins` dataset to x and y-axis, respectively (using `x` and `y` arguments of `aes()` function). 
 
 ## **Challenge 1.** {.tabset}
-
-You can run assignments in your own RStudio, or run the first challenge in the plotting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
 ### Assignment
 >
-> 1a: How does body mass change over time? What do you observe? Note that many points are plotted on top of each other. This is called "overplotting". 
+> 1a: How has bill length changed over time? What do you observe? 
 >
 > *Hint: the* `penguins` *dataset has a column called `year`, which should appear on the x-axis.*
 >
 > 1b: Try a different `geom_` function called `geom_jitter`. It will spread the points apart a little bit using random noise.
 >
-> 1c: See if you can visualize body mass by island. Which island tends to have higher body mass (notice the density of the points along the y-axis)? Lowest body mass? Which island has highest spread in body mass values? How about lowest spread? 
+
+Room: plenary 
+Duration: 5 minutes
 
 ### Solution
 
@@ -145,49 +133,33 @@ ggplot(data = penguins) +
     mapping = aes(x = year, 
                   y = bill_length_mm)
   )
-
-## 1c
-ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(x = island, 
-                  y = bill_length_mm)
-  )
-
 ```
 
 
 # Mapping data pt.1
 
-What if we want to combine graphs from the previous two challenges and show the relationship between three variables in the same graph? Turns out, we don't necessarily need to use third geometrical dimension, we can simply employ colour.
+What if we want to combine graphs from the previous two challenges and show the relationship between three variables in the same graph? Turns out, we don't necessarily need to use third geometrical dimension, we can employ colour.
 
 The following graph maps `island` variable from `penguins` dataset to the `colour` aesthetic of the plot. Let's take a look:
 
 ```{r}
 ggplot(data = penguins) + 
   geom_jitter(
-    mapping = aes(x = year, 
+    mapping = aes(x = bill_depth_mm, 
                   y = bill_length_mm, 
                   colour = island)
   )
 ```
 
 ## **Challenge 2.** {.tabset}
-You can run assignments in your own RStudio, or run the second challenge in the plotting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
+Room: break-out 
+Duration: 10 minutes
 
 ### Assignment
 > 
-> **2a**: What will happen if you switch the mappings of `island` and `year` in the previous example? Is the graph still useful? Why? Try mapping year to colour.
+> **2a**: What will happen if you switch colour to also be by year? Is the graph still useful? Why or why not?
 >
-> **2b**: What if you map `colour` aesthetic to `species`? What has changed? How is `year` different from `species`? What is the limitation of the `colour` aesthetic, when used to visualize different types of data? 
-> 
-> **2c**: Can you add a little colour to our initial graph of body mass by bill length? colour the points by island.
->
-> **2d**: How about using colour gradient to illustrate change over time?
-
+> **2b**: What if you map `colour` aesthetic to `species`? What has changed? How is `year` different from `species` or `island`? What is the limitation of the `colour` aesthetic, when used to visualize different types of data? 
 
 ### Solution
 
@@ -195,34 +167,17 @@ learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
 ## 2a
 ggplot(data = penguins) + 
   geom_jitter(
-    mapping = aes(x = bill_length_mm, 
-                  y = year,
+    mapping = aes(x = bill_depth_mm, 
+                  y = bill_length_mm,
                   colour = year)
   )
 
 # 2b
 ggplot(data = penguins) + 
   geom_jitter(
-    mapping = aes(x = island, 
+    mapping = aes(x = bill_depth_mm, 
                   y = bill_length_mm,
                   colour = species)
-  )
-
-
-## 2c
-ggplot(data = penguins) + 
-  geom_jitter(
-    mapping = aes(x = body_mass_g, 
-                  y = bill_length_mm,
-                  colour = island)
-  )
-
-# 2d
-ggplot(data = penguins) + 
-  geom_jitter(
-    mapping = aes(x = body_mass_g, 
-                  y = bill_length_mm,
-                  colour = year)
   )
 ```
 
@@ -233,43 +188,29 @@ There are other aesthetics that can come handy. One of them is `size`. The idea 
 
 ```{r}
 ggplot(data = penguins) + 
-  geom_point(
-    mapping = aes(x = body_mass_g, 
+  geom_jitter(
+    mapping = aes(x = bill_depth_mm, 
                   y = bill_length_mm, 
-                  colour = island, 
-                  size = bill_depth_mm)
+                  colour = species, 
+                  size = year)
   )
 ```
 
-There's one more useful aesthetic property of the graph which is good for visualizing low-cardinality categorical variables (categorical variables with small number of unique values), called `shape`. The idea is that you can employ different shapes (other than circles) to plot the data.
+It might be even better to try another type of aesthetic, like shape, for categorical data like species.
 
-## **Challenge 3.** {.tabset}
-You can run assignments in your own RStudio, or run the third challenge in the plotting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
-> 
-> **3**: Blow your mind by visualizing five(!) dimensions in the same graph. Modify the previous example mapping year to colour and shape to island. 
-
-### Solution
-
-```{r, results="hide"}
+```{r}
 ggplot(data = penguins) + 
-  geom_point(
-    mapping = aes(x = body_mass_g, 
+  geom_jitter(
+    mapping = aes(x = bill_depth_mm, 
                   y = bill_length_mm, 
-                  colour = year, 
-                  shape = island,
-                  size = bill_depth_mm)
+                  colour = species, 
+                  shape = species)
   )
 ```
+
+Playing around with different aesthetic mappings until you find something that really makes the data "pop" is a good idea. A plot is rarely made nice on the first try, we all try different configurations until we find the one we like.
 
 # Setting values
-
-Combining too many aesthetics in the same graph can make it quite busy. However, you can always remove certain aesthetic properties and use several graphs to highlight different aspects of data.
 
 Until now, we explored different aesthetic properties of a graph mapped to certain variables. What if you want to recolour or use a certain shape to plot all data points? Well, that means that such colour or shape will no longer be *mapped* to any data, so you need to supply it to `geom_` function as a separate argument (outside of the `mapping`). 
 This is called "setting" in the ggplot2-world. We "map" aesthetics to data columns, or we "set" single values outside aesthetics to apply to the entire geom or plot.
@@ -278,7 +219,7 @@ Here's our initial graph with all colours coloured in blue.
 ```{r}
 ggplot(data = penguins) + 
   geom_point(
-    mapping = aes(x = body_mass_g, 
+    mapping = aes(x = bill_depth_mm, 
                   y = bill_length_mm),
     colour = "blue"
   )
@@ -287,93 +228,47 @@ ggplot(data = penguins) +
 Once more, observe that the colour is now not mapped to any particular variable from the `penguins` dataset and applies equally to all data points, therefore it is outside the `mapping` argument and is not wrapped into `aes()` function. Note that set colours are supplied as characters (in quotes). 
 
 ## **Challenge 4.** {.tabset}
-
-You can run assignments in your own RStudio, or run the forth challenge in the plotting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
+Room: break-out 
+Duration: 10 minutes
 
 ### Assignment
 > 
-> **4a**: Try mapping `colour` aesthetic to `island` and then to `year`. What do you notice? What might be the reason for different treatment of these variables by `ggplot`?
+> **4a**: Change the transparency (alpha) of the data points by year. 
+> _Hint: `alpha` takes a value from 0 (transparent) to 1 (solid).
 > 
-> **4b**: Change the transparency of the data points by year.
+> **4b**: Move the transparency outside the `aes()` and set it to `0.7`. What can we benefit of each one of these methods?
 > 
-> **4c**: Move the transparency outside the `aes()` and set it to `0.7`. What can be the benefit of each one of these methods?
-> 
-> **4d**: Add colour argument, with 'blue' in quotations, into the aes and see what happens. Did you expect that?
 
 ### Solution
 ```{r, results="hide"}
 ## 4a
 ggplot(data = penguins) + 
   geom_point(
-    mapping = aes(x = body_mass_g, 
+    mapping = aes(x = bill_depth_mm, 
                   y = bill_length_mm, 
-                  colour = year)
+                  alpha = year)
   )
 
 ## 4b
 ggplot(data = penguins) + 
   geom_point(
-    mapping = aes(x = body_mass_g, 
-                  y = bill_length_mm, 
-                  alpha = year)
-  )
-
-## 4c
-ggplot(data = penguins) + 
-  geom_point(
-    mapping = aes(x = body_mass_g, 
+    mapping = aes(x = bill_depth_mm, 
                   y = bill_length_mm),
     alpha = 0.7)
-
-## 4d
-ggplot(data = penguins) + 
-  geom_point(
-    mapping = aes(x = body_mass_g, 
-                  y = bill_length_mm,
-                  colour = "blue")
-  )
 ```
 
-When an argument is placed inside an aes and remains quoted, like "red" here, ggplot is interpreting as a variable named "blue" and not the colour blue!
-
-
-# Labeling the chart
-
-Lastly we will learn how to label and annotate the chart using `labs` and `annotate` functions. 
-
-```{r}
-ggplot(data = penguins) + 
-  geom_point(
-    aes(x = bill_depth_mm, 
-        y = bill_length_mm, 
-        colour = island)
-  ) +
-  facet_wrap(~year) + 
-  labs(
-    title = "Bill depth vs bill length over time",
-    subtitle = "In the past 3 years, relationship between bill depth and length in penguins do not seem to change",
-    caption = "Originally published in doi:10.1371/journal.pone.0090081",
-    x = "Bill length, (mm)",
-    y = "Bill depth, (mm)",
-    colour = "Island"
-  )
-```
-
+Controlling the transparency can be a great way to "mute" the visual effect of certain data, while still keeping it visible. Its a great tool when you have many data points or if you have several geoms together, like we will see soon.
 
 # Geometrical objects
 
-Next, we will consider different options for <GEOM_FUNCTION> component of our template `ggplot2` graph example. Using different `geom_` functions user can highlight different aspects of data. For example, we could connect individual data points belonging to the same species into a line and illustrate the development of body mass over time for each species separately using `geom_line()` function. 
+Next, we will consider different options for `geoms`. Using different `geom_` functions user can highlight different aspects of data. For example, we could connect individual data points belonging to the same species into a line and illustrate the development of body mass over time for each species separately using `geom_line()` function. 
 
 Some `geom_` functions allow additional aesthetics, such as aesthetic `group` in the `geom_line()` function. This aesthetic may not have any meaning in other geoms, but here it allows us to draw multiple lines, one per species. To keep the lines organized, we will colour them by island. 
 
 ```{r}
 ggplot(data = penguins) + 
   geom_line(
-    mapping = aes(x = year, 
+    mapping = aes(x = bill_depth_mm, 
                   y = bill_length_mm, 
                   group = species, 
                   colour = species)
@@ -382,29 +277,28 @@ ggplot(data = penguins) +
 
 That looks crazy! Line plots are not ideal for this data, as there are multiple lines per species and year, so the lines do not line up nicely.
 
-Another useful geom function is `geom_boxplot()`. It adds a layer with the "box and whiskers" plot illustrating the distribution of values within categories. The following chart breaks down body mass by island, where the box represents first and third quartile (the 25th and 75th percentiles), the middle bar signifies the median value and the whiskers extent to cover 95% confidence interval. Outliers (outside of the 95% confidence interval range) are shown separately.
+Another useful geom function is `geom_boxplot()`. It adds a layer with the "box and whiskers" plot illustrating the distribution of values within categories. The following chart breaks down bill length by island, where the box represents first and third quartile (the 25th and 75th percentiles), the middle bar signifies the median value and the whiskers extent to cover 95% confidence interval. Outliers (outside of the 95% confidence interval range) are shown separately.
 
 ```{r}
 ggplot(data = penguins) + 
   geom_boxplot(
-    mapping = aes(x = island, 
+    mapping = aes(x = species, 
                   y = bill_length_mm)
   )
 ```
 
-Layers can be added on top of each other. In the following graph we will place the boxplots over jittered points to see the distribution of outliers more clearly. We can map two aesthetic properties to the same variable. Here we will also use different colour for each island.
+Layers can be added on top of each other. In the following graph we will place the boxplots **over** jittered points to see the distribution of outliers more clearly. We can map two aesthetic properties to the same variable. Here we will also use different colour for each island.
 
 ```{r}
 ggplot(data = penguins) + 
   geom_jitter(
-    mapping = aes(x = island, 
+    mapping = aes(x = species, 
                   y = bill_length_mm, 
-                  colour = island)
+                  colour = species)
   ) +
   geom_boxplot(
-    mapping = aes(x = island,
-                  y = bill_length_mm, 
-                  colour = island)
+    mapping = aes(x = species,
+                  y = bill_length_mm)
   )
 
 ```
@@ -414,15 +308,14 @@ Now, this was slightly inefficient due to duplication of code - we had to specif
 ```{r}
 ggplot(data = penguins,
        mapping = aes(x = island, 
-                     y = bill_length_mm,
-                     colour = island)
+                     y = bill_length_mm)
 ) + 
-  geom_jitter() +
-  geom_boxplot()
+  geom_jitter(aes(colour = island)) +
+  geom_boxplot(alpha = .6)
 
 ```
 
-You can still add layer-specific mappings or other arguments by specifying them within individual geoms. We would recommend building each layer separately and then moving common arguments up to the "parent" function.
+You can still add layer-specific mappings or other arguments by specifying them within individual geoms. Here, we've set the transparency of the boxplot to .6, so we can see the points behind it, and also mapped colour to island in the points. We would recommend building each layer separately and then moving common arguments up to the "parent" function.
 
 We can use linear models to highlight differences in dependency between bill length and body mass by island. Notice that we added a separate argument to the `geom_smooth()` function to specify the type of model we want `ggplot2` to built using the data (linear model). The `geom_smooth()` function has also helpfully provided confidence intervals, indicating "goodness of fit" for each model (shaded gray area). For more information on statistical models, please refer to help (by typing `?geom_smooth`)
 
@@ -435,20 +328,16 @@ ggplot(data = penguins,
   geom_smooth(method = "lm")
 ```
 
-Notice, that we also used a new visual property called `alpha` to increase transparency of the data points and make trend lines stand out. `alpha` property can also be used as a mapping aesthetic, i.e. transparency can be made to vary depending on the value of certain variable.
-
 ## **Challenge 5.** {.tabset}
-You can run assignments in your own RStudio, or run the fifth challenge in the plotting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
+Room: Break-out
+Duration: 10 minutes
 
 ### Assignment
 > 
-> **5a.** Modify the graph to force R to create single regression line for all data points. Keep the points coloured by island.
+> **5a.** Modify the plot so the the points are coloured by island, but there is a single regression line.
 >
-> **5b.** Add a regression line to the plot that plots one line for each species, while also plotting one across all species
+> **5b.** Add a regression line to the plot that plots one line for each species, while also plotting one across all species.
+> _Hint: Add another geom!_
 >
 
 ### Solution
@@ -456,7 +345,6 @@ learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
 In the graph above, each geom inherited all three mappings: x, y and colour. If we want only single linear model to be built, we would need to limit the effect of `colour` aesthetic to only `geom_point()` function, by moving it from the "parent" function to the layer where we want it to apply. Note, though, that because we want the `colour` to be still mapped to the `island` variable, it needs to be wrapped into `aes()` function and supplied to `mapping` argument.
 
 ```{r, results="hide"}
-
 # 5a
 ggplot(data = penguins, 
        mapping = aes(x = bill_depth_mm, 
@@ -465,351 +353,20 @@ ggplot(data = penguins,
              alpha = 0.5) +
   geom_smooth(method = "lm")
 
-# Alternative solution
-ggplot(data = penguins, 
-       mapping = aes(x = bill_depth_mm, 
-                     y = bill_length_mm, 
-                     colour = species)) +
-  geom_point(alpha = 0.5) +
+# 5b
+ggplot(penguins, 
+       aes(x = bill_depth_mm, 
+           y = bill_length_mm)) +
+  geom_point(aes(colour = species),
+             alpha = 0.5) +
+  geom_smooth(method = "lm", 
+              aes(colour = species)) +
   geom_smooth(method = "lm", 
               colour = "black")
-
-# 5b
-ggplot(data = penguins, 
-       mapping = aes(x = bill_depth_mm, 
-                     y = bill_length_mm)) +
-  geom_point(mapping = aes(colour = species),
-             alpha = 0.5) +
-  geom_smooth(method = "lm", aes(colour = species)) +
-  geom_smooth(method = "lm", colour = "black")
 ```
-
-# Correcting the scale
-
-Some times, we have data that need to be plotted on another scale than the default native scale of the data.
-For instance, if you have data that have some type of exponential or hyperbolic distribution.
-There are a couple of ways to do this in ggplot2. 
-The first thing we can try is transforming the data with a function, like the `log()` for a logarithmic transformation.
-
-```{r}
-ggplot(data = penguins,
-       mapping = aes(x = log(body_mass_g), 
-                     y = bill_length_mm, 
-                     colour = island)
-) +
-  geom_point() +
-  geom_smooth(method = "lm")
-```
-
-As you can observe the x-axis label of our graph says `body_mass_g`, which indicates that we are not really plotting the original data, but rather the output of `log()` function. The same effect (with slightly more aesthetically pleasing x-axis label) can be achieved by specifying the x-axis scale transformation as a separate layer. Instead of transforming the values, we will transform the scale of x-axis.
-
-```{r}
-ggplot(data = penguins,
-       mapping = aes(x = body_mass_g, 
-                     y = bill_length_mm, 
-                     colour = island)
-) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  scale_x_log10()
-```
-
-Now the x-axis is measured in log10 units and the data, plotted on log10 scale looks more linear. Certain scale and coordinate functions may result in similar visual effects on the chart, but the way they interact with other aesthetic elements may be quite different. Check out the online `ggplot2` [documentation](http://docs.ggplot2.org/) for more details and examples of using scale and coordinate transformations.
-
-## **Challenge 6.** {.tabset}
-You can run assignments in your own RStudio, or run the sixth challenge in the plotting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
-> 
-> **6a**: Make a boxplot of body mass by year. When was interquartile range of body mass the smallest? 
->
-> **6b**: Make a histogram of `body_mass_g`. What is the shape of the distribution? Try setting bin to 50. Why is the bin parameter important for interpretation of the histogram? 
->
-> **6c**:  Build a density function. How would you compare density functions of different islands?
-> 
-> **6d**: Based on graph produced using `geom_density2d()` function of log bill length vs body mass, how many clusters of data points can you identify? What if you look at it by island?
-
-### Solution
-```{r, results="hide"}
-## 6a
-ggplot(penguins) +
-  geom_boxplot(
-    mapping = aes(y = body_mass_g, 
-                  x = year, 
-                  group = year)
-  )
-
-## 6b
-ggplot(penguins) +
-  geom_histogram(
-    mapping = aes(x = body_mass_g),
-    bins = 50
-  )
-
-## 6c
-ggplot(penguins) +
-  geom_density(
-    mapping = aes(x = body_mass_g, 
-                  colour = island)
-  ) 
-
-## 6d
-ggplot(penguins) +
-  geom_density2d(
-    mapping = aes(x = body_mass_g,
-                  y = bill_length_mm,
-                  colour = island)
-  )
-```
-
-# Faceting
-
-Multi-layered graphs employing several aesthetics can look crowded. In order to avoid it, one can split the data into different graphs using panels of similar graphs. In `ggplot2` this method is called "faceting". Lets facet the graph above by island and show the data points and the trend for each island in a separate chart.
-
-```{r}
-ggplot(data = penguins, 
-       mapping = aes(x = body_mass_g, 
-                     y = bill_length_mm)
-) +
-  geom_point() +
-  geom_smooth() +
-  facet_wrap(~ island)
-```
-
-The `facet_wrap()` layer takes a “formula” as its argument, denoted by the tilde (~). This tells R to draw a panel for each unique value in the `island` column of the `penguins` dataset. Faceting is useful when number of panels is limited. Notice that here R places panels from left to right, "wrapping" those panels that do not fit in one row onto the new line. Learn about advanced faceting, including faceting over several variables using help on `?facet_grid()`.
-
-Reiterating our previously proposed `ggplot2` template and adding what we learned until, now we can state:
-
-```{r, eval=FALSE}
-`ggplot(data = <DATA>) + 
-  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>)) + 
-  <FACET_FUNCTION>`
-```
-
-## **Challenge 7.** {.tabset}
-You can run assignments in your own RStudio, or run the seventh challenge in the plotting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
-> 
-> **7a**: Try faceting by year, keeping the linear smoother. Is there any change in slope of the linear trend over the years?
->
-> **7b**: What if you look at linear models per island?
-
-### Solution
-
-```{r, results="hide"}
-## 7a
-ggplot(data = penguins, 
-       mapping = aes(x = body_mass_g, 
-                     y = bill_length_mm)
-) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  facet_wrap(~ year)
-
-## 7b
-ggplot(data = penguins, 
-       mapping = aes(x = body_mass_g, 
-                     y = bill_length_mm)
-) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  facet_wrap( ~ island)
-```
-
-# Changing color and fill
-
-Often, people would want to change the colours in the plots or the general theme to something more suitable to their needs. Journals often have specific requirements to how plots should look, or you need to use specific colours across different types of visualisations.
-
-Changing the colours are done through the `scale_fill` and `scale_colour` functions.
-
-```{r}
-ggplot(penguins)+
-  geom_density(
-    aes(x = body_mass_g, 
-        colour = island)
-  ) +
-  scale_colour_brewer(palette = "Dark2")
-```
-
-This plot has used colour on a density, which will colour the edges of the density plot. 
-This is not very clear, however, and colours are not easy to see.
-We can try switching the colour to "fill" mapping instead, and also change the scale to fill, which should flood the density area.
-
-Can you notice something other that is different with this code?
-We have taken away the `data = ` and `mapping = ` calls! ggplot is clever. In the `ggplot()` call, as long as we provide the data to use as the first input, it know this is data. And all the geoms auto-detect the `aes()`, so you dont _need_ to put `mapping =` there!
-
-```{r}
-ggplot(penguins)+
-  geom_density(
-    aes(x = body_mass_g, 
-        fill = island), 
-    alpha = .5
-  ) +
-  scale_fill_brewer(palette = "Dark2")
-```
-Here, we are using the [brewer palettes](http://applied-r.com/rcolorbrewer-palettes/#the-palettes) to colour. These have the very convenient `scale_[]_brewer()` functions we can use. 
-We can also use our own palettes if we want!
-
-
-```{r}
-ggplot(penguins)+
-  geom_density(
-    aes(x = body_mass_g, 
-        fill = island),
-    alpha = .5
-  ) +
-  scale_fill_manual(values = c("firebrick", "dodgerblue", "forestgreen"))
-```
-Its often smart to use palettes that are curated though, as they often include colour scales that give good distinctions between colours. Another popular variant like brewer is the viridis colours.
-
-```{r}
-ggplot(penguins)+
-  geom_density(
-    aes(x = body_mass_g, 
-        fill = island), 
-    alpha = .5
-  ) +
-  scale_fill_viridis_d()
-```
-
-## **Challenge 8.** {.tabset}
-You can run assignments in your own RStudio, or run the eigth challenge in the plotting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
-> 
-> **8a**: Make a boxplot of body mass by year. What happens if you add `factor()` around year? What do you need to change in the scale_fill function to make it work? 
->
-> **8b**: Make a histogram of `body_mass_g`? What is the shape of the distribution? Why is bin parameter important for interpretation of the histogram? 
->
-> **8c**: Build a density plot How would you compare density functions of different islands?
-> 
-
-### Solution
-```{r, results="hide"}
-## 8a
-ggplot(penguins) +
-  geom_boxplot(
-    mapping = aes(y = body_mass_g, 
-                  x = factor(year),
-                  fill = factor(year))
-  ) +
-  scale_fill_viridis_d()
-
-## 8b
-ggplot(penguins) +
-  geom_point(
-    mapping = aes(x = body_mass_g,
-                  y = bill_length_mm, 
-                  colour = body_mass_g)
-  ) +
-  scale_colour_viridis_c()
-
-## 8c
-ggplot(penguins)+
-  geom_density2d(
-    aes(x = body_mass_g, 
-        y = bill_length_mm, 
-        colour = island)
-  ) +
-  scale_colour_brewer(palette = "Dark2")
-```
-
-# Themes
-
-Now that we can change the colours, we might want to change the general plot look. Not everyone likes the grey grid background, the grid ticks etc. 
-
-In ggplot2, we change this static part of the plot through the `theme` functions. There are several built in versions that have common layouts people might use. For instance, `theme_classic()` is often used when preparing for journal submissions for journals that have very specific requirements for plot composition.
-
-```{r}
-ggplot(penguins) +
-  geom_boxplot(
-    mapping = aes(y = body_mass_g, 
-                  x = factor(year),
-                  fill = factor(year))
-  ) +
-  scale_fill_viridis_d() +
-  theme_classic()
-```
-
-In addition to the built in themes, you can control _everything_ in the plot layout through the simple `theme` call. While the function name is simple, altering theme elements can be quite difficult, as its quite advanced. But there are some specific arguments people often like to use, like repositioning where the legend appears.
-
-```{r}
-ggplot(penguins) +
-  geom_boxplot(
-    mapping = aes(y = body_mass_g, 
-                  x = factor(year),
-                  fill = factor(year))
-  ) +
-  scale_fill_viridis_d() +
-  theme(
-    legend.position = "bottom"
-  )
-```
-
-## **Challenge 9.** {.tabset}
-You can run assignments in your own RStudio, or run the ninth challenge in the plotting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("001-ggplot2", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
-> 
-> **9a**: Create a plot and alter the theme. Try the dark theme, for instance!
->
-> **9b**: Edit the theme and make the plot as ugly as you can! Use both the theme and scales for the colours to find the most horrible combinations! 
-> 
-
-### Solution
-```{r, results="hide"}
-## 9a
-ggplot(penguins) +
-  geom_boxplot(
-    mapping = aes(y = body_mass_g, 
-                  x = factor(year),
-                  fill = factor(year))
-  ) +
-  theme_dark()
-
-## 9b
-ggplot(penguins)+
-  geom_density2d(
-    aes(x = body_mass_g, 
-        y = bill_length_mm, 
-        colour = island)
-  ) +
-  scale_colour_brewer(palette = "Dark2")
-```
-
+Look at that! The data actually reveals something called the "simpsons paradox". It's when a relationship looks to go in a specific direction, but when looking into groups within the data the relationship is the opposite. Here, the overall relationship between bill length and depths looks negative, but when we take into account that there are different species, the relationship is actually positive.
 
 # Wrap-up
 
-We conclude this lesson by reiterating our `ggplot2` data visualization template. 
-
-```{r, eval=FALSE}
-`ggplot(data = <DATA>,
-        mapping = aes(<GLOBAL_MAPPINGS>)) + 
-  <GEOM_FUNCTION>(
-    mapping = aes(<GEOM_MAPPINGS>)
-  ) +
-  <SCALE_FUNCTION> +
-  <COORDINATE_FUNCTION> +
-  <FACET_FUNCTION> + 
-  <LABS>`
-```
-
-We learned about seven parameters of ggplot functions. However, it is very rare that all six of them need to specified in a given graphic or chart. Most of the time ggplot offers useful defaults for everything other than data, geoms and mappings.
+We learned about different parameters of ggplot functions, and how to combine different geoms into more complex charts.
 

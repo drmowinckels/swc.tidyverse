@@ -33,7 +33,8 @@ It is not necessary, but highly recommended.
 Open your RStudio and paste the following code into the pane called "Console":
 
 ```r
-install.packages(c("tidyverse", "palmerpenguins"), Ncpus = 2)
+install.packages("tidyverse")
+install.packages("palmerpenguins")
 ```
 
 If you are still struggling to install the package, please create [a ticket](https://github.com/Athanasiamo/swc.tidyverse/issues) pasting the command and output you get so I can help you get it sorted.

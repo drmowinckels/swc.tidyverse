@@ -1,0 +1,51 @@
+---
+title: "Working with datasets in R and the Tidyverse"
+subtitle: "Introduction"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: true
+date: "25th May 2021"
+---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      fig.retina = 3)
+```
+
+Welcome to our workshop on working with datasets in R and the Tidyverse.
+Before we begin, I'd like to remind you all that this is a software carpentry arrange course, meaning we operate under a code of conduct.
+If you feel that someone is violating the CoC or is making you feel uncomfortable in any way, to contact one of the helpers or instructors in a direct message in the zoom chat so we may assist you.
+We are dedicated to a harassment free learning environment, and want everyone to feel comfortable in this shared space. 
+
+If you have questions at any point during the course, please ask the question in the chat to everyone. 
+Please, make sure questions are in general asked to 'everyone', so that all may benefit from the answers.
+If you are wondering about something, its likely more are also.
+The helpers will answer certain questions in the chat directly, or interrupt the instructors for them to answer them.
+
+For this course, we will be actively using break-out rooms during most exercises. 
+You will be allocated a specific break-room and a helper for your room, and this will be the people you will work with throughout the course. 
+We hope you get familiar and comfortable with each other in the break out rooms, and help each other learn.
+Be patient with each other, some pick up coding faster than others. 
+
+I'd like everyone to open their RStudio now. 
+You should all have been given install instructions before today, and hopefully you are all set to go. 
+
+For this course, I'm going to rearrange my RStudio panes a little. 
+This is both my personal preference when I work, but mostly I'm doing it now because we have been given feedback that during online teaching this configuration is often easier to look at. 
+
+**Show standard RStudio setup**
+_explain the different panes_
+
+**Show altering the setup so that Console is on top right, only history on bottom left, minimize history to the smallest possible**
+
+> Ask about the size of things, can they see the text ok?
+
+
+In a in-person course, usually we have everyone typing along as we instruct. 
+For those of you that have two monitors (i.e. a laptop and extra screen, or computer with either one large screen or two screens) this should be possible, and the recommended way to learn during this course.
+Typing code is the best way to start getting used to it and to start understanding what the results of the code are.
+
+If you have just a single small screen (like your laptop), we realise that both having us on zoom _and_ having RStudio open to type along is going to be difficult.
+There is an option in zoom that might make this better for you and that you can try out. 
+[Adjusting Zoom ratio to follow the presenters pointer](https://support.zoom.us/hc/en-us/articles/115004806663-Follow-Presenter-s-Pointer-During-Screen-Sharing)

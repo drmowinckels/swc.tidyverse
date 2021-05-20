@@ -30,13 +30,15 @@ penguins <- palmerpenguins::penguins
 > To be able to search for more information about the tidyverse and its functions
 >
 
+This session is going to be a little different than the others. We will be working with more challenges and exploring different way of combining the things we have learned these days. So we will spend more time in break-out rooms solving challenges and being "hands-on" while in the plenary session we will talk about how we solved the challenges and if things are behaving as we expect or not and why.
+
 Before the break, and a little scattered through the sessions, we have been combining the things we have learned. It's when we start using the tidyverse as a whole, all functions together that they start really becoming powerful. In this last session, we will be working on the things we have learned and applying them together in ways that uncover some of the cool things we can get done.
 
 The last summary code we made was a little tedious. First pivoting long and then pivoting wide again. 
 
 ```{r}
 library(tidyverse)
-penguin_path <-  palmerpenguins::path_to_file("penguins.csv")
+penguin_path <- palmerpenguins::path_to_file("penguins.csv")
 penguins <- read.csv(penguin_path)
 
 penguins %>% 
@@ -63,13 +65,13 @@ penguins %>%
   pivot_longer(ends_with("mm"))
 ```
 
-We've done this before, why is it a clue now? Now that we have learned grouping and summarising, what if we now also group by the new name column to get summaries for each colum as a row already here!
+We've done this before, why is it a clue now? Now that we have learned grouping and summarising, what if we now also group by the new name column to get summaries for each column as a row already here!
 
 ```{r}
 penguins %>% 
   pivot_longer(ends_with("mm")) %>% 
   group_by(name) %>% 
-    summarise(across(ends_with("mm"), 
+  summarise(across(ends_with("mm"), 
                    .fns = list(mean = mean,
                                sd = sd,
                                min = min,
@@ -78,13 +80,13 @@ penguins %>%
             n = length(species)
   ) 
 ```
-but that didn't work as expected. Well, we already pivoted the "mm" column into name, so using that in across didn't work. But across can also just take a single column name instead of a tidy selector.
+but that didn't work as expected. Well, we already pivoted the "mm" column into "name", so using that in across didn't work. But across can also just take a single column name instead of a tidy selector.
 
 ```{r}
 penguins %>% 
   pivot_longer(ends_with("mm")) %>% 
   group_by(name) %>% 
-    summarise(across(value, 
+  summarise(across(value, 
                    .fns = list(mean = mean,
                                sd = sd,
                                min = min,
@@ -98,12 +100,8 @@ SO we substitute the tidy selector with just the name of the column  we want to 
 
 
 ## **Challenge 1.** {.tabset}
-
-You can run assignments in your own RStudio, or run the first challenge in the combining tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("006-combining", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
+Room: break-out
+Duration: 10 minutes
 
 ### Assignment
 >
@@ -123,7 +121,7 @@ learnr::run_tutorial("006-combining", "swc.tidyverse")
 penguins %>% 
   pivot_longer(ends_with("mm")) %>% 
   group_by(name) %>% 
-    summarise(across(value, 
+  summarise(across(value, 
                    .fns = list(mean = mean,
                                sd = sd,
                                min = min,
@@ -138,7 +136,7 @@ penguins %>%
   pivot_longer(ends_with("mm"),
                values_drop_na = TRUE) %>% 
   group_by(name) %>% 
-    summarise(across(value, 
+  summarise(across(value, 
                    .fns = list(mean = mean,
                                sd = sd,
                                min = min,
@@ -152,7 +150,7 @@ penguins %>%
   pivot_longer(ends_with("mm"),
                values_drop_na = TRUE) %>% 
   group_by(name) %>% 
-    summarise(across(value, 
+  summarise(across(value, 
                    .fns = list(mean = mean,
                                sd = sd,
                                min = min,
@@ -166,7 +164,7 @@ penguins %>%
   pivot_longer(ends_with("mm"),
                values_drop_na = TRUE) %>% 
   group_by(island, species, name) %>% 
-    summarise(across(value, 
+  summarise(across(value, 
                    .fns = list(mean = mean,
                                sd = sd,
                                min = min,
@@ -185,7 +183,7 @@ penguins_sum <- penguins %>%
   pivot_longer(ends_with("mm"),
                values_drop_na = TRUE) %>% 
   group_by(island, species, name) %>% 
-    summarise(across(value, 
+  summarise(across(value, 
                    .fns = list(mean = mean,
                                sd = sd,
                                min = min,
@@ -199,8 +197,8 @@ We can for instance make a bar chart with the values from the summary statistics
 
 ```{r, eval = FALSE}
 penguins_sum %>% 
-  ggplot(aes(x = mean, 
-             y = island,
+  ggplot(aes(x = island,
+             y = mean,
              fill = species)) +
   geom_bar() +
   facet_wrap(~ name, scales = "free")
@@ -214,8 +212,8 @@ This error message is telling us that we have used an aesthetic that is not need
 
 ```{r}
 penguins_sum %>% 
-  ggplot(aes(x = max, 
-             y = island,
+  ggplot(aes(x = island, 
+             y = mean,
              fill = species)) +
   geom_bar(stat = "identity") +
   facet_wrap(~ name, scales = "free")
@@ -226,8 +224,8 @@ In ggplot, there is an argument called "position", that could help us. By defaul
 
 ```{r}
 penguins_sum %>% 
-  ggplot(aes(x = max, 
-             y = island,
+  ggplot(aes(x = island, 
+             y = mean,
              fill = species)) +
   geom_bar(stat = "identity",
            position = "dodge") +
@@ -236,59 +234,82 @@ penguins_sum %>%
 
 
 ## **Challenge 2.** {.tabset}
-
-You can run assignments in your own RStudio, or run the second challenge in the combining tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("006-combining", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
+Room: break-out
+Duration: 10 minutes
 
 ### Assignment
 >
-> **2a**: Create a bar chart based om the penguins summary data, where the mean values are on the x axis and species are on the y axis. Make sure to dodge the bar for easier comparisons. Create subplots on the different metrics.
+> **2a**: Create a bar chart based om the penguins summary data, where the mean values are on the x axis and species are on the y axis. Make sure to dodge the bar for easier comparisons. Create subplots on the different metrics (_Hint: use facet_wrap()_.
 >
 > **2b**: Adapt the code the plot the standard deviation rather than the mean
 >
-> **2c**: Swap around the plot to explore different ways of looking at the same data. Try swapping the axes, so that x is on the y, and vice versa. Or Try having species on one axis and using island as colour fill. What variation do you think best shows the differences between groups?
->
-> **2d**: Revert the code back so that you have the mean on the x-axis. Try adding an error bar that indicates the standard deviation of the measurement, while the bars indicate the mean values. What does the geom_errorbar need to plot the error bars?
->
-> **2e**: Try pivoting the data even longer! Pivot longer all the stats columns so that the column names are in a column named "stat". Now, create another plot using the "value" column on the y-axis, and creating subplots based on both the observation name AND the stat!
->
-
 
 ### Solution
 
 ```{r "solutions-2"}
 ## 2a
 penguins_sum %>% 
-  ggplot(aes(x = mean, 
-             y = island,
+  ggplot(aes(x = island, 
+             y = mean,
              fill = species)) +
   geom_bar(stat = "identity",
            position = "dodge") +
-  facet_wrap(~ name, scales = "free")
+  facet_wrap(~ name)
 
 
 # 2b
 penguins_sum %>% 
-  ggplot(aes(x = sd, 
-             y = island,
+  ggplot(aes(x = island, 
+             y = sd,
              fill = species)) +
   geom_bar(stat = "identity",
            position = "dodge") +
-  facet_wrap(~ name, scales = "free")
+  facet_wrap(~ name)
+```
 
-## 2c
+
+# Facetting extra long data
+
+But we can get even more creative. We mentioned in the pivoting session, that pivoting data is a key skill to really discover how powerful a tool the tidyverse can be. It's when you start thinking of pivoting as solutions to various tasks that is gets super interesting. 
+For instance, in our summary data, we have 4 different statistics, and its hard to get them all nicely into a plot. But they all give us some information about the underlying data. How can we create a plot that showcases them all?
+
+We can pivot _even longer_ and create subplots for each statistic!
+
+
+```{r}
 penguins_sum %>% 
+  pivot_longer(all_of(c("mean", "sd", "min", "max")),
+               names_to = "stat") %>% 
   ggplot(aes(x = species, 
-             y = sd,
+             y = value,
              fill = island)) +
   geom_bar(stat = "identity",
            position = "dodge") +
-  facet_wrap(~ name, scales = "free")
+  facet_grid(stat ~ name)
+```
 
-## 2d
+## **Challenge 3.** {.tabset}
+Room: plenary
+Duration: 5 minutes
+
+>
+> **3a**: Try pivoting the data even longer! Pivot longer all the stats columns so that the column names are in a column named "stat". Now, create another plot using the "value" column on the y-axis, and creating subplots based on both the observation name AND the stat!
+>
+> **3b**: Try adding the argument 'scales = "free"' to the facet_grid function. What does that do?
+
+```{r}
+## 3a
+penguins_sum %>% 
+  pivot_longer(all_of(c("mean", "sd", "min", "max")),
+               names_to = "stat") %>% 
+  ggplot(aes(x = species, 
+             y = value,
+             fill = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_grid(stat ~ name)
+
+## 3b
 penguins_sum %>% 
   pivot_longer(all_of(c("mean", "sd", "min", "max")),
                names_to = "stat") %>% 
@@ -300,3 +321,101 @@ penguins_sum %>%
   facet_grid(stat ~ name, scales = "free")
 ```
 
+adding scales = "free" in the facet means that each row and/or column in the sub-plot grid gets their own scale. Before all the facets were in the same scale on the y-axis, making the standard deviation row almost invisible. Making the scale free, made it possible to see the differences in standard deviations more clearly.
+
+# Fixing factors.for plots
+
+This is starting to look really cool, but its still not perfect.
+I dont know about you, but the order of the stats rows in the plot is a little weird.
+In the sum file, they were nicely ordered by mean, sd, min and then max.
+But this order is lost in the plot. 
+Can you discern how the plot rows are ordered?
+
+```{r}
+penguins_sum
+
+penguins_sum %>% 
+  pivot_longer(all_of(c("mean", "sd", "min", "max")),
+               names_to = "stat") %>% 
+  ggplot(aes(x = species, 
+             y = value,
+             fill = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_grid(stat ~ name, scales = "free")
+```
+
+They are ordered alphabetically. To override this, we need to let ggplot know somehow the order that they should be in.
+We do that using `factors` and a `mutate`
+
+```{r}
+penguins_sum %>% 
+  pivot_longer(all_of(c("mean", "sd", "min", "max")),
+               names_to = "stat") %>% 
+  mutate(stat = factor(stat, levels = c("mean", "sd", "min", "max")))
+
+
+penguins_sum %>% 
+  pivot_longer(all_of(c("mean", "sd", "min", "max")),
+               names_to = "stat") %>% 
+  mutate(stat = factor(stat, levels = c("mean", "sd", "min", "max"))) %>% 
+  
+  ggplot(aes(x = species, 
+             y = value,
+             fill = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_grid(stat ~ name, scales = "free")
+```
+
+## **Challenge 4.** {.tabset}
+Room: break-out
+Duration: 10 minutes
+
+>
+> **4a**: Try adapting the code we have been using, by adding a `mutate` in between the pivot_longer and the ggplot function, that changes the "stat" column into a factor with the levels in the order mean, sd, min then max.
+>
+> **4b**: Can you think of a way to simplify this? Look at how the code 'c("mean", "sd", "min", "max")' is typed out twice. Is there a way we can save that code to an object, and then use that object for the code in stead?
+
+
+```{r}
+# 4a
+penguins_sum %>% 
+  pivot_longer(all_of(c("mean", "sd", "min", "max")),
+               names_to = "stat") %>% 
+  mutate(stat = factor(stat, levels = c("mean", "sd", "min", "max"))) %>% 
+  
+  ggplot(aes(x = species, 
+             y = value,
+             fill = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_grid(stat ~ name, scales = "free")
+
+# 4b
+stats <- c("mean", "sd", "min", "max")
+
+penguins_sum %>% 
+  pivot_longer(all_of(stats),
+               names_to = "stat") %>% 
+  mutate(stat = factor(stat, levels = stats)) %>% 
+  
+  ggplot(aes(x = species, 
+             y = value,
+             fill = island)) +
+  geom_bar(stat = "identity",
+           position = "dodge") +
+  facet_grid(stat ~ name, scales = "free")
+```
+
+# Requests
+
+We've covered a lot of different ways of working with the tidyverse here. DO you have any requests of what you could imagine wanting to do, but cannot think of it your self? This is the perfect time to ask the question, and we will try to think of a way to solve that task while you watch. 
+Many times, learning to do something new is watching others solve a task. It gives ideas on how you yourself can solve a similar future task. 
+
+
+# Learning more
+
+The [tidyverse webpage](https://www.tidyverse.org/) offers lots of resources on learning the tidyverse way of working, and information about what great things you can do with this collection of packages. 
+There is an [R for Datascience](https://www.rfordatasci.com/) learning community that is an excellent and welcoming community of other learners navigating the tidyverse. We wholeheartedly recommend joining this community!
+The [Rstudio community](https://community.rstudio.com/) is also a great place to ask questions or look for solutions for questions you may have, and so is [stackoverflow](https://stackoverflow.com/).

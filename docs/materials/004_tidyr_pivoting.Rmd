@@ -118,12 +118,8 @@ penguins <- read_csv(penguin_path)
 ```
 
 ## **Challenge 1.** {.tabset}
-
-You can run assignments in your own RStudio, or run the first challenge in the pivoting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("004-pivoting", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
+Room: break-out
+Duration: 10 minutes
 
 ### Assignment
 >
@@ -210,7 +206,7 @@ penguins %>%
 pivot_longer takes tidy-select column arguments, so it is easy to grab all the columns you are after. Here, we are pivoting longer all columns that contain an underscore. And what happens? We now have less columns, but also two new columns we did not have before! In the `name` column, all our previous columns names are, one after the other. And in the `value` column, all the cell values for the observations! 
 So before, the data was wider, in that each of the columns with `_` had their own column, while now, they are all collected into two columns instead of 4.
 
-Why would we want to do that? Well, perhaps we want to plot all the variables in a single ggplot call? Now that the measurement types are collected in these two ways, we can facet over the `name` column to create a subplot per measurement type!
+Why would we want to do that? Well, perhaps we want to plot all the variables in a single ggplot call? Now that the measurement types are collected in these two ways, we can facet over the `name` column to create a sub-plot per measurement type!
 
 ```{r}
 penguins %>% 
@@ -222,21 +218,17 @@ penguins %>%
   facet_wrap(~name, scales = "free_y")
 ```
 
-That's pretty neat. By pivoting the data into this longer shape we are able to create subplots for all measurements easily with the same ggplot call and have them consistent, and nicely aligned. This longer format is also great for summaries, which we will be covering tomorrow.
+That's pretty neat. By pivoting the data into this longer shape we are able to create sub-plots for all measurements easily with the same ggplot call and have them consistent, and nicely aligned. This longer format is also great for summaries, which we will be covering tomorrow.
 
 ## **Challenge 2.** {.tabset}
-
-You can run assignments in your own RStudio, or run the second challenge in the pivoting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("004-pivoting", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
+Room: Plenary
+Duration: 10 minutes
 
 ### Assignment
 >
-> **2a**: Start by pivoting the penguins data so that all the bill measurements (starts with "bill") are in the same column.
+> **2a**: Pivot longer all columns containing an underscore (_) in their name.
 >
-> **2b**: Pivot longer all columns containing an underscore (_) in their name.
+> **2b**: Pivot the penguins data so that all the bill measurements (starts with "bill") are in the same column.
 >
 > **2c**: As mentioned, pivot_longer accepts tidy-selectors. Pivot longer all numerical columns.
 >
@@ -244,13 +236,13 @@ learnr::run_tutorial("004-pivoting", "swc.tidyverse")
 ### Solution
 
 ```{r "solutions-2"}
-## 1a
+# 1a
 penguins %>% 
-  pivot_longer(starts_with("bill"))
+  pivot_longer(contains("_"))
 
 # 1b
 penguins %>% 
-  pivot_longer(contains("_"))
+  pivot_longer(starts_with("bill"))
 
 ## 1c
 penguins %>% 
@@ -283,12 +275,8 @@ penguins %>%
 now, the pivot gave us 4 columns in stead of two! We told pivot that the column name could be split into the columns part, measure and unit, and that these were separated by underscore. Again we see how great consistent and logical naming of columns can be such a great help when working with data!
 
 ## **Challenge 3.** {.tabset}
-
-You can run assignments in your own RStudio, or run the third challenge in the pivoting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("004-pivoting", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
+Room: Break-out
+Duration: 10 minutes
 
 ### Assignment
 >
@@ -370,7 +358,7 @@ penguins_long_simple %>%
 
 ok what is happening here? It does not at all look as we expected! Our columns have something very weird in them, with this strange `<dbl [7]>` thing, what does that mean?
 Lets look at the warning message our code gave us and see if we can figure it out.
-**Values are not uniquely identified; output will contain list-cols**. We are being told the pivot wider cannot uniquely identify the observations, and so cannot plave a single value into the columns. Is returning lists of values. 
+**Values are not uniquely identified; output will contain list-cols**. We are being told the pivot wider cannot uniquely identify the observations, and so cannot place a single value into the columns. Is returning lists of values. 
 
 yikes! That's super annoying. Let's go back to our penguins data set and see if we can do something to help.
 
@@ -412,12 +400,8 @@ penguins_long
 
 
 ## **Challenge 4.** {.tabset}
-
-You can run assignments in your own RStudio, or run the forth challenge in the pivoting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("004-pivoting", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
+Room: plenary
+Duration: 5 minutes
 
 ### Assignment
 >
@@ -454,12 +438,8 @@ penguins_long %>%
 Those arguments and inputs should be familiar to the call from pivot_longer. So we are lucky that if you understand one of them, it is easier to understand the other.
 
 ## **Challenge 5.** {.tabset}
-
-You can run assignments in your own RStudio, or run the fifth challenge in the pivoting tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("004-pivoting", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
+Room: break-out
+Duration: 10 minutes
 
 ### Assignment
 >
@@ -475,3 +455,9 @@ penguins_long %>%
               names_sep = "_",
               values_from = value)
 ```
+
+# Wrap up
+We have been exploring how to pivot data into longer and wider shapes.
+Pivoting is a vital part of the "tidyverse"-way, and very powerful tool once you get used to it.
+We will see pivots in action more tomorrow as we create summaries and play around with combining all the things we have been exploring.
+
