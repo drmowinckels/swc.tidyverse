@@ -40,5 +40,37 @@ install.packages("palmerpenguins")
 If you are still struggling to install the package, please create [a ticket](https://github.com/Athanasiamo/swc.tidyverse/issues) pasting the command and output you get so I can help you get it sorted.
 We will also be hosting a 1 hour guided install session from **11-12am** on **Friday 21at of May**. Please join this session for more "hands-on" direct help in getting you up to speed.
 
-### If you are on a MacBook with the M1 chip.
-The M1-processor for new MacBooks, it all its glory, does not run RStudio. We cannot control this. If you have a MacBook with the M1-chip let us know via e-mail, and we will create a learning environment for you in RStudio cloud. 
+
+## Test loading the package
+
+Try loading the tidyverse package by running the below code in your console.
+
+```{r}
+library(tidyverse)
+```
+
+This is the expected output after running this command
+```r
+-- Attaching packages ---------- tidyverse 1.3.1 --
+v ggplot2 3.3.3     v purrr   0.3.4
+v tibble  3.1.1     v dplyr   1.0.5
+v tidyr   1.1.3     v stringr 1.4.0
+v readr   1.4.0     v forcats 0.5.1
+-- Conflicts ------------- tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+```
+
+
+If you see a warning after this command, that looks like the below, that is ok. 
+If you get something saying `Error` please let us know, but **warnings** at this stage can be ignored.
+
+```r
+Warning messages:
+1: package ‘tidyverse’ was built under R version 4.0.5 
+2: package ‘tibble’ was built under R version 4.0.5 
+3: package ‘tidyr’ was built under R version 4.0.5 
+4: package ‘dplyr’ was built under R version 4.0.5 
+5: package ‘forcats’ was built under R version 4.0.5
+```
+

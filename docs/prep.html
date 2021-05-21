@@ -2070,6 +2070,7 @@ Materials
 <span class="down-arrow">&#x25BE;</span>
 </button>
 <div class="nav-dropdown-content">
+<a href="materials/000-introduction.html">Day 1 - Introduction</a>
 <a href="materials/001-ggplot2.html">Day 1 - Pt 1 - Tidy data visualisation</a>
 <a href="materials/002-dplyr-subsetting.html">Day 1 - Pt 2 - Tidy data subsetting</a>
 <a href="materials/003-dplyr-mutating.html">Day 2 - Pt 1 - Adding or altering variables</a>
@@ -2110,9 +2111,31 @@ Materials
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;palmerpenguins&quot;</span>)</span></code></pre></div>
 <p>If you are still struggling to install the package, please create <a href="https://github.com/Athanasiamo/swc.tidyverse/issues">a ticket</a> pasting the command and output you get so I can help you get it sorted. We will also be hosting a 1 hour guided install session from <strong>11-12am</strong> on <strong>Friday 21at of May</strong>. Please join this session for more “hands-on” direct help in getting you up to speed.</p>
-<h3 id="if-you-are-on-a-macbook-with-the-m1-chip.">If you are on a MacBook with the M1 chip.</h3>
-<p>The M1-processor for new MacBooks, it all its glory, does not run RStudio. We cannot control this. If you have a MacBook with the M1-chip let us know via e-mail, and we will create a learning environment for you in RStudio cloud.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h2 id="test-loading-the-package">Test loading the package</h2>
+<p>Try loading the tidyverse package by running the below code in your console.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>This is the expected output after running this command</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="sc">--</span> Attaching packages <span class="sc">----------</span> tidyverse <span class="dv">1</span>.<span class="fl">3.1</span> <span class="sc">--</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>v ggplot2 <span class="dv">3</span>.<span class="fl">3.3</span>     v purrr   <span class="dv">0</span>.<span class="fl">3.4</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>v tibble  <span class="dv">3</span>.<span class="fl">1.1</span>     v dplyr   <span class="dv">1</span>.<span class="fl">0.5</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>v tidyr   <span class="dv">1</span>.<span class="fl">1.3</span>     v stringr <span class="dv">1</span>.<span class="fl">4.0</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>v readr   <span class="dv">1</span>.<span class="fl">4.0</span>     v forcats <span class="dv">0</span>.<span class="fl">5.1</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="sc">--</span> Conflicts <span class="sc">-------------</span> <span class="fu">tidyverse_conflicts</span>() <span class="sc">--</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>x dplyr<span class="sc">::</span><span class="fu">filter</span>() masks stats<span class="sc">::</span><span class="fu">filter</span>()</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>x dplyr<span class="sc">::</span><span class="fu">lag</span>()    masks stats<span class="sc">::</span><span class="fu">lag</span>()</span></code></pre></div>
+<p>If you see a warning after this command, that looks like the below, that is ok. If you get something saying <code>Error</code> please let us know, but <strong>warnings</strong> at this stage can be ignored.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Warning messages<span class="sc">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span> package ‘tidyverse’ was built under R version <span class="dv">4</span>.<span class="fl">0.5</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span> package ‘tibble’ was built under R version <span class="dv">4</span>.<span class="fl">0.5</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span><span class="sc">:</span> package ‘tidyr’ was built under R version <span class="dv">4</span>.<span class="fl">0.5</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span><span class="sc">:</span> package ‘dplyr’ was built under R version <span class="dv">4</span>.<span class="fl">0.5</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span><span class="sc">:</span> package ‘forcats’ was built under R version <span class="dv">4</span>.<span class="fl">0.5</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

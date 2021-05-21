@@ -11,6 +11,8 @@ navbar:
       href: prep.html
     - text: "Materials"
       menu:
+        - text: "Day 1 - Introduction"
+          href: materials/000-introduction.html
         - text: "Day 1 - Pt 1 - Tidy data visualisation"
           href: materials/001-ggplot2.html
         - text: "Day 1 - Pt 2 - Tidy data subsetting"
