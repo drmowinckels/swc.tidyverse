@@ -102,38 +102,6 @@ penguins %>%
 ```
 
 
-## **Challenge 1.** {.tabset}
-
-You can run assignments in your own RStudio, or run the first challenge in the mutating tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("003-mutating", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
->
-> **1a**: Create a column named `bill_ld_ratio` that is the value of `bill_length_mm` divided by `bill_depth_mm`
->
-> **1b**: transform the body mass column to the logarithmic scale using the `log` function
->
-> **1c**: Divide all values in the flipper lenght column with 10, and store it in a variable called flipper_length_cm.
-
-### Solution
-
-```{r "solutions-1"}
-## 1a
-penguins %>% 
-  mutate(bill_ld_ratio = bill_length_mm / bill_depth_mm)
-
-# 1b
-penguins %>% 
-  mutate(body_mass_g_log = log(body_mass_g))
-
-## 1c
-penguins %>% 
-  mutate(flipper_length_cm  = flipper_length_mm/10)
-```
-
 # Adding new variables, part two 
 
 Sometimes, we want to assign certain data values based on other variables in the data set. 
@@ -192,35 +160,6 @@ In R, missing values are usually given the value `NA` which stands for `Not appl
 <!-- penguins %>%  -->
 <!--   filter(is.na(body_mass_g)) -->
 <!-- ``` -->
-
-
-## **Challenge 2.** {.tabset}
-
-You can run assignments in your own RStudio, or run the second challenge in the mutating tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("003-mutating", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
->
-> **2a**: Adapt the example to evaluate if body mass is **below** 4.5kg, and assign rows that are TRUE to be "normal" and rows that are FALSE to "large"
->
-> **2b**: Create a new column named "biscoe" and its content should be `TRUE` if the island is "Biscoe" and `FALSE` for everything else.
-
-
-### Solution
-
-```{r "solutions-2"}
-## 2a
-penguins %>% 
-  mutate(body_type = if_else(body_mass_g < 4500, "normal", "large")) 
-
-# 2b
-penguins %>% 
-  mutate(biscoe = if_else(island == "Biscoe", TRUE, FALSE)) %>% 
-  select(species, island, biscoe)
-```
 
 
 # Adding new variables, part three
@@ -322,32 +261,6 @@ penguins %>%
 
 Here, we use the `is.na()` function we saw earlier, on `bill_ratio`. But it also has an `!` in front, what does that mean? In R's logical expressions, the `!` is a negation specifier. It means it flips the logical so the `TRUE` becomes `FALSE`, and *vice versa*. So here, it means the `bill_ratio` is **not** `NA`.
 
-## **Challenge 3.** {.tabset}
-
-You can run assignments in your own RStudio, or run the third challenge in the mutating tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("003-mutating", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
-> **3a**: Create a new column called `body_type` which should contain the categories "large" for penguins above 4 kilos, "petite" penguins below 3 kilos, and "normal" for all the remaining penguins that have their mass recorded.
-> 
-
-
-### Solution
-
-```{r "solutions-3"}
-## 3a
-penguins %>% 
-  mutate(
-    body_type = case_when(
-      body_mass_g > 4500 ~ "large",
-      body_mass_g < 3000 ~ "petite",
-      !is.na(body_mass_g) ~ "normal") # the rest
-  ) 
-```
-
 # Adding new variables, part four
 
 So far, we've been looking at adding variables one by one.
@@ -399,47 +312,44 @@ Now they are all there! neat! But that `.names` argument is a little weird. What
 
 Internally, `across()` stores the column names in a vector it calls `.col`. We can use this knowledge to tell the across function what to name our new columns. In this case, we want to append the column name with `_sc`. 
 
+# **Adding new variables, challenges** {.tabset}
 
-## **Challenge 4.** {.tabset}
-
-You can run assignments in your own RStudio, or run the third challenge in the mutating tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("003-mutating", "swc.tidyverse")
-```
 (helpers, please paste this into the chat at the right time.)
 
-### Assignment
-> **4a**: Transform all the colmns with milimetres measurements so they are scaled, and the _prefix_ "sc_" to the columns names.
-> **4b**: Do the same, but now only for the bill measurements.
+## Assignment
+>
+> **1a**: Create a column named `bill_ld_ratio_log` that is the natural logarithm (using the `log()` function) of `bill_length_mm` divided by `bill_depth_mm`
+>
+> **1b**: Create a new column called `body_type`, where animals below 3 kg are `small`, animals between 3 and 4.5 kg are `normal`, and animals larger than 4.5 kg are `large`. In the same command, create a new column named `biscoe` and its content should be `TRUE` if the island is `Biscoe` and `FALSE` for everything else.
+>
+> **1c**: Transform all the colmns with milimetres measurements so they are scaled, and the _prefix_ `sc_` to the columns names.
 
+## Solution
 
-### Solution
-
-```{r "solutions-4"}
-## 4a
+```{r "solutions-1"}
+## 1a
 penguins %>% 
-  mutate(across(ends_with("mm"),
-                scale, 
+  mutate(bill_ld_ratio = log(bill_length_mm / bill_depth_mm))
+
+## 1b
+penguins %>% 
+  mutate(body_type = case_when(body_mass_g < 3000 ~ "small",
+                               body_mass_g >= 3000 ~ "normal",
+                               body_mass_g > 4500 ~ "large"),
+         biscoe = if_else(condition = island == "Biscoe", 
+                          true = TRUE, 
+                          false = FALSE)) 
+
+## 1c
+penguins %>% 
+  mutate(across(.cols = ends_with("mm"), 
+                .fns = scale, 
                 .names = "sc_{.col}")) %>% 
   select(contains("mm"))
-
-## 4b
-penguins %>% 
-  mutate(across(starts_with("mm"),
-                scale, 
-                .names = "sc_{.col}")) %>% 
-  select(starts_with("mm"))
-
-## 4c
-penguins %>% 
-  mutate(across(where(is.numeric),
-                scale, 
-                .names = "sc_{.col}")) %>% 
-  select(where(is.numeric))
 ```
 
 
-# Adding new variables, part five (`group_by()`)
+# Grouping and ungrouping, part one
 
 Sometimes, it makes sense to calculate values based on some grouping variable.
 In this case, for instance species, island or sex. 
@@ -494,7 +404,7 @@ Now that we have confirmed that there are different values for the different spe
 penguins %>% 
   group_by(species) %>% 
   mutate(bill_length_sp_max = max(bill_length_mm, na.rm = TRUE),
-         bill_length_rel = bill_length_mm/bill_length_sp_max) %>%
+         bill_length_rel = bill_length_mm / bill_length_sp_max) %>%
   ggplot(mapping = aes(x = bill_length_rel,
                        fill = species)) +
   geom_density(alpha = 0.5)
@@ -549,56 +459,7 @@ This looks quite similar between the species.
 <!-- # hurrah! That looks right to me. Now all values are around 0, and we can clearly see that the relationship between bill length and depth is pretty much the same between the species.  -->
 
 
-## **Challenge 5.** {.tabset}
-
-You can run assignments in your own RStudio, or run the third challenge in the mutating tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("003-mutating", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
-
-> **5a**: De-mean the bill length column. Do it in two steps, first by making a column for the species means, then using that data to de-mean the bill length.
-
-> **5b**: Do the same, but now in a single step (i.e. do not store the species mean in its own column)
-
-> **5c**: Based on the code in the previous example, adapt it to be grouped by island in stead of species.
-
-> **5d**: De-mean all the numerical columns, and give them a suffix of "dm".
-
-### Solution
-
-```{r "solutions-5"}
-## 5a
-penguins %>% 
-  group_by(species) %>% 
-  mutate(
-    bill_length_sp_mean = mean(bill_length_mm, na.rm = TRUE),
-    bill_length_cent = bill_length_mm - bill_length_sp_mean
-  ) %>% 
-  select(species, island, starts_with("bill"))
-
-## 5b
-penguins %>% 
-  group_by(species) %>% 
-  mutate(
-    bill_length_cent = bill_length_mm - mean(bill_length_mm, na.rm = TRUE)
-  ) %>% 
-  select(species, island, starts_with("bill"))
-
-## 5c
-penguins %>% 
-  group_by(species) %>% 
-  mutate(
-    across(where(is.numeric),
-           ~ .x - mean(.x, na.rm = TRUE),
-           .names = "{.col}_dm")
-  ) %>% 
-  select(species, where(is.numeric))
-```
-
-## Ungrouping
+# Grouping and ungrouping, part two
 
 Now that we have learned to group, its also a good stage to learn to `ungroup()`.
 When data is grouped in R, all operations on it happen in a grouped fashion.
@@ -618,31 +479,58 @@ penguins %>%
 The last line there ungroups the data. And you can see from the output, that the lines explaining the grouping of the data are now gone.
 If you have been grouping your data and at some point discover things are not happening as expected, remember to ungroup your data! 
 
-## **Challenge 6.** {.tabset}
+# **Grouping and ungrouping, challenges.** {.tabset}
 
-You can run assignments in your own RStudio, or run the third challenge in the mutating tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("003-mutating", "swc.tidyverse")
-```
 (helpers, please paste this into the chat at the right time.)
 
-### Assignment
+## Assignment
 
-> **6a**: What is the difference in the minimum body mass for the penguins data sat if the data is grouped by species, and when it is ungrouped?
+> **2a**: Center the bill length column. Do it in two steps, first by making a column for the species means, then using that data to center ("de-mean") the bill length.
+>
+> **2b**: Do the same, but now in a single step, *i.e.*, do not store the species mean in its own column.
+>
+> **2c**: Based on the code in the previous example, adapt it to be grouped by island in stead of species.
+>
+> **2d**: Calaculate the centered bill length again, but this time also include a new column `n` with the number of *total* observations (hint: you can use the `n()` function). Why does the inclusion of an `ungroup()` step a difference?
 
-### Solution
+## Solution
 
-```{r "solutions-6"}
-## 6a
+```{r "solutions-2"}
+## 2a
 penguins %>% 
   group_by(species) %>% 
+  mutate(bill_length_sp_mean = mean(bill_length_mm, na.rm = TRUE),
+         bill_length_cent = bill_length_mm - bill_length_sp_mean) %>% 
+  select(species, island, starts_with("bill"))
+
+## 2b
+penguins %>% 
+  group_by(species) %>% 
+  mutate(bill_length_cent = bill_length_mm - mean(bill_length_mm, na.rm = TRUE)) %>% 
+  select(species, island, starts_with("bill"))
+
+## 2c
+penguins %>% 
+  group_by(island) %>% 
+  mutate(bill_length_cent = bill_length_mm - mean(bill_length_mm, na.rm = TRUE)) %>% 
+  select(species, island, starts_with("bill"))
+
+## 2d
+penguins %>% 
+  group_by(species) %>% 
+  mutate(body_mass_cent = body_mass_g - mean(body_mass_g, na.rm = TRUE),
+         n = n()) %>% 
+  select(species, island, year, starts_with("body_mass"), n)
+
+penguins %>% 
+  group_by(species) %>% 
+  mutate(body_mass_cent = body_mass_g - mean(body_mass_g, na.rm = TRUE)) %>% 
   ungroup() %>% 
-  mutate(
-    body_mass_min = min(body_mass_g, na.rm = TRUE)
-  )
+  mutate(n = n()) %>% 
+  select(species, island, year, starts_with("body_mass"), n)
 ```
 
-## Wrap up
+# Wrap up
 
 Now we've learned a little about adding and altering variables in data sets using {dplyr}'s `mutate()` function. Both alone, and also together with `across()` and `group_by()`. 
 You should be able to play around with the examples provided and learn more about how things work through trial and error. 

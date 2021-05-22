@@ -322,7 +322,7 @@ div.tocify {
 <!--               values_from = value) -->
 <!-- ``` -->
 <div id="data-summaries" class="section level1">
-<h1><strong>Data summaries</strong></h1>
+<h1>Data summaries</h1>
 <p>Next to visualizing data, creating summaries of the data in tables is a quick way to get an idea of what type of data you have at hand. It might help you spot incorrect data or extreme values, or whether specific analysis approaches are needed.</p>
 <p>To summarize data with the {tidyverse} efficiently, we need to utilize the tools we have learned the previous days, like adding new variables, tidy-selections, pivots and grouping data. All these tools combine amazingly when we start making summaries.</p>
 <p>Let us start from the beginning with summaries, and work our way up to the more complex variations as we go.</p>
@@ -351,6 +351,7 @@ div.tocify {
 ##   `mean(bill_length_mm, na.rm = TRUE)`
 ##                                  &lt;dbl&gt;
 ## 1                                 43.9</code></pre>
+<p>An alternative way to remove missing values from a column is to pass the column to {tidyr}’s <code>drop_na()</code> function.</p>
 <pre class="r"><code>penguins %&gt;% 
   drop_na(bill_length_mm) %&gt;% 
   summarise(mean(bill_length_mm))</code></pre>
@@ -358,7 +359,7 @@ div.tocify {
 ##   `mean(bill_length_mm)`
 ##                    &lt;dbl&gt;
 ## 1                   43.9</code></pre>
-<p>We have the mean of bill length! But it does not look very tidy. We can give the column a name, in the same fashion as we would in <code>mutate</code>. Actually, <code>summarise</code> in many ways resembles mutate in how it takes it arguments.</p>
+<p>We have the mean of bill length! But it does not look very tidy. We can give the column a name, in the same fashion as we would in <code>mutate()</code>. Actually, <code>summarise()</code> in many ways resembles mutate in how it takes it arguments.</p>
 <pre class="r"><code>penguins %&gt;% 
   drop_na(bill_length_mm) %&gt;% 
   summarise(bill_length_mean = mean(bill_length_mm))</code></pre>
@@ -376,57 +377,63 @@ div.tocify {
 ##   bill_length_mean bill_length_min bill_length_max
 ##              &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
 ## 1             43.9            32.1            59.6</code></pre>
-<div id="challenge-1." class="section level2 tabset">
-<h2 class="tabset"><strong>Challenge 1.</strong></h2>
-<p>You can run assignments in your own RStudio, or run the first challenge in the summaries tutorial by entering the following in the R console:</p>
-<pre class="r"><code>learnr::run_tutorial(&quot;005-summarising&quot;, &quot;swc.tidyverse&quot;)</code></pre>
+</div>
+<div id="data-summaries-challenges." class="section level1 tabset">
+<h1 class="tabset"><strong>Data summaries, challenges.</strong></h1>
 <p>(helpers, please paste this into the chat at the right time.)</p>
-<div id="assignment" class="section level3">
-<h3>Assignment</h3>
+<div id="assignment" class="section level2">
+<h2>Assignment</h2>
 <blockquote>
 <p><strong>1a</strong>: First start by trying to summarise a single column, <code>bill_length_mm</code> by calculating its mean.</p>
 <p><strong>1b</strong>: Add a column with the standard deviation of bill length.</p>
-<p><strong>1c</strong>: Now add the same two metrics for bill depth and give the columns clear names</p>
+<p><strong>1c</strong>: Now add the same two metrics for bill depth and give the columns clear names. Why could the <code>drop_na()</code> step give us wrong results?</p>
 </blockquote>
 </div>
-<div id="solution" class="section level3">
-<h3>Solution</h3>
+<div id="solution" class="section level2">
+<h2>Solution</h2>
 <pre class="r"><code>## 1a
 penguins %&gt;% 
-  summarise(mean(bill_length_mm, na.rm = TRUE))</code></pre>
+  drop_na(bill_length_mm) %&gt;% 
+  summarise(mean(bill_length_mm))</code></pre>
 <pre><code>## # A tibble: 1 x 1
-##   `mean(bill_length_mm, na.rm = TRUE)`
-##                                  &lt;dbl&gt;
-## 1                                 43.9</code></pre>
+##   `mean(bill_length_mm)`
+##                    &lt;dbl&gt;
+## 1                   43.9</code></pre>
 <pre class="r"><code># 1b
 penguins %&gt;% 
-  summarise(
-    mean(bill_length_mm, na.rm = TRUE),
-    sd(bill_length_mm, na.rm = TRUE)
-  )</code></pre>
+  drop_na(bill_length_mm) %&gt;% 
+  summarise(mean(bill_length_mm),
+            sd(bill_length_mm))</code></pre>
 <pre><code>## # A tibble: 1 x 2
-##   `mean(bill_length_mm, na.rm = TRUE)` `sd(bill_length_mm, na.rm = TRUE)`
-##                                  &lt;dbl&gt;                              &lt;dbl&gt;
-## 1                                 43.9                               5.46</code></pre>
+##   `mean(bill_length_mm)` `sd(bill_length_mm)`
+##                    &lt;dbl&gt;                &lt;dbl&gt;
+## 1                   43.9                 5.46</code></pre>
 <pre class="r"><code>## 1c 
 penguins %&gt;% 
-  summarise(
-    bill_length_mean = mean(bill_length_mm, na.rm = TRUE),
-    bill_length_sd   = sd(bill_length_mm, na.rm = TRUE),
-    bill_depth_mean  = mean(bill_depth_mm, na.rm = TRUE),
-    bill_depth_sd    = sd(bill_depth_mm, na.rm = TRUE)
-  )</code></pre>
+  summarise(bill_length_mean = mean(bill_length_mm, na.rm = TRUE),
+            bill_length_sd   = sd(bill_length_mm, na.rm = TRUE),
+            bill_depth_mean  = mean(bill_depth_mm, na.rm = TRUE),
+            bill_depth_sd    = sd(bill_depth_mm, na.rm = TRUE))</code></pre>
 <pre><code>## # A tibble: 1 x 4
 ##   bill_length_mean bill_length_sd bill_depth_mean bill_depth_sd
 ##              &lt;dbl&gt;          &lt;dbl&gt;           &lt;dbl&gt;         &lt;dbl&gt;
 ## 1             43.9           5.46            17.2          1.97</code></pre>
-<p>Here, we also added some extra space after the column names, to align the functions up. This is a fairly common coding practise for this type of code, that usually makes it easier for others to read.</p>
-</div>
+<pre class="r"><code>penguins %&gt;% 
+  drop_na(bill_length_mm, bill_depth_mm) %&gt;% 
+  summarise(bill_length_mean = mean(bill_length_mm),
+            bill_length_sd   = sd(bill_length_mm),
+            bill_depth_mean  = mean(bill_depth_mm),
+            bill_depth_sd    = sd(bill_depth_mm))</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##   bill_length_mean bill_length_sd bill_depth_mean bill_depth_sd
+##              &lt;dbl&gt;          &lt;dbl&gt;           &lt;dbl&gt;         &lt;dbl&gt;
+## 1             43.9           5.46            17.2          1.97</code></pre>
+<p>Here, we also added some extra space after the column names, to align the functions up. This is a fairly common coding practice for this type of code, that usually makes it easier for others to read.</p>
 </div>
 </div>
 <div id="summarising-multiple-columns" class="section level1">
 <h1>Summarising multiple columns</h1>
-<p>We’ve already mentioned that <code>summarise</code> accepts arguments much like <code>mutate</code> does. Which means that it might also work with across? That would be convenient when we’d like to summarise across many columns at once.</p>
+<p>We’ve already mentioned that <code>summarize()</code> accepts arguments much like <code>mutate()</code> does. Which means that it might also work with across? That would be convenient when we’d like to summarize across many columns at once.</p>
 <pre class="r"><code>penguins %&gt;% 
   summarise(across(.cols = starts_with(&quot;bill&quot;),
                    .fns = mean))</code></pre>
@@ -434,7 +441,7 @@ penguins %&gt;%
 ##   bill_length_mm bill_depth_mm
 ##            &lt;dbl&gt;         &lt;dbl&gt;
 ## 1             NA            NA</code></pre>
-<p>We still have the problem with <code>NA</code>s. But, we can use the internal <code>.x</code> as we’ve done before.</p>
+<p>We still have the problem with <code>NA</code>s. But, we can use the <code>...</code> argument!</p>
 <pre class="r"><code>penguins %&gt;% 
   summarise(across(.cols = starts_with(&quot;bill&quot;),
                    .fns = mean, 
@@ -452,7 +459,7 @@ penguins %&gt;%
 ##   bill_length_mm_mean bill_depth_mm_mean
 ##                 &lt;dbl&gt;              &lt;dbl&gt;
 ## 1                43.9               17.2</code></pre>
-<p>And like with <code>across()</code> before, we can control how the column names are made by the use of the <code>.names</code> argument and knowing the internal placeholders for the names of the columns (“.col”) and the functions (“.fn”).</p>
+<p>And like with <code>across()</code> before, we can control how the column names are made by the use of the <code>.names</code> argument and knowing the internal placeholders for the names of the columns (<code>.col</code>) and the functions (<code>.fn</code>).</p>
 <pre class="r"><code>penguins %&gt;% 
   summarise(across(.cols = starts_with(&quot;bill&quot;),
                    .fns = list(&quot;mean&quot; = mean,
@@ -463,7 +470,7 @@ penguins %&gt;%
 ##   mean_bill_length_mm sd_bill_length_mm mean_bill_depth_mm sd_bill_depth_mm
 ##                 &lt;dbl&gt;             &lt;dbl&gt;              &lt;dbl&gt;            &lt;dbl&gt;
 ## 1                43.9              5.46               17.2             1.97</code></pre>
-<p>Now we know how to summarise several columns at once, and we can even do that with several functions. The last examples we saw, are actually a little over-complicated, because we wanted to make sure you got a feel for how things work. Notice how all the functions we are using take the <code>na.rm = TRUE</code> argument to remove NA. This consistency across the three functions makes is possible to let <code>across()</code> know in one line that all the functions should use this setting.</p>
+<p>Now we know how to summarize several columns at once, and we can even do that with several functions. The last examples we saw, are actually a little over-complicated, because we wanted to make sure you got a feel for how things work. Notice how all the functions we are using take the <code>na.rm = TRUE</code> argument to remove NA. This consistency across the three functions makes is possible to let <code>across()</code> know in one line that all the functions should use this setting.</p>
 <pre class="r"><code>penguins %&gt;% 
   summarise(across(.cols = ends_with(&quot;mm&quot;) | ends_with(&quot;g&quot;), 
                    .fns = list(&quot;mean&quot; = mean,
@@ -475,57 +482,36 @@ penguins %&gt;%
 ## 1                43.9              5.46               17.2             1.97
 ## # ... with 4 more variables: flipper_length_mm_mean &lt;dbl&gt;,
 ## #   flipper_length_mm_sd &lt;dbl&gt;, body_mass_g_mean &lt;dbl&gt;, body_mass_g_sd &lt;dbl&gt;</code></pre>
-<p>When we are able to do that, we can drop the <code>~</code> and <code>.x</code> and just let across know that for all functions, it should remove <code>NA</code>s. This is more concise and easier to read and type! But remember, this trick only works when using functions that have this same argument in them, and not all functions do.</p>
-<div id="challenge-2." class="section level2 tabset">
-<h2 class="tabset"><strong>Challenge 2.</strong></h2>
-<p>You can run assignments in your own RStudio, or run the first challenge in the summaries tutorial by entering the following in the R console:</p>
-<pre class="r"><code>learnr::run_tutorial(&quot;005-summarising&quot;, &quot;swc.tidyverse&quot;)</code></pre>
+<p>But remember, this trick only works when using functions that have this same argument in them, and not all functions do.</p>
+</div>
+<div id="summarizing-multiple-columns-challenges." class="section level1 tabset">
+<h1 class="tabset"><strong>Summarizing multiple columns, challenges.</strong></h1>
 <p>(helpers, please paste this into the chat at the right time.)</p>
-<div id="assignment-1" class="section level3">
-<h3>Assignment</h3>
+<div id="assignment-1" class="section level2">
+<h2>Assignment</h2>
 <blockquote>
 <p><strong>2a</strong>: Get the mean of all columns containing an underscore (&quot;_&quot;)</p>
 <p><strong>2b</strong>: Get the mean, minimum and maximum of all columns containing an underscore (&quot;_&quot;)</p>
-<p><strong>2c</strong>: Do the same as the above, but now make sure the columns are given nicer names by naming the functions in the list.</p>
-<p><strong>2d</strong>: Simplify the code above to not use the tilde (~) but assign na.rm = TRUE to all functions at once.</p>
 </blockquote>
 </div>
-<div id="solution-1" class="section level3">
-<h3>Solution</h3>
+<div id="solution-1" class="section level2">
+<h2>Solution</h2>
 <pre class="r"><code>## 2a
 penguins %&gt;% 
-  summarise(across(contains(&quot;_&quot;), 
-                   .fns = ~ mean(.x, na.rm = TRUE)))</code></pre>
+  summarise(across(.cols = contains(&quot;_&quot;), 
+                   .fns = mean,
+                   na.rm = TRUE))</code></pre>
 <pre><code>## # A tibble: 1 x 4
 ##   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##            &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;       &lt;dbl&gt;
 ## 1           43.9          17.2              201.       4202.</code></pre>
 <pre class="r"><code># 2b
 penguins %&gt;% 
-  summarise(across(contains(&quot;_&quot;), 
-                   .fns = list(
-                     ~ mean(.x, na.rm = TRUE),
-                     ~ min(.x, na.rm = TRUE),
-                     ~ max(.x, na.rm = TRUE)
-                   ))
-  )</code></pre>
-<pre><code>## # A tibble: 1 x 12
-##   bill_length_mm_1 bill_length_mm_2 bill_length_mm_3 bill_depth_mm_1
-##              &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;
-## 1             43.9             32.1             59.6            17.2
-## # ... with 8 more variables: bill_depth_mm_2 &lt;dbl&gt;, bill_depth_mm_3 &lt;dbl&gt;,
-## #   flipper_length_mm_1 &lt;dbl&gt;, flipper_length_mm_2 &lt;int&gt;,
-## #   flipper_length_mm_3 &lt;int&gt;, body_mass_g_1 &lt;dbl&gt;, body_mass_g_2 &lt;int&gt;,
-## #   body_mass_g_3 &lt;int&gt;</code></pre>
-<pre class="r"><code>## 2c 
-penguins %&gt;% 
-  summarise(across(contains(&quot;_&quot;), 
-                   .fns = list(
-                     mean = ~ mean(.x, na.rm = TRUE),
-                     min = ~ min(.x, na.rm = TRUE),
-                     max = ~ max(.x, na.rm = TRUE)
-                   ))
-  )</code></pre>
+  summarise(across(.cols = contains(&quot;_&quot;), 
+                   .fns = list(&quot;mean&quot; = mean,
+                               &quot;min&quot; = min,
+                               &quot;max&quot; = max), 
+                   na.rm = TRUE))</code></pre>
 <pre><code>## # A tibble: 1 x 12
 ##   bill_length_mm_mean bill_length_mm_min bill_length_mm_max bill_depth_mm_mean
 ##                 &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
@@ -534,23 +520,6 @@ penguins %&gt;%
 ## #   flipper_length_mm_mean &lt;dbl&gt;, flipper_length_mm_min &lt;int&gt;,
 ## #   flipper_length_mm_max &lt;int&gt;, body_mass_g_mean &lt;dbl&gt;, body_mass_g_min &lt;int&gt;,
 ## #   body_mass_g_max &lt;int&gt;</code></pre>
-<pre class="r"><code>## 2d 
-penguins %&gt;% 
-  summarise(across(contains(&quot;_&quot;), 
-                   .fns = list(mean = mean,
-                               min = min,
-                               max = max), 
-                   na.rm = TRUE)
-  )</code></pre>
-<pre><code>## # A tibble: 1 x 12
-##   bill_length_mm_mean bill_length_mm_min bill_length_mm_max bill_depth_mm_mean
-##                 &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
-## 1                43.9               32.1               59.6               17.2
-## # ... with 8 more variables: bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;,
-## #   flipper_length_mm_mean &lt;dbl&gt;, flipper_length_mm_min &lt;int&gt;,
-## #   flipper_length_mm_max &lt;int&gt;, body_mass_g_mean &lt;dbl&gt;, body_mass_g_min &lt;int&gt;,
-## #   body_mass_g_max &lt;int&gt;</code></pre>
-</div>
 </div>
 </div>
 <div id="summarising-grouped-data" class="section level1">
@@ -590,66 +559,36 @@ penguins %&gt;%
 ## 2 Chinstrap             48.8            40.9            58  
 ## 3 Gentoo                47.5            40.9            59.6</code></pre>
 <p>Now we are suddenly able to easily compare groups within our data, since they are so neatly summarized here.</p>
-<div id="challenge-3." class="section level2 tabset">
-<h2 class="tabset"><strong>Challenge 3.</strong></h2>
-<p>You can run assignments in your own RStudio, or run the third challenge in the summaries tutorial by entering the following in the R console:</p>
-<pre class="r"><code>learnr::run_tutorial(&quot;005-summarising&quot;, &quot;swc.tidyverse&quot;)</code></pre>
-<p>(helpers, please paste this into the chat at the right time.)</p>
-<div id="assignment-2" class="section level3">
-<h3>Assignment</h3>
-<blockquote>
-<p><strong>3a</strong>: Group the data by species and get the mean of the <code>bill_length_mm</code> column</p>
-<p><strong>3b</strong>: Group the data by island instead, and take the summary of the bill length and bill depth columns</p>
-<p><strong>3c</strong>: Group the data by island AND species, what happened?</p>
-</blockquote>
-</div>
-<div id="solution-2" class="section level3">
-<h3>Solution</h3>
-<pre class="r"><code>## 3a
-penguins %&gt;% 
-  group_by(species) %&gt;% 
-  summarise(mean(bill_length_mm, na.rm = TRUE))</code></pre>
-<pre><code>## # A tibble: 3 x 2
-##   species   `mean(bill_length_mm, na.rm = TRUE)`
-##   &lt;fct&gt;                                    &lt;dbl&gt;
-## 1 Adelie                                    38.8
-## 2 Chinstrap                                 48.8
-## 3 Gentoo                                    47.5</code></pre>
-<pre class="r"><code># 3b
-penguins %&gt;% 
-  group_by(island) %&gt;% 
-  summarise(
-    bill_length_mm = mean(bill_length_mm, na.rm = TRUE),
-    bill_depth_mm = mean(bill_depth_mm, na.rm = TRUE)
-  )</code></pre>
-<pre><code>## # A tibble: 3 x 3
-##   island    bill_length_mm bill_depth_mm
-##   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;
-## 1 Biscoe              45.3          15.9
-## 2 Dream               44.2          18.3
-## 3 Torgersen           39.0          18.4</code></pre>
-<pre class="r"><code>## 3c
-penguins %&gt;% 
-  group_by(island, species) %&gt;% 
-  summarise(
-    bill_length_mm = mean(bill_length_mm, na.rm = TRUE),
-    bill_depth_mm = mean(bill_depth_mm, na.rm = TRUE)
-  )</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;island&#39;. You can override using the `.groups` argument.</code></pre>
-<pre><code>## # A tibble: 5 x 4
-## # Groups:   island [3]
-##   island    species   bill_length_mm bill_depth_mm
-##   &lt;fct&gt;     &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;
-## 1 Biscoe    Adelie              39.0          18.4
-## 2 Biscoe    Gentoo              47.5          15.0
-## 3 Dream     Adelie              38.5          18.3
-## 4 Dream     Chinstrap           48.8          18.4
-## 5 Torgersen Adelie              39.0          18.4</code></pre>
-</div>
-</div>
-</div>
-<div id="summarising-collections-of-columns-while-grouped" class="section level1">
-<h1>Summarising collections of columns while grouped</h1>
+<!-- ## **Challenge 3.** {.tabset} -->
+<!-- (helpers, please paste this into the chat at the right time.) -->
+<!-- ### Assignment -->
+<!-- > -->
+<!-- > **3a**: Group the data by species and get the mean of the `bill_length_mm` column -->
+<!-- > -->
+<!-- > **3b**: Group the data by island instead, and take the summary of the bill length and bill depth columns -->
+<!-- > -->
+<!-- > **3c**: Group the data by island AND species, what happened?  -->
+<!-- > -->
+<!-- ### Solution -->
+<!-- ```{r "solutions-3"} -->
+<!-- ## 3a -->
+<!-- penguins %>%  -->
+<!--   drop_na(bill_length_mm) %>%  -->
+<!--   group_by(species) %>%  -->
+<!--   summarise(mean(bill_length_mm)) -->
+<!-- # 3b -->
+<!-- penguins %>%  -->
+<!--   group_by(island) %>%  -->
+<!--   summarise(bill_length_mm = mean(bill_length_mm, na.rm = TRUE), -->
+<!--             bill_depth_mm = mean(bill_depth_mm, na.rm = TRUE)) -->
+<!-- ## 3c -->
+<!-- penguins %>%  -->
+<!--   group_by(island, species) %>%  -->
+<!--   summarise( -->
+<!--     bill_length_mm = mean(bill_length_mm, na.rm = TRUE), -->
+<!--     bill_depth_mm = mean(bill_depth_mm, na.rm = TRUE) -->
+<!--   ) -->
+<!-- ``` -->
 <p>Since we know how to apply the group by function now, we should also be able to apply it before summarizing across columns. There is no real difference in the summarize function with or without the across. It basically does the same. So let us also try summarizing based on groups using across! Before we had this code:</p>
 <pre class="r"><code>penguins %&gt;% 
   summarise(across(.cols = starts_with(&quot;bill&quot;), 
@@ -695,52 +634,29 @@ penguins %&gt;%
 ## # ... with 3 more variables: bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;,
 ## #   n &lt;int&gt;</code></pre>
 <p>Look at the last column <code>n</code>! Now, together with all the bill column and function combinations, we have a single column counting the number of species observations!</p>
-<div id="challenge-4." class="section level2 tabset">
-<h2 class="tabset"><strong>Challenge 4.</strong></h2>
-<p>You can run assignments in your own RStudio, or run the third challenge in the summaries tutorial by entering the following in the R console:</p>
-<pre class="r"><code>learnr::run_tutorial(&quot;005-summarising&quot;, &quot;swc.tidyverse&quot;)</code></pre>
+</div>
+<div id="summarizing-grouped-data-challenges." class="section level1 tabset">
+<h1 class="tabset"><strong>Summarizing grouped data, challenges.</strong></h1>
 <p>(helpers, please paste this into the chat at the right time.)</p>
-<div id="assignment-3" class="section level3">
-<h3>Assignment</h3>
+<div id="assignment-2" class="section level2">
+<h2>Assignment</h2>
 <blockquote>
-<p><strong>4a</strong>: Get the descriptive statistics (mean, sd, min and max) for all the columns ending with “mm”, grouped by species</p>
-<p><strong>4b</strong>: Now add a count of how many observations there are of each species and place that in the column named <code>n</code>.</p>
-<p><strong>4c</strong>: Try grouping by more variables. Like sex, or island. or add more summary variables.</p>
+<p><strong>3a</strong>: Get the descriptive statistics (mean, sd, min and max) for all the columns ending with “mm”, grouped by species. Add a count of how many observations there are of each species in a column named <code>n</code>.</p>
+<p><strong>3b</strong>: Try grouping by more variables. Like sex, or island. or add more summary variables.</p>
 </blockquote>
 </div>
-<div id="solution-3" class="section level3">
-<h3>Solution</h3>
-<pre class="r"><code>## 4a
+<div id="solution-2" class="section level2">
+<h2>Solution</h2>
+<pre class="r"><code># 3a
 penguins %&gt;% 
   group_by(species) %&gt;% 
-  summarise(across(ends_with(&quot;mm&quot;), 
-                   .fns = list(mean = mean,
-                               sd = sd,
-                               min = min,
-                               max = max), 
-                   na.rm = TRUE)
-  )</code></pre>
-<pre><code>## # A tibble: 3 x 13
-##   species  bill_length_mm_m~ bill_length_mm_sd bill_length_mm_~ bill_length_mm_~
-##   &lt;fct&gt;                &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-## 1 Adelie                38.8              2.66             32.1             46  
-## 2 Chinstr~              48.8              3.34             40.9             58  
-## 3 Gentoo                47.5              3.08             40.9             59.6
-## # ... with 8 more variables: bill_depth_mm_mean &lt;dbl&gt;, bill_depth_mm_sd &lt;dbl&gt;,
-## #   bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;,
-## #   flipper_length_mm_mean &lt;dbl&gt;, flipper_length_mm_sd &lt;dbl&gt;,
-## #   flipper_length_mm_min &lt;int&gt;, flipper_length_mm_max &lt;int&gt;</code></pre>
-<pre class="r"><code># 4b
-penguins %&gt;% 
-  group_by(species) %&gt;% 
-  summarise(across(ends_with(&quot;mm&quot;), 
-                   .fns = list(mean = mean,
-                               sd = sd,
-                               min = min,
-                               max = max), 
+  summarise(across(.cols = ends_with(&quot;mm&quot;), 
+                   .fns = list(&quot;mean&quot; = mean,
+                               &quot;sd&quot; = sd,
+                               &quot;min&quot; = min,
+                               &quot;max&quot; = max), 
                    na.rm = TRUE),
-            n = length(species)
-  )</code></pre>
+            n = n())</code></pre>
 <pre><code>## # A tibble: 3 x 14
 ##   species  bill_length_mm_m~ bill_length_mm_sd bill_length_mm_~ bill_length_mm_~
 ##   &lt;fct&gt;                &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
@@ -751,17 +667,16 @@ penguins %&gt;%
 ## #   bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;,
 ## #   flipper_length_mm_mean &lt;dbl&gt;, flipper_length_mm_sd &lt;dbl&gt;,
 ## #   flipper_length_mm_min &lt;int&gt;, flipper_length_mm_max &lt;int&gt;, n &lt;int&gt;</code></pre>
-<pre class="r"><code>## 4c
+<pre class="r"><code>## 3b
 penguins %&gt;% 
   group_by(species, island, sex) %&gt;% 
-  summarise(across(ends_with(&quot;mm&quot;), 
-                   .fns = list(mean = mean,
-                               sd = sd,
-                               min = min,
-                               max = max), 
+  summarise(across(.cols = ends_with(&quot;mm&quot;), 
+                   .fns = list(&quot;mean&quot; = mean,
+                               &quot;sd&quot; = sd,
+                               &quot;min&quot; = min,
+                               &quot;max&quot; = max), 
                    na.rm = TRUE),
-            n = length(species)
-  )</code></pre>
+            n = n())</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;species&#39;, &#39;island&#39;. You can override using the `.groups` argument.</code></pre>
 <pre><code>## # A tibble: 13 x 16
 ## # Groups:   species, island [5]
@@ -785,7 +700,6 @@ penguins %&gt;%
 ## #   bill_depth_mm_max &lt;dbl&gt;, flipper_length_mm_mean &lt;dbl&gt;,
 ## #   flipper_length_mm_sd &lt;dbl&gt;, flipper_length_mm_min &lt;int&gt;,
 ## #   flipper_length_mm_max &lt;int&gt;, n &lt;int&gt;</code></pre>
-</div>
 </div>
 </div>
 <div id="ungrouping-for-future-control" class="section level1">
@@ -814,7 +728,7 @@ penguins %&gt;%
 ## 3 Adelie    Torgersen    52
 ## 4 Chinstrap Dream        68
 ## 5 Gentoo    Biscoe      124</code></pre>
-<p>When we group by two columns, it actually has the same behaviour. But because we used to have two groups, we now are left with one. In this case “species” is still a grouping variable. Lets say we want a column now, that counts the total number of penguins observations. That would be the sum of the “n” column.</p>
+<p>When we group by two columns, it actually has the same behavior. But because we used to have two groups, we now are left with one. In this case “species” is still a grouping variable. Lets say we want a column now, that counts the total number of penguins observations. That would be the sum of the “n” column.</p>
 <pre class="r"><code>penguins %&gt;% 
   group_by(species, island) %&gt;% 
   summarise(n = n()) %&gt;% 
@@ -903,7 +817,7 @@ penguins %&gt;%
 ##  9 Adelie  Biscoe female    22 flipper length      mm    mean  187.  
 ## 10 Adelie  Biscoe female    22 flipper length      mm    sd      6.74
 ## # ... with 146 more rows</code></pre>
-<p>Ok, it’s slightly better, but its still not convenient. Ideally, we’d like the different statistics as different columns, and have the rest in rows. Now that we have split the columns up, we have a column with <em>just</em> the statistics names. Lets try pivoting wider again, using that column to create the column names,</p>
+<p>OK, it’s slightly better, but its still not convenient. Ideally, we’d like the different statistics as different columns, and have the rest in rows. Now that we have split the columns up, we have a column with <em>just</em> the statistics names. Lets try pivoting wider again, using that column to create the column names,</p>
 <pre class="r"><code>penguins %&gt;% 
   group_by(species, island, sex) %&gt;% 
   summarise(across(.cols = ends_with(&quot;mm&quot;), 
@@ -935,82 +849,79 @@ penguins %&gt;%
 ## 10 Adelie  Dream  male      28 bill    length      mm     40.1 1.75   36.3  44.1
 ## # ... with 29 more rows</code></pre>
 <p>Look at that! Its starting to become so much better! Now each grouping combination and type of measurement is in its own row, but each summary statistic is in different columns. Slowly, the data are becoming more easy to compare.</p>
-<div id="challenge-5." class="section level2 tabset">
-<h2 class="tabset"><strong>Challenge 5.</strong></h2>
-<p>You can run assignments in your own RStudio, or run the fifth challenge in the summaries tutorial by entering the following in the R console:</p>
-<pre class="r"><code>learnr::run_tutorial(&quot;005-summarising&quot;, &quot;swc.tidyverse&quot;)</code></pre>
+</div>
+<div id="pivoting-summaries-challenges." class="section level1 tabset">
+<h1 class="tabset"><strong>Pivoting summaries, challenges.</strong></h1>
 <p>(helpers, please paste this into the chat at the right time.)</p>
-<div id="assignment-4" class="section level3">
-<h3>Assignment</h3>
+<div id="assignment-3" class="section level2">
+<h2>Assignment</h2>
 <blockquote>
-<p><strong>5a</strong>: Pivot longer a grouped summary over species for the columns containing underscores, with the metrics mean, standard deviation, minimum and maximum values. When you pivot the data, split the column names up into 4 parts describing the part, measurement, unit and statistic used.</p>
-<p><strong>5b</strong>: Add to the code you just wrote and pivot the data wider again by the statistic column.</p>
+<p><strong>4a</strong>: Pivot longer a grouped summary over species, island and sex for the columns containing underscores, with the metrics mean, standard deviation, minimum and maximum values, as well as the total number of observations per group. When you pivot the data, split the column names up into 4 parts describing the part, measurement, unit and statistic used.</p>
+<p><strong>4b</strong>: Add to the code you just wrote and pivot the data wider again by the statistic column.</p>
 </blockquote>
 </div>
-<div id="solution-4" class="section level3">
-<h3>Solution</h3>
+<div id="solution-3" class="section level2">
+<h2>Solution</h2>
 <pre class="r"><code>## 5a
 penguins %&gt;% 
   group_by(species, island, sex) %&gt;% 
-  summarise(across(ends_with(&quot;mm&quot;), 
-                   .fns = list(mean = mean,
-                               sd = sd,
-                               min = min,
-                               max = max), 
-                   na.rm = TRUE)
-  ) %&gt;% 
-  pivot_longer(contains(&quot;mm&quot;),
+  summarise(across(.cols = contains(&quot;_&quot;), 
+                   .fns = list(&quot;mean&quot; = mean,
+                               &quot;sd&quot; = sd,
+                               &quot;min&quot; = min,
+                               &quot;max&quot; = max), 
+                   na.rm = TRUE),
+            n = n()) %&gt;% 
+  ungroup() %&gt;% 
+  pivot_longer(cols = contains(&quot;_&quot;),
                names_to = c(&quot;part&quot;, &quot;measurement&quot;, &quot;unit&quot;, &quot;stat&quot;),
                names_sep = &quot;_&quot;) </code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;species&#39;, &#39;island&#39;. You can override using the `.groups` argument.</code></pre>
-<pre><code>## # A tibble: 156 x 8
-## # Groups:   species, island [5]
-##    species island sex    part    measurement unit  stat   value
-##    &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
-##  1 Adelie  Biscoe female bill    length      mm    mean   37.4 
-##  2 Adelie  Biscoe female bill    length      mm    sd      1.76
-##  3 Adelie  Biscoe female bill    length      mm    min    34.5 
-##  4 Adelie  Biscoe female bill    length      mm    max    40.5 
-##  5 Adelie  Biscoe female bill    depth       mm    mean   17.7 
-##  6 Adelie  Biscoe female bill    depth       mm    sd      1.09
-##  7 Adelie  Biscoe female bill    depth       mm    min    16   
-##  8 Adelie  Biscoe female bill    depth       mm    max    20.7 
-##  9 Adelie  Biscoe female flipper length      mm    mean  187.  
-## 10 Adelie  Biscoe female flipper length      mm    sd      6.74
-## # ... with 146 more rows</code></pre>
+<pre><code>## # A tibble: 208 x 9
+##    species island sex        n part    measurement unit  stat   value
+##    &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
+##  1 Adelie  Biscoe female    22 bill    length      mm    mean   37.4 
+##  2 Adelie  Biscoe female    22 bill    length      mm    sd      1.76
+##  3 Adelie  Biscoe female    22 bill    length      mm    min    34.5 
+##  4 Adelie  Biscoe female    22 bill    length      mm    max    40.5 
+##  5 Adelie  Biscoe female    22 bill    depth       mm    mean   17.7 
+##  6 Adelie  Biscoe female    22 bill    depth       mm    sd      1.09
+##  7 Adelie  Biscoe female    22 bill    depth       mm    min    16   
+##  8 Adelie  Biscoe female    22 bill    depth       mm    max    20.7 
+##  9 Adelie  Biscoe female    22 flipper length      mm    mean  187.  
+## 10 Adelie  Biscoe female    22 flipper length      mm    sd      6.74
+## # ... with 198 more rows</code></pre>
 <pre class="r"><code># 5b
 penguins %&gt;% 
   group_by(species, island, sex) %&gt;% 
-  summarise(across(ends_with(&quot;mm&quot;), 
-                   .fns = list(mean = mean,
-                               sd = sd,
-                               min = min,
-                               max = max), 
+  summarise(across(.cols = contains(&quot;_&quot;), 
+                   .fns = list(&quot;mean&quot; = mean,
+                               &quot;sd&quot; = sd,
+                               &quot;min&quot; = min,
+                               &quot;max&quot; = max), 
                    na.rm = TRUE),
-            n = length(species)
-  ) %&gt;% 
-  pivot_longer(contains(&quot;mm&quot;),
+            n = n()) %&gt;% 
+  ungroup() %&gt;% 
+  pivot_longer(cols = contains(&quot;_&quot;),
                names_to = c(&quot;part&quot;, &quot;measurement&quot;, &quot;unit&quot;, &quot;stat&quot;),
                names_sep = &quot;_&quot;) %&gt;% 
   pivot_wider(names_from = stat, 
               values_from  = value)</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;species&#39;, &#39;island&#39;. You can override using the `.groups` argument.</code></pre>
-<pre><code>## # A tibble: 39 x 11
-## # Groups:   species, island [5]
-##    species island sex        n part    measurement unit   mean    sd   min   max
-##    &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 Adelie  Biscoe female    22 bill    length      mm     37.4 1.76   34.5  40.5
-##  2 Adelie  Biscoe female    22 bill    depth       mm     17.7 1.09   16    20.7
-##  3 Adelie  Biscoe female    22 flipper length      mm    187.  6.74  172   199  
-##  4 Adelie  Biscoe male      22 bill    length      mm     40.6 2.01   37.6  45.6
-##  5 Adelie  Biscoe male      22 bill    depth       mm     19.0 0.880  17.2  21.1
-##  6 Adelie  Biscoe male      22 flipper length      mm    190.  6.46  180   203  
-##  7 Adelie  Dream  female    27 bill    length      mm     36.9 2.09   32.1  42.2
-##  8 Adelie  Dream  female    27 bill    depth       mm     17.6 0.897  15.5  19.3
-##  9 Adelie  Dream  female    27 flipper length      mm    188.  5.51  178   202  
-## 10 Adelie  Dream  male      28 bill    length      mm     40.1 1.75   36.3  44.1
-## # ... with 29 more rows</code></pre>
-</div>
+<pre><code>## # A tibble: 52 x 11
+##    species island sex        n part    measurement unit    mean      sd    min
+##    &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Adelie  Biscoe female    22 bill    length      mm      37.4   1.76    34.5
+##  2 Adelie  Biscoe female    22 bill    depth       mm      17.7   1.09    16  
+##  3 Adelie  Biscoe female    22 flipper length      mm     187.    6.74   172  
+##  4 Adelie  Biscoe female    22 body    mass        g     3369.  343.    2850  
+##  5 Adelie  Biscoe male      22 bill    length      mm      40.6   2.01    37.6
+##  6 Adelie  Biscoe male      22 bill    depth       mm      19.0   0.880   17.2
+##  7 Adelie  Biscoe male      22 flipper length      mm     190.    6.46   180  
+##  8 Adelie  Biscoe male      22 body    mass        g     4050   356.    3550  
+##  9 Adelie  Dream  female    27 bill    length      mm      36.9   2.09    32.1
+## 10 Adelie  Dream  female    27 bill    depth       mm      17.6   0.897   15.5
+## # ... with 42 more rows, and 1 more variable: max &lt;dbl&gt;</code></pre>
 </div>
 </div>
 

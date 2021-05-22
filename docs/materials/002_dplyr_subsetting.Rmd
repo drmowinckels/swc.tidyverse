@@ -146,6 +146,8 @@ select(penguins, where(is.factor))
 
 # **Selecting columns, challenges** {.tabset}
 
+(helpers, please paste this into the chat at the right time.)
+
 ## Assignment
 >
 > **1a**: Select from the penguins data set only columns that are factors.
@@ -236,6 +238,8 @@ This now gives us both all chinstrap penguins, and the smallest Adelie penguins!
 By combining AND and OR statements this way, we can slowly create the filtering we are after.
 
 # **Filtering rows, challenges** {.tabset}
+
+(helpers, please paste this into the chat at the right time.)
 
 ## Assignment
 >
@@ -380,6 +384,8 @@ penguins %>%
 
 # **Sorting rows, challenges** {.tabset}
 
+(helpers, please paste this into the chat at the right time.)
+
 ## Assignment
 >
 > **3a**: Arrange the penguins data by body mass.
@@ -406,7 +412,7 @@ penguins %>%
 ```
 
 
-# Combining with {ggplot}
+# Combining with {ggplot2}
 
 Some times, we want to subset data just to reduce the data in a plot, not necessarily for our whole pipeline.
 For instance, maybe you want to plot the data just from the Gentoo species, but don't want to make another data set.
