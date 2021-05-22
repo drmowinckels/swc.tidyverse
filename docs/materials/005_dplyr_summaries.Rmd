@@ -1,6 +1,6 @@
 ---
-title: "Working with datasets in R and the Tidyverse"
-subtitle: "Summarising data"
+title: "Working with datasets in R and the {tidyverse}"
+subtitle: "Summarising data with {dplyr}"
 output:
   html_document:
     toc: true
@@ -12,9 +12,7 @@ editor_options:
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
-                      fig.retina = 3)
-library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 > **Questions**
@@ -30,92 +28,92 @@ library(tidyverse)
 > To be able to reshape data to create convenient summaries.
 >
 > To be able to apply multiple functions to a single summary call to create complex summaries quickly.
->
 
 
-## Short recap of previous sessions {.tabset}
 
-Welcome back to the second day! Yesterday we covered how to use ggplot to create publication quality visualisations, and dplyr to subset our data. 
-Let's just look at a couple of exmples of what we did.
+<!-- ## Short recap of previous sessions {.tabset} -->
 
-### ggplot2 1
+<!-- Welcome back to the second day! Yesterday we covered how to use ggplot to create publication quality visualisations, and dplyr to subset our data.  -->
+<!-- Let's just look at a couple of exmples of what we did. -->
 
-```{r}
-library(tidyverse)
-penguins <- palmerpenguins::penguins
+<!-- ### ggplot2 1 -->
 
-penguins %>% 
-  ggplot(aes(x = bill_length_mm,
-             y = bill_depth_mm,
-             colour = species)) +
-  geom_jitter() +
-  geom_smooth(method = "lm") + 
-  geom_smooth(method = "lm", colour = "black")
-```
+<!-- ```{r} -->
+<!-- library(tidyverse) -->
+<!-- penguins <- palmerpenguins::penguins -->
 
-### ggplot2 2
+<!-- penguins %>%  -->
+<!--   ggplot(aes(x = bill_length_mm, -->
+<!--              y = bill_depth_mm, -->
+<!--              colour = species)) + -->
+<!--   geom_jitter() + -->
+<!--   geom_smooth(method = "lm") +  -->
+<!--   geom_smooth(method = "lm", colour = "black") -->
+<!-- ``` -->
 
-```{r}
-penguins %>% 
-  ggplot(aes(x = bill_length_mm,
-             y = bill_depth_mm,
-             colour = species)) +
-  geom_density2d() +
-  labs(
-    title = "Penguin bill length and depth association",
-    subtitle = "of three species of penguin",
-    color = "Species", 
-    y = "Bill depth (mm)",
-    x = "Bill length (mm)",
-    caption = "Source: DOI 10.1371/journal.pone.0090081"
-  )
-```
+<!-- ### ggplot2 2 -->
 
-### reading in data
-```{r}
-penguin_path <- palmerpenguins::path_to_file("penguins.csv" )
-read_csv(penguin_path)
-```
+<!-- ```{r} -->
+<!-- penguins %>%  -->
+<!--   ggplot(aes(x = bill_length_mm, -->
+<!--              y = bill_depth_mm, -->
+<!--              colour = species)) + -->
+<!--   geom_density2d() + -->
+<!--   labs( -->
+<!--     title = "Penguin bill length and depth association", -->
+<!--     subtitle = "of three species of penguin", -->
+<!--     color = "Species",  -->
+<!--     y = "Bill depth (mm)", -->
+<!--     x = "Bill length (mm)", -->
+<!--     caption = "Source: DOI 10.1371/journal.pone.0090081" -->
+<!--   ) -->
+<!-- ``` -->
 
-### mutating 1
-```{r}
-penguins %>% 
-  mutate(
-    bill_ratio = bill_depth_mm/bill_length_mm,
-    bill_type = if_else(bill_ratio < .5, "elongated", "stumped")
-  ) %>% 
-  select(starts_with("bill"))
-```
+<!-- ### reading in data -->
+<!-- ```{r} -->
+<!-- penguin_path <- palmerpenguins::path_to_file("penguins.csv" ) -->
+<!-- read_csv(penguin_path) -->
+<!-- ``` -->
 
-### mutating 2
-```{r}
-penguins %>% 
-  mutate(across(ends_with("mm"),
-                scale, 
-                .names = "sc_{.col}")) %>% 
-  select(contains("mm"))
-```
+<!-- ### mutating 1 -->
+<!-- ```{r} -->
+<!-- penguins %>%  -->
+<!--   mutate( -->
+<!--     bill_ratio = bill_depth_mm/bill_length_mm, -->
+<!--     bill_type = if_else(bill_ratio < .5, "elongated", "stumped") -->
+<!--   ) %>%  -->
+<!--   select(starts_with("bill")) -->
+<!-- ``` -->
 
-### pivot longer
-```{r}
-penguins_long_simple <- penguins %>% 
-  mutate(sample = row_number()) %>% 
-  pivot_longer(starts_with("bill"))
-penguins_long_simple
-```
+<!-- ### mutating 2 -->
+<!-- ```{r} -->
+<!-- penguins %>%  -->
+<!--   mutate(across(ends_with("mm"), -->
+<!--                 scale,  -->
+<!--                 .names = "sc_{.col}")) %>%  -->
+<!--   select(contains("mm")) -->
+<!-- ``` -->
 
-### pivot wider
-```{r}
-penguins_long_simple %>% 
-  pivot_wider(names_from = name,
-              values_from = value)
-```
+<!-- ### pivot longer -->
+<!-- ```{r} -->
+<!-- penguins_long_simple <- penguins %>%  -->
+<!--   mutate(sample = row_number()) %>%  -->
+<!--   pivot_longer(starts_with("bill")) -->
+<!-- penguins_long_simple -->
+<!-- ``` -->
+
+<!-- ### pivot wider -->
+<!-- ```{r} -->
+<!-- penguins_long_simple %>%  -->
+<!--   pivot_wider(names_from = name, -->
+<!--               values_from = value) -->
+<!-- ``` -->
 
 # **Data summaries**
 
-Next to visualising data, creating summaries of the data in tables is a quick way to get an idea of what type of data you have at hand. It might help you spot incorrect data or extreme outliers, or whether specific analysis approaches are needed.
+Next to visualizing data, creating summaries of the data in tables is a quick way to get an idea of what type of data you have at hand. It might help you spot incorrect data or extreme values, or whether specific analysis approaches are needed.
 
-To summarise data with the tidyverse efficiently, we need to utilise the tools we have learned the previous days, like adding new variables, tidy-selections, pivots and grouping data. All these tools combine amazingly when we start making summaries. 
+To summarize data with the {tidyverse} efficiently, we need to utilize the tools we have learned the previous days, like adding new variables, tidy-selections, pivots and grouping data. All these tools combine amazingly when we start making summaries. 
 
 Let us start from the beginning with summaries, and work our way up to the more complex variations as we go.
 
@@ -123,8 +121,7 @@ First, we must again prepare our workspace with our packages and data.
 
 ```{r}
 library(tidyverse)
-penguins_path <- palmerpenguins::path_to_file("penguins.csv")
-penguins <- read_csv(penguins_path)
+penguins <- palmerpenguins::penguins
 ```
 
 We should start to feel quite familiar with our penguins by now. Let us start by finding the mean of the bill length
@@ -134,30 +131,37 @@ penguins %>%
   summarise(mean(bill_length_mm))
 ```
 
-`NA`. as we remember, there are some `NA` values in our data. We can omit these by addin the `na.rm = TRUE` argument, which will remove all NA's before calculating the mean.
+`NA`. as we remember, there are some `NA` values in our data. We can omit these by adding the `na.rm = TRUE` argument, which will remove all `NA`'s before calculating the mean.
 
 ```{r}
 penguins %>% 
   summarise(mean(bill_length_mm, na.rm = TRUE))
 ```
 
-We have the mean of bill lenght! But it does not look very tidy. We can give the column a name, in the same fashion as we would in `mutate`. Actually, `summarise` in many ways resembles mutate in how it takes it arguments.
-
 ```{r}
 penguins %>% 
-  summarise(bill_length_mean = mean(bill_length_mm, na.rm = TRUE))
+  drop_na(bill_length_mm) %>% 
+  summarise(mean(bill_length_mm))
 ```
 
-To this, we can also add, for instance the minmum and maximum values.
+
+We have the mean of bill length! But it does not look very tidy. We can give the column a name, in the same fashion as we would in `mutate`. Actually, `summarise` in many ways resembles mutate in how it takes it arguments.
+
+```{r}
+penguins %>% 
+  drop_na(bill_length_mm) %>% 
+  summarise(bill_length_mean = mean(bill_length_mm))
+```
+
+To this, we can also add, for instance the minimum and maximum values.
 
 
 ```{r}
 penguins %>% 
-  summarise(
-    bill_length_mean = mean(bill_length_mm, na.rm = TRUE),
-    bill_length_min = min(bill_length_mm, na.rm = TRUE),
-    bill_length_max = max(bill_length_mm, na.rm = TRUE)
-  )
+  drop_na(bill_length_mm) %>% 
+  summarise(bill_length_mean = mean(bill_length_mm),
+            bill_length_min = min(bill_length_mm),
+            bill_length_max = max(bill_length_mm))
 ```
 
 ## **Challenge 1.** {.tabset}
@@ -210,65 +214,51 @@ We've already mentioned that `summarise` accepts arguments much like `mutate` do
 
 ```{r}
 penguins %>% 
-  summarise(
-    across(starts_with("bill"), 
-           .fns = mean)
-  )
+  summarise(across(.cols = starts_with("bill"),
+                   .fns = mean))
 ```
 
 We still have the problem with `NA`s. But, we can use the internal `.x` as we've done before.
 
 ```{r}
 penguins %>% 
-  summarise(
-    across(starts_with("bill"), 
-           .fns = ~ mean(.x, na.rm = TRUE))
-  )
+  summarise(across(.cols = starts_with("bill"),
+                   .fns = mean, 
+                   na.rm = TRUE))
 ```
 
 The name of the columns are a little unsatisfactory though, they give us no real indication of what the metric is. We can add names , but we'll need to place the function inside a `list()` first. 
 
 ```{r}
 penguins %>% 
-  summarise(
-    across(starts_with("bill"), 
-           .fns = list(
-             mean = ~ mean(.x, na.rm = TRUE)
-           )
-    )
-  )
+  summarise(across(.cols = starts_with("bill"),
+                   .fns = list("mean" = mean),
+                   na.rm = TRUE))
 ```
 
-And like with `across` before, we can control how the column names are made by the use of the `.names` argument and knowing the internal placeholders for the names of the columns (".col") and the functions (".fn").
+And like with `across()` before, we can control how the column names are made by the use of the `.names` argument and knowing the internal placeholders for the names of the columns (".col") and the functions (".fn").
 
 
 ```{r}
 penguins %>% 
-  summarise(
-    across(starts_with("bill"), 
-           .fns = list(
-             mean = ~ mean(.x, na.rm = TRUE), 
-             sd = ~ sd(.x, na.rm = TRUE)
-           ),
-           .names = "{.fn}_{.col}"
-    )
-  )
+  summarise(across(.cols = starts_with("bill"),
+                   .fns = list("mean" = mean,
+                               "sd" = sd),
+                   na.rm = TRUE,
+                   .names = "{.fn}_{.col}"))
 ```
 
-Now we know how to summarise several columns at once, and we can even do that with several functions. The last examples we saw, are actually a little over-complicated, because we wanted to make sure you got a feel for how things work. Notice how all the functions we are using take the `na.rm = TRUE` argument to remove NA. This consistency across the three functions makes is possible to let `across` know in one line that all the functions should use this setting.
+Now we know how to summarise several columns at once, and we can even do that with several functions. The last examples we saw, are actually a little over-complicated, because we wanted to make sure you got a feel for how things work. Notice how all the functions we are using take the `na.rm = TRUE` argument to remove NA. This consistency across the three functions makes is possible to let `across()` know in one line that all the functions should use this setting.
 
 ```{r}
 penguins %>% 
-  summarise(across(contains("_"), 
-                   .fns = list(
-                     mean = mean,
-                     sd = sd
-                   ), 
-                   na.rm = TRUE)
-  )
+  summarise(across(.cols = ends_with("mm") | ends_with("g"), 
+                   .fns = list("mean" = mean,
+                               "sd" = sd), 
+                   na.rm = TRUE))
 ```
 
-When we are able to do that, we can drop the `~` and `.x` and just let across know that for all functions, it should remove NAs. This is more concise and easier to read and type!
+When we are able to do that, we can drop the `~` and `.x` and just let across know that for all functions, it should remove `NA`s. This is more concise and easier to read and type!
 But remember, this trick only works when using functions that have this same argument in them, and not all functions do.
 
 
@@ -331,27 +321,25 @@ penguins %>%
 
 # Summarising grouped data
 
-All the examples we have gone through so far with summarising data, we have summarised the entire data set. But most times, we want to have a look at groups in our data, and summarise based on these groups. How can we manage to summarise while preserving grouping information?
+All the examples we have gone through so far with summarizing data, we have summarized the entire data set. But most times, we want to have a look at groups in our data, and summarize based on these groups. How can we manage to summarize while preserving grouping information?
 
-We've already worked a little with the `group_by` function, and we will use it again! Because, once we know how to summarise data, summarising data by groups is as simple as adding one more line to our code.
+We've already worked a little with the `group_by()` function, and we will use it again! Because, once we know how to summarize data, summarizing data by groups is as simple as adding one more line to our code.
 
 Let us start with our first example of getting the mean of a single column.
 
 ```{r}
 penguins %>% 
-  summarise(
-    bill_length_mean = mean(bill_length_mm, na.rm = TRUE)
-  )
+  drop_na(bill_length_mm) %>% 
+  summarise(bill_length_mean = mean(bill_length_mm))
 ```
 
-Here, we are getting a single mean for the entire data set. In order to get, for instance the means of each of the species, we can group by species before we summarise.
+Here, we are getting a single mean for the entire data set. In order to get, for instance the means of each of the species, we can group by species before we summarize.
 
 ```{r}
 penguins %>% 
+  drop_na(bill_length_mm) %>% 
   group_by(species) %>% 
-  summarise(
-    bill_length_mean = mean(bill_length_mm, na.rm = TRUE)
-  )
+  summarise(bill_length_mean = mean(bill_length_mm))
 ```
 
 And now we suddenly have three means! And they are tidily collected in each their row.
@@ -359,15 +347,14 @@ To this we can keep adding as we did before.
 
 ```{r}
 penguins %>% 
+  drop_na(bill_length_mm) %>% 
   group_by(species) %>%
-  summarise(
-    bill_length_mean = mean(bill_length_mm, na.rm = TRUE),
-    bill_length_min = min(bill_length_mm, na.rm = TRUE),
-    bill_length_max = max(bill_length_mm, na.rm = TRUE)
-  )
+  summarise(bill_length_mean = mean(bill_length_mm),
+            bill_length_min = min(bill_length_mm),
+            bill_length_max = max(bill_length_mm))
 ```
 
-Now we are suddenly able to easily compare groups within our data, since they are so neatly summarised here. 
+Now we are suddenly able to easily compare groups within our data, since they are so neatly summarized here. 
 
 
 ## **Challenge 3.** {.tabset}
@@ -413,30 +400,28 @@ penguins %>%
 ```
 
 # Summarising collections of columns while grouped
-Since we know how to apply the group by function now, we should also be able to apply it before summarising across columns. There is no real difference in the summarise function with or without the across. It basically does the same. So let us also try summarising based on groups using across!
+Since we know how to apply the group by function now, we should also be able to apply it before summarizing across columns. There is no real difference in the summarize function with or without the across. It basically does the same. So let us also try summarizing based on groups using across!
 Before we had this code:
 
 ```{r}
 penguins %>% 
-  summarise(across(starts_with("bill"), 
-                   .fns = list(mean = mean,
-                               min = min,
-                               max = max), 
-                   na.rm = TRUE)
-  )
+  summarise(across(.cols = starts_with("bill"), 
+                   .fns = list("mean" = mean,
+                               "min" = min,
+                               "max" = max), 
+                   na.rm = TRUE))
 ```
 
-Where we summarised the columns starting with bill, and got the mean, min and max values for those columns, and made sure we removed the NAs. If we want to do this in a grouped fashion, we need to get the group by function snuggled in between the data call to penguins and summarise.
+Where we summarized the columns starting with bill, and got the mean, min and max values for those columns, and made sure we removed the `NA`s. If we want to do this in a grouped fashion, we need to get the group by function snuggled in between the data call to penguins and summarize.
 
 ```{r}
 penguins %>% 
   group_by(species) %>% 
-  summarise(across(starts_with("bill"), 
-                   .fns = list(mean = mean,
-                               min = min,
-                               max = max), 
-                   na.rm = TRUE)
-  )
+  summarise(across(.cols = starts_with("bill"), 
+                   .fns = list("mean" = mean,
+                               "min" = min,
+                               "max" = max), 
+                   na.rm = TRUE))
 ```
 
 Now we get a lovely summary of all the columns and functions we want for all three species groups.
@@ -445,13 +430,12 @@ We can even combine the single column summaries together with across!
 ```{r}
 penguins %>% 
   group_by(species) %>% 
-  summarise(across(starts_with("bill"), 
-                   .fns = list(mean = mean,
-                               min = min,
-                               max = max), 
+  summarise(across(.cols = starts_with("bill"), 
+                   .fns = list("mean" = mean,
+                               "min" = min,
+                               "max" = max), 
                    na.rm = TRUE),
-            n = length(species)
-  )
+            n = n())
 ```
 
 Look at the last column `n`! Now, together with all the bill column and function combinations, we have a single column counting the number of species observations!
@@ -516,35 +500,35 @@ penguins %>%
 
 # Ungrouping for future control
 
-We've been grouping a lot and not ungrouping. Which might seem fine now, because we have not really done anything more after the summarise. But in many cases we might continue our merry data handling way and do lots more, and then the preserving of the grouping can give us some unexpected results. Let us explore that a little.
+We've been grouping a lot and not ungrouping. Which might seem fine now, because we have not really done anything more after the summarize. But in many cases we might continue our merry data handling way and do lots more, and then the preserving of the grouping can give us some unexpected results. Let us explore that a little.
 
 ```{r}
 penguins %>% 
   group_by(species) %>% 
-  summarise(n = length(species))
+  summarise(n = n())
 ```
-When we group by a single column and summarise, the output data is no longer grouped. In a way, the "summarise" uses up one group while summarising, as based on species, the data can not be condensed any further than this.
+When we group by a single column and summarize, the output data is no longer grouped. In a way, the `summarize()` uses up one group while summarizing, as based on species, the data can not be condensed any further than this.
 
 ```{r}
 penguins %>% 
   group_by(species, island) %>% 
-  summarise(n = length(species))
+  summarise(n = n())
 ```
 When we group by two columns, it actually has the same behaviour. But because we used to have two groups, we now are left with one. In this case "species" is still a  grouping variable. Lets say we want a column now, that counts the total number of penguins observations. That would be the sum of the "n" column.
 
 ```{r}
 penguins %>% 
   group_by(species, island) %>% 
-  summarise(n = length(species)) %>% 
+  summarise(n = n()) %>% 
   mutate(N = sum(n))
 ```
 
-But that is not what we are expecting! why? Because the data is still grouped by species, it is now taking the sum within each species, rather than the whole. To get the whole we need first to ungroup, and then try again.
+But that is not what we are expecting! why? Because the data is still grouped by species, it is now taking the sum within each species, rather than the whole. To get the whole we need first to `ungroup()`, and then try again.
 
 ```{r}
 penguins %>% 
   group_by(species, island) %>% 
-  summarise(n = length(species)) %>% 
+  summarise(n = n()) %>% 
   ungroup() %>% 
   mutate(N = sum(n))
 ```
@@ -556,15 +540,15 @@ We now have outputs with lots of information, but its not in the tidiest format.
 ```{r}
 penguins %>% 
   group_by(species, island, sex) %>% 
-  summarise(across(ends_with("mm"), 
-                   .fns = list(mean = mean,
-                               sd = sd,
-                               min = min,
-                               max = max), 
+  summarise(across(.cols = ends_with("mm"), 
+                   .fns = list("mean" = mean,
+                               "sd" = sd,
+                               "min" = min,
+                               "max" = max), 
                    na.rm = TRUE),
-            n = length(species)
-  ) %>% 
-  pivot_longer(contains("mm"))
+            n = n()) %>% 
+  ungroup() %>% 
+  pivot_longer(cols = contains("mm"))
 ```
 
 Ok so now everything is back into this pivoting format where things are in two columns. Ok, that is still not very satisfactory though. Let's try to make it better. The naming of columns is still very convenient, so let ut try to split the `name` column up like we did yesterday. 
@@ -572,33 +556,33 @@ Ok so now everything is back into this pivoting format where things are in two c
 ```{r}
 penguins %>% 
   group_by(species, island, sex) %>% 
-  summarise(across(ends_with("mm"), 
-                   .fns = list(mean = mean,
-                               sd = sd,
-                               min = min,
-                               max = max), 
+  summarise(across(.cols = ends_with("mm"), 
+                   .fns = list("mean" = mean,
+                               "sd" = sd,
+                               "min" = min,
+                               "max" = max), 
                    na.rm = TRUE),
-            n = length(species)
-  ) %>% 
-  pivot_longer(contains("mm"),
+            n = n()) %>% 
+  ungroup() %>%
+  pivot_longer(cols = contains("mm"),
                names_to = c("part", "measurement", "unit", "stat"),
                names_sep = "_")
 ```
 
-Ok, its slightly better, but its still not convenient. Ideally, we'd like the different statistics as different columns, and have the rest in rows. Now that we have split the columns up, we have a column with _just_ the statistics names. Lets try pivoting wider again, using that column to create the column names,
+Ok, it's slightly better, but its still not convenient. Ideally, we'd like the different statistics as different columns, and have the rest in rows. Now that we have split the columns up, we have a column with _just_ the statistics names. Lets try pivoting wider again, using that column to create the column names,
 
 ```{r}
 penguins %>% 
   group_by(species, island, sex) %>% 
-  summarise(across(ends_with("mm"), 
-                   .fns = list(mean = mean,
-                               sd = sd,
-                               min = min,
-                               max = max), 
+  summarise(across(.cols = ends_with("mm"), 
+                   .fns = list("mean" = mean,
+                               "sd" = sd,
+                               "min" = min,
+                               "max" = max), 
                    na.rm = TRUE),
-            n = length(species)
-  ) %>% 
-  pivot_longer(contains("mm"),
+            n = n()) %>% 
+  ungroup() %>%
+  pivot_longer(cols = contains("mm"),
                names_to = c("part", "measurement", "unit", "stat"),
                names_sep = "_") %>% 
   pivot_wider(names_from = stat, 

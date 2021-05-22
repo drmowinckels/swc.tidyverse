@@ -6,9 +6,6 @@ output:
     toc: true
     toc_float:
       collapsed: true
-    # theme: 
-    #   code_font: 
-    #     google: Fira code
 date: "25th May 2021"
 editor_options: 
   chunk_output_type: inline
@@ -27,7 +24,6 @@ knitr::opts_chunk$set(echo = TRUE)
 > To be able to reduce the number of rows in a data set
 >
 > To be able to select the columns wanted of a data set
->
 
 In many cases, we are working with data sets that contain more data than we need, or we want to inspect certain parts of the data set before we continue.
 Subsetting data sets can be challenging in base R, because there is a fair bit of repetition. Repeating yourself will cost you time, both now and later, and potentially introduce some nasty bugs.
