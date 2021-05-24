@@ -22,7 +22,7 @@ navbar:
         - text: "Day 2 - Pt 2 - Tidy reshaping"
           href: materials/004_tidyr_pivoting.html
         - text: "Day 3 - Pt 1 - Tidy data summaries"
-          href: materials/005_summarise.html
+          href: materials/005_dplyr_summaries.html
         - text: "Day 3 - Pt 2 - Summaries, pivots and visualisation"
           href: materials/006_combining.html
 
