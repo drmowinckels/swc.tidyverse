@@ -1,5 +1,5 @@
 ---
-title: "Working with datasets in R and the Tidyverse"
+title: "Working with datasets in R and the {tidyverse}"
 subtitle: "Combining everything we have learned"
 output:
   html_document:
