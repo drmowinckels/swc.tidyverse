@@ -1,6 +1,6 @@
 ---
-title: "Working with datasets in R and the Tidyverse"
-subtitle: "Visualisation with ggplot2"
+title: "Working with datasets in R and the {tidyverse}"
+subtitle: "Visualisation with {ggplot2}"
 output:
   html_document:
     toc: true

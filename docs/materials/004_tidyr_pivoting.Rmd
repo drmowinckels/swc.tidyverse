@@ -1,6 +1,6 @@
 ---
-title: "Working with datasets in R and the Tidyverse"
-subtitle: "Reading in data and pivoting / reshaping"
+title: "Working with datasets in R and the {tidyverse}"
+subtitle: "Reading in data and pivoting / reshaping with {tidyr}"
 output:
   html_document:
     toc: true

@@ -16,14 +16,14 @@ navbar:
         - text: "Day 1 - Pt 1 - Tidy data visualisation"
           href: materials/001-ggplot2.html
         - text: "Day 1 - Pt 2 - Tidy data subsetting"
-          href: materials/002-dplyr-subsetting.html
+          href: materials/002_dplyr_subsetting.html
         - text: "Day 2 - Pt 1 - Adding or altering variables"
-          href: materials/003-dplyr-mutating.html
+          href: materials/003_dplyr_mutating.html
         - text: "Day 2 - Pt 2 - Tidy reshaping"
-          href: materials/004-tidyr-pivoting.html
+          href: materials/004_tidyr_pivoting.html
         - text: "Day 3 - Pt 1 - Tidy data summaries"
-          href: materials/005-summarise.html
+          href: materials/005_summarise.html
         - text: "Day 3 - Pt 2 - Summaries, pivots and visualisation"
-          href: materials/006-combining-demo.html
+          href: materials/006_combining.html
 
 output: distill::distill_article

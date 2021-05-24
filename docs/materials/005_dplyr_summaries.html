@@ -328,12 +328,12 @@ div.tocify {
 <p>Let us start from the beginning with summaries, and work our way up to the more complex variations as we go.</p>
 <p>First, we must again prepare our workspace with our packages and data.</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
-<pre><code>## v ggplot2 3.3.3     v purrr   0.3.4
-## v tibble  3.1.2     v dplyr   1.0.6
-## v tidyr   1.1.3     v stringr 1.4.0
-## v readr   1.4.0     v forcats 0.5.1</code></pre>
-<pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
+## ✓ tibble  3.1.2     ✓ dplyr   1.0.6
+## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+## ✓ readr   1.4.0     ✓ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>penguins &lt;- palmerpenguins::penguins</code></pre>
@@ -480,7 +480,7 @@ penguins %&gt;%
 ##   bill_length_mm_mean bill_length_mm_sd bill_depth_mm_mean bill_depth_mm_sd
 ##                 &lt;dbl&gt;             &lt;dbl&gt;              &lt;dbl&gt;            &lt;dbl&gt;
 ## 1                43.9              5.46               17.2             1.97
-## # ... with 4 more variables: flipper_length_mm_mean &lt;dbl&gt;,
+## # … with 4 more variables: flipper_length_mm_mean &lt;dbl&gt;,
 ## #   flipper_length_mm_sd &lt;dbl&gt;, body_mass_g_mean &lt;dbl&gt;, body_mass_g_sd &lt;dbl&gt;</code></pre>
 <p>But remember, this trick only works when using functions that have this same argument in them, and not all functions do.</p>
 </div>
@@ -516,7 +516,7 @@ penguins %&gt;%
 ##   bill_length_mm_mean bill_length_mm_min bill_length_mm_max bill_depth_mm_mean
 ##                 &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
 ## 1                43.9               32.1               59.6               17.2
-## # ... with 8 more variables: bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;,
+## # … with 8 more variables: bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;,
 ## #   flipper_length_mm_mean &lt;dbl&gt;, flipper_length_mm_min &lt;int&gt;,
 ## #   flipper_length_mm_max &lt;int&gt;, body_mass_g_mean &lt;dbl&gt;, body_mass_g_min &lt;int&gt;,
 ## #   body_mass_g_max &lt;int&gt;</code></pre>
@@ -600,7 +600,7 @@ penguins %&gt;%
 ##   bill_length_mm_mean bill_length_mm_min bill_length_mm_max bill_depth_mm_mean
 ##                 &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
 ## 1                43.9               32.1               59.6               17.2
-## # ... with 2 more variables: bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;</code></pre>
+## # … with 2 more variables: bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;</code></pre>
 <p>Where we summarized the columns starting with bill, and got the mean, min and max values for those columns, and made sure we removed the <code>NA</code>s. If we want to do this in a grouped fashion, we need to get the group by function snuggled in between the data call to penguins and summarize.</p>
 <pre class="r"><code>penguins %&gt;% 
   group_by(species) %&gt;% 
@@ -610,12 +610,12 @@ penguins %&gt;%
                                &quot;max&quot; = max), 
                    na.rm = TRUE))</code></pre>
 <pre><code>## # A tibble: 3 x 7
-##   species  bill_length_mm_m~ bill_length_mm_m~ bill_length_mm_~ bill_depth_mm_m~
+##   species  bill_length_mm_m… bill_length_mm_m… bill_length_mm_… bill_depth_mm_m…
 ##   &lt;fct&gt;                &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
 ## 1 Adelie                38.8              32.1             46               18.3
-## 2 Chinstr~              48.8              40.9             58               18.4
+## 2 Chinstr…              48.8              40.9             58               18.4
 ## 3 Gentoo                47.5              40.9             59.6             15.0
-## # ... with 2 more variables: bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;</code></pre>
+## # … with 2 more variables: bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;</code></pre>
 <p>Now we get a lovely summary of all the columns and functions we want for all three species groups. We can even combine the single column summaries together with across!</p>
 <pre class="r"><code>penguins %&gt;% 
   group_by(species) %&gt;% 
@@ -626,12 +626,12 @@ penguins %&gt;%
                    na.rm = TRUE),
             n = n())</code></pre>
 <pre><code>## # A tibble: 3 x 8
-##   species  bill_length_mm_m~ bill_length_mm_m~ bill_length_mm_~ bill_depth_mm_m~
+##   species  bill_length_mm_m… bill_length_mm_m… bill_length_mm_… bill_depth_mm_m…
 ##   &lt;fct&gt;                &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
 ## 1 Adelie                38.8              32.1             46               18.3
-## 2 Chinstr~              48.8              40.9             58               18.4
+## 2 Chinstr…              48.8              40.9             58               18.4
 ## 3 Gentoo                47.5              40.9             59.6             15.0
-## # ... with 3 more variables: bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;,
+## # … with 3 more variables: bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;,
 ## #   n &lt;int&gt;</code></pre>
 <p>Look at the last column <code>n</code>! Now, together with all the bill column and function combinations, we have a single column counting the number of species observations!</p>
 </div>
@@ -658,12 +658,12 @@ penguins %&gt;%
                    na.rm = TRUE),
             n = n())</code></pre>
 <pre><code>## # A tibble: 3 x 14
-##   species  bill_length_mm_m~ bill_length_mm_sd bill_length_mm_~ bill_length_mm_~
+##   species  bill_length_mm_m… bill_length_mm_sd bill_length_mm_… bill_length_mm_…
 ##   &lt;fct&gt;                &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
 ## 1 Adelie                38.8              2.66             32.1             46  
-## 2 Chinstr~              48.8              3.34             40.9             58  
+## 2 Chinstr…              48.8              3.34             40.9             58  
 ## 3 Gentoo                47.5              3.08             40.9             59.6
-## # ... with 9 more variables: bill_depth_mm_mean &lt;dbl&gt;, bill_depth_mm_sd &lt;dbl&gt;,
+## # … with 9 more variables: bill_depth_mm_mean &lt;dbl&gt;, bill_depth_mm_sd &lt;dbl&gt;,
 ## #   bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;,
 ## #   flipper_length_mm_mean &lt;dbl&gt;, flipper_length_mm_sd &lt;dbl&gt;,
 ## #   flipper_length_mm_min &lt;int&gt;, flipper_length_mm_max &lt;int&gt;, n &lt;int&gt;</code></pre>
@@ -680,26 +680,25 @@ penguins %&gt;%
 <pre><code>## `summarise()` has grouped output by &#39;species&#39;, &#39;island&#39;. You can override using the `.groups` argument.</code></pre>
 <pre><code>## # A tibble: 13 x 16
 ## # Groups:   species, island [5]
-##    species  island   sex    bill_length_mm_m~ bill_length_mm_~ bill_length_mm_m~
+##    species  island   sex    bill_length_mm_m… bill_length_mm_… bill_length_mm_m…
 ##    &lt;fct&gt;    &lt;fct&gt;    &lt;fct&gt;              &lt;dbl&gt;            &lt;dbl&gt;             &lt;dbl&gt;
 ##  1 Adelie   Biscoe   female              37.4             1.76              34.5
 ##  2 Adelie   Biscoe   male                40.6             2.01              37.6
 ##  3 Adelie   Dream    female              36.9             2.09              32.1
 ##  4 Adelie   Dream    male                40.1             1.75              36.3
 ##  5 Adelie   Dream    &lt;NA&gt;                37.5            NA                 37.5
-##  6 Adelie   Torgers~ female              37.6             2.21              33.5
-##  7 Adelie   Torgers~ male                40.6             3.03              34.6
-##  8 Adelie   Torgers~ &lt;NA&gt;                37.9             3.23              34.1
-##  9 Chinstr~ Dream    female              46.6             3.11              40.9
-## 10 Chinstr~ Dream    male                51.1             1.56              48.5
+##  6 Adelie   Torgers… female              37.6             2.21              33.5
+##  7 Adelie   Torgers… male                40.6             3.03              34.6
+##  8 Adelie   Torgers… &lt;NA&gt;                37.9             3.23              34.1
+##  9 Chinstr… Dream    female              46.6             3.11              40.9
+## 10 Chinstr… Dream    male                51.1             1.56              48.5
 ## 11 Gentoo   Biscoe   female              45.6             2.05              40.9
 ## 12 Gentoo   Biscoe   male                49.5             2.72              44.4
 ## 13 Gentoo   Biscoe   &lt;NA&gt;                45.6             1.37              44.5
-## # ... with 10 more variables: bill_length_mm_max &lt;dbl&gt;,
-## #   bill_depth_mm_mean &lt;dbl&gt;, bill_depth_mm_sd &lt;dbl&gt;, bill_depth_mm_min &lt;dbl&gt;,
-## #   bill_depth_mm_max &lt;dbl&gt;, flipper_length_mm_mean &lt;dbl&gt;,
-## #   flipper_length_mm_sd &lt;dbl&gt;, flipper_length_mm_min &lt;int&gt;,
-## #   flipper_length_mm_max &lt;int&gt;, n &lt;int&gt;</code></pre>
+## # … with 10 more variables: bill_length_mm_max &lt;dbl&gt;, bill_depth_mm_mean &lt;dbl&gt;,
+## #   bill_depth_mm_sd &lt;dbl&gt;, bill_depth_mm_min &lt;dbl&gt;, bill_depth_mm_max &lt;dbl&gt;,
+## #   flipper_length_mm_mean &lt;dbl&gt;, flipper_length_mm_sd &lt;dbl&gt;,
+## #   flipper_length_mm_min &lt;int&gt;, flipper_length_mm_max &lt;int&gt;, n &lt;int&gt;</code></pre>
 </div>
 </div>
 <div id="ungrouping-for-future-control" class="section level1">
@@ -787,7 +786,7 @@ penguins %&gt;%
 ##  8 Adelie  Biscoe female    22 bill_depth_mm_max       20.7 
 ##  9 Adelie  Biscoe female    22 flipper_length_mm_mean 187.  
 ## 10 Adelie  Biscoe female    22 flipper_length_mm_sd     6.74
-## # ... with 146 more rows</code></pre>
+## # … with 146 more rows</code></pre>
 <p>Ok so now everything is back into this pivoting format where things are in two columns. Ok, that is still not very satisfactory though. Let’s try to make it better. The naming of columns is still very convenient, so let ut try to split the <code>name</code> column up like we did yesterday.</p>
 <pre class="r"><code>penguins %&gt;% 
   group_by(species, island, sex) %&gt;% 
@@ -816,7 +815,7 @@ penguins %&gt;%
 ##  8 Adelie  Biscoe female    22 bill    depth       mm    max    20.7 
 ##  9 Adelie  Biscoe female    22 flipper length      mm    mean  187.  
 ## 10 Adelie  Biscoe female    22 flipper length      mm    sd      6.74
-## # ... with 146 more rows</code></pre>
+## # … with 146 more rows</code></pre>
 <p>OK, it’s slightly better, but its still not convenient. Ideally, we’d like the different statistics as different columns, and have the rest in rows. Now that we have split the columns up, we have a column with <em>just</em> the statistics names. Lets try pivoting wider again, using that column to create the column names,</p>
 <pre class="r"><code>penguins %&gt;% 
   group_by(species, island, sex) %&gt;% 
@@ -847,7 +846,7 @@ penguins %&gt;%
 ##  8 Adelie  Dream  female    27 bill    depth       mm     17.6 0.897  15.5  19.3
 ##  9 Adelie  Dream  female    27 flipper length      mm    188.  5.51  178   202  
 ## 10 Adelie  Dream  male      28 bill    length      mm     40.1 1.75   36.3  44.1
-## # ... with 29 more rows</code></pre>
+## # … with 29 more rows</code></pre>
 <p>Look at that! Its starting to become so much better! Now each grouping combination and type of measurement is in its own row, but each summary statistic is in different columns. Slowly, the data are becoming more easy to compare.</p>
 </div>
 <div id="pivoting-summaries-challenges." class="section level1 tabset">
@@ -890,7 +889,7 @@ penguins %&gt;%
 ##  8 Adelie  Biscoe female    22 bill    depth       mm    max    20.7 
 ##  9 Adelie  Biscoe female    22 flipper length      mm    mean  187.  
 ## 10 Adelie  Biscoe female    22 flipper length      mm    sd      6.74
-## # ... with 198 more rows</code></pre>
+## # … with 198 more rows</code></pre>
 <pre class="r"><code># 5b
 penguins %&gt;% 
   group_by(species, island, sex) %&gt;% 
@@ -921,7 +920,7 @@ penguins %&gt;%
 ##  8 Adelie  Biscoe male      22 body    mass        g     4050   356.    3550  
 ##  9 Adelie  Dream  female    27 bill    length      mm      36.9   2.09    32.1
 ## 10 Adelie  Dream  female    27 bill    depth       mm      17.6   0.897   15.5
-## # ... with 42 more rows, and 1 more variable: max &lt;dbl&gt;</code></pre>
+## # … with 42 more rows, and 1 more variable: max &lt;dbl&gt;</code></pre>
 </div>
 </div>
 
