@@ -6,9 +6,6 @@ output:
     toc: true
     toc_float:
       collapsed: true
-    # theme: 
-    #   code_font: 
-    #     google: Fira code
 date: "25th May 2021"
 editor_options: 
   chunk_output_type: inline
@@ -27,7 +24,6 @@ knitr::opts_chunk$set(echo = TRUE)
 > To be able to reduce the number of rows in a data set
 >
 > To be able to select the columns wanted of a data set
->
 
 In many cases, we are working with data sets that contain more data than we need, or we want to inspect certain parts of the data set before we continue.
 Subsetting data sets can be challenging in base R, because there is a fair bit of repetition. Repeating yourself will cost you time, both now and later, and potentially introduce some nasty bugs.
@@ -150,6 +146,8 @@ select(penguins, where(is.factor))
 
 # **Selecting columns, challenges** {.tabset}
 
+(helpers, please paste this into the chat at the right time.)
+
 ## Assignment
 >
 > **1a**: Select from the penguins data set only columns that are factors.
@@ -240,6 +238,8 @@ This now gives us both all chinstrap penguins, and the smallest Adelie penguins!
 By combining AND and OR statements this way, we can slowly create the filtering we are after.
 
 # **Filtering rows, challenges** {.tabset}
+
+(helpers, please paste this into the chat at the right time.)
 
 ## Assignment
 >
@@ -384,6 +384,8 @@ penguins %>%
 
 # **Sorting rows, challenges** {.tabset}
 
+(helpers, please paste this into the chat at the right time.)
+
 ## Assignment
 >
 > **3a**: Arrange the penguins data by body mass.
@@ -410,7 +412,7 @@ penguins %>%
 ```
 
 
-# Combining with {ggplot}
+# Combining with {ggplot2}
 
 Some times, we want to subset data just to reduce the data in a plot, not necessarily for our whole pipeline.
 For instance, maybe you want to plot the data just from the Gentoo species, but don't want to make another data set.

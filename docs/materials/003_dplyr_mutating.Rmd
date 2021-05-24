@@ -1,6 +1,6 @@
 ---
-title: "Working with datasets in R and the Tidyverse"
-subtitle: "Adding and altering variables"
+title: "Working with datasets in R and the {tidyverse}"
+subtitle: "Adding and altering variables with {dplyr}"
 output:
   html_document:
     toc: true
@@ -12,84 +12,30 @@ editor_options:
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
-                      fig.retina = 3)
-library(tidyverse)
-penguins <- palmerpenguins::penguins
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
-**Questions**
-
->
+> **Questions**
+> 
 > How can I add variables to my data?
+> 
 > How can I alter the variables already in my data?
 >
-**Objectives**
-
+> **Objectives**
 >
 > To be able to add new variables to the data
 >
 > To understand the basic consepts between different data types
->
 
-## Short recap of previous sessions {.tabset}
-
-Welcome back to the second day! Yesterday we covered how to use ggplot to create publication quality visualisations, and dplyr to subset our data. 
-Let's just look at a couple of exmples of what we did.
-
-### ggplot2 1
-
-```{r}
-library(tidyverse)
-penguins <- palmerpenguins::penguins
-
-penguins %>% 
-  ggplot(aes(x = bill_length_mm,
-             y = bill_depth_mm,
-             colour = species)) +
-  geom_jitter() +
-  geom_smooth(method = "lm") + 
-  geom_smooth(method = "lm", colour = "black")
-```
-
-### ggplot2 2
-
-```{r}
-penguins %>% 
-  ggplot(aes(x = bill_length_mm,
-             y = bill_depth_mm,
-             colour = species)) +
- geom_density2d() +
- labs(
-   title = "Penguin bill length and depth association",
-   subtitle = "of three species of penguin",
-   color = "Species", 
-   y = "Bill depth (mm)",
-   x = "Bill length (mm)",
-   caption = "Source: DOI 10.1371/journal.pone.0090081"
- )
-```
-
-
-### subsetting
-
-```{r}
-penguins %>% 
-  select(species, island, ends_with("mm")) %>% 
-  filter(species == "Adelie")
-```
-
-
-
-# The `dplyr` package
+# The {dplyr} package
 
 Often, the data we have do not contain exactly what we need. We might need to change the order of factors, create new variables based on other columns in the data, or even variables conditional on specific values in other columns. Perhaps we even want to alter all columns of a specific type in the same way?
 
 These are the things we will cover in this session.
 
-Yesterday we went through functions in the dplyr package that are about subsetting and ordering the data in a data set.
+Yesterday we went through functions in the {dplyr} package that are about subsetting and ordering the data in a data set.
 
-This session will focus on the mutate function, which is dplyr's function to create or alter variables in a data set.
+This session will focus on the `mutate()` function, which is {dplyr}'s function to create or alter variables in a data set.
 
 1. `select()` (covered in Day 1 session)
 2. `filter()` (covered in Day 1 session)
@@ -98,18 +44,19 @@ This session will focus on the mutate function, which is dplyr's function to cre
 5. `group_by()` (covered in this session)
 6. `summarize()` (covered in Day 3 session)
 
-# Adding new variables pt.1
+# Adding new variables, part one
 
-Let us first talk about selecting columns. In dplyr, the function name for selecting columns is `select()`! That should be easy to remember.
-In fact, the tidyverse names for functions are inspired by English grammar, which will help us when we are writing our code.
+Let us first talk about selecting columns. In {dplyr}, the function name for selecting columns is `select()`! 
+In fact, the {tidyverse} names for functions are inspired by English grammar, which will help us when we are writing our code.
 
-As yesterday, we need to start off by making sure we have the tidyverse package loaded, and the penguins dataset ready at hand.
+As yesterday, we need to start off by making sure we have the {tidyverse} package loaded, and the penguins data set ready at hand.
+
 ```{r}
 library(tidyverse)
 penguins <- palmerpenguins::penguins
 ```
 
-In tidyverse, when we add new variables, we use the `mutate` function. Just like the other tidyverse functions, mutate work specifically with data sets, and provides a nice shorthand for working directly with the columns in the data set. 
+In {tidyverse}, when we add new variables, we use the `mutate()` function. Just like the other {tidyverse} functions, mutate work specifically with data sets, and provides a nice shorthand for working directly with the columns in the data set. 
 
 ```{r}
 penguins %>% 
@@ -118,19 +65,16 @@ penguins %>%
 
 The output of this can be hard to spot, depending on the size of the screen. But you should be able to spot a new column in the data set called "new_var", and it has the value 1 for all rows!
 
-This is what we told mutate to do! We specified a new column by name, and gave it a specific value 1. 
+This is what we told `mutate()` to do! We specified a new column by name, and gave it a specific value, `1`. 
 
-This works because its easy to assing a single value to all rows. What if we try to give it three values? What would we expect?
+This works because its easy to assining a single value to all rows. What if we try to give it three values? What would we expect?
 
-```{r, eval = FALSE}
+```{r,error=TRUE}
 penguins %>% 
   mutate(var = 1:3)
 ```
-```
-Error: Problem with `mutate()` input `var`. x Input `var` can't be recycled to size 344. ℹ Input `var` is `1:3`. ℹ Input `var` must be size 344 or 1, not 3.
-```
 
-Here, its failing with a mysterious message. The error is telling us that input must be of size 344 or 1. 344 are the number of rows in the data set, so its telling us the input we gave it is not suitable because its neither of length 344 nor of length 1. 
+Here, it's failing with a mysterious message. The error is telling us that input must be of size 344 or 1. 344 are the number of rows in the data set, so its telling us the input we gave it is not suitable because its neither of length 344 nor of length 1. 
 
 So now we know the premises for mutate, it takes inputs that are either of the same length as there are rows in the data set or length 1. 
 ```{r}
@@ -138,541 +82,386 @@ penguins %>%
   mutate(var = 1:344)
 ```
 
-But generally, we create new columns based on other data in the data set. So lets do a more useful example. For instance, perhaps we want to use the ratio between the bill length and depth as a measurement for a model. 
+But generally, we create new columns based on other data in the data set. So let's do a more useful example. For instance, perhaps we want to use the ratio between the bill length and depth as a measurement for a model. 
 
 ```{r}
 penguins %>% 
-  mutate(bill_ratio = bill_length_mm/bill_depth_mm) %>% 
+  mutate(bill_ratio = bill_length_mm / bill_depth_mm) %>% 
   select(starts_with("bill"))
 ```
 
-So, here we have asked for the ratio between bill length and depth to be calculated and stored in a column named "bill_ratio". Then we selected just the bill columns to have a peak at the output more directly. 
+So, here we have asked for the ratio between bill length and depth to be calculated and stored in a column named `bill_ratio`. Then we selected just the `bill` columns to have a peak at the output more directly. 
 
-We can do almost anything within a mutate to get the values as we want them, also use functions that exist in R to transform the data. For instance, perhaps we want to scale the variables of interest to have a mean of 0 and standard deviation of 1, which is quite common to improve statistical modelling. We can do that with the `scale` function.
+We can do almost anything within a `mutate()` to get the values as we want them, also use functions that exist in R to transform the data. For instance, perhaps we want to scale the variables of interest to have a mean of 0 and standard deviation of 1, which is quite common to improve statistical modeling. We can do that with the `scale()` function.
 
 ```{r}
 penguins %>% 
-  mutate(
-    bill_ratio = bill_length_mm/bill_depth_mm,
-    bill_length_mm_z = scale(bill_length_mm)
-  ) %>% 
+  mutate(bill_ratio = bill_length_mm/bill_depth_mm,
+         bill_length_mm_z = scale(bill_length_mm)) %>% 
   select(starts_with("bill"))
 ```
 
 
-## **Challenge 1.** {.tabset}
-
-You can run assignments in your own RStudio, or run the first challenge in the mutating tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("003-mutating", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
->
-> **1a**: Create a column named `bill_ld_ratio` that is the value of `bill_length_mm` divided by `bill_depth_mm`
->
-> **1b**: transform the body mass column to the logarithmic scale using the `log` function
->
-> **1c**: Divide all values in the flipper lenght column with 10, and store it in a variable called flipper_length_cm.
-
-### Solution
-
-```{r "solutions-1"}
-## 1a
-penguins %>% 
-  mutate(bill_ld_ratio = bill_length_mm / bill_depth_mm)
-
-# 1b
-penguins %>% 
-  mutate(body_mass_g_log = log(body_mass_g))
-
-## 1c
-penguins %>% 
-  mutate(flipper_length_cm  = flipper_length_mm/10)
-```
-
-# Add variable based on data conditionals 
+# Adding new variables, part two 
 
 Sometimes, we want to assign certain data values based on other variables in the data set. 
 For instance, maybe we want to classify all penguins with body mass above 4.5 kg as "large" while the rest are "normal"?
 
-The `if_else` function takes expressions much like `filter`.
+The `if_else()` function takes expressions, much like `filter()`.
 The first value after the expression is the value assigned if the expression is `TRUE`, while the second is if the expression is `FALSE`
 
 ```{r}
 penguins %>% 
-  mutate(size = if_else(body_mass_g > 4500,
-                       "large", "normal"))
+  mutate(size = if_else(condition = body_mass_g > 4500, 
+                        true = "large", 
+                        false = "normal"))
 ```
 
-Now we have a column with two values, "large" and "normal" based on whether the penguins are above or below 4.5 kilos.
+Now we have a column with two values, `large` and `normal` based on whether the penguins are above or below 4.5 kilos.
 
 We can for instance use that in a plot.
 
 ```{r}
 penguins %>% 
-  mutate(size = if_else(body_mass_g > 4500,
-                       "large", "normal")) %>% 
+  mutate(size = if_else(condition = body_mass_g > 4500, 
+                        true = "large", 
+                        false = "normal")) %>% 
   ggplot() +
-  geom_jitter(aes(x = year,
-                  y = body_mass_g,
-                  colour = size))
+  geom_jitter(mapping = aes(x = year, y = body_mass_g, colour = size))
 ```
 
 That shows us clearly that we have grouped the penguins based on their size. But there is this strange `NA` in the plot legend. what is that? 
 
-In R, missing values are usually given the value `NA` which stands for `Not applicable`. This is a very special name in R. Like TRUE and FALSE are capitalized, RStudio immediately recognises the combination of capital letters and gives it another colour than all other values. 
+In R, missing values are usually given the value `NA` which stands for `Not applicable`, *i.e.*, missing data. This is a very special name in R. Like `TRUE` and `FALSE` are capitalized, RStudio immediately recognizes the combination of capital letters and gives it another color than all other values. 
 
-Let us just explore that a tiny bit.
+<!-- Let us just explore that a bit. -->
 
-NA is great, because it can be used in any vector as a missing value placeholder. Remember we mentioned yesterday that a column in a data set must contain all the same type of data. Either factor, or numeric, or string etc. It cannot be a combination. So mssing values must be something a little special, to still fit into all those categories. Let us do a couple of tests.
+<!-- `NA` is great, because it can be used in any vector as a missing value placeholder. Remember we mentioned yesterday that a column in a data set must contain all the same type of data. Either factor, or numeric, or string etc. It cannot be a combination. So missing values must be something a little special, to still fit into all those categories. Let us do a couple of tests. -->
 
-We will use the `c` function in R to create new vectors. It stands for either "combine" or "concatenate".
+<!-- We will use the `c` function in R to create new vectors. It stands for either "combine" or "concatenate". -->
 
-```{r}
-c("this", "is", "a", "string", "vector" ,NA)
-c(1:4, NA, 5:8)
-factor(c("fct1", "fct2", NA))
-```
+<!-- ```{r} -->
+<!-- c("this", "is", "a", "string", "vector" ,NA) -->
+<!-- c(1:4, NA, 5:8) -->
+<!-- factor(c("fct1", "fct2", NA)) -->
+<!-- ``` -->
 
-Notice how the `NA` is never quoted, its displayed in plain letters. This lets us know its not stored as a string, but as a special `NA` missing value. We will come across this NA especially tomorrow when we create summaries.
+<!-- Notice how the `NA` is never quoted, its displayed in plain letters. This lets us know its not stored as a string, but as a special `NA` missing value. We will come across this `NA` especially tomorrow when we create summaries. -->
 
-since its not quoted we can also not look for it like a string, and we also cannot look for it with an equals. 
-NA's are special, and therefore have their own function to locate them.
+<!-- Since it's not quoted we can also not look for it like a string, and we also cannot look for it with an equals. `NA`'s are special, and therefore have their own function to locate them. -->
 
-```{r}
-penguins %>% 
-  filter(body_mass_g == "NA")
+<!-- ```{r} -->
+<!-- penguins %>%  -->
+<!--   filter(body_mass_g == "NA") -->
 
-penguins %>% 
-  filter(body_mass_g == NA)
+<!-- penguins %>%  -->
+<!--   filter(body_mass_g == NA) -->
 
-penguins %>% 
-  filter(is.na(body_mass_g))
-```
-
-
-## **Challenge 2.** {.tabset}
-
-You can run assignments in your own RStudio, or run the second challenge in the mutating tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("003-mutating", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
->
-> **2a**: Adapt the example to evaluate if body mass is **below** 4.5kg, and assign rows that are TRUE to be "normal" and rows that are FALSE to "large"
->
-> **2b**: Create a new column named "biscoe" and its content should be `TRUE` if the island is "Biscoe" and `FALSE` for everything else.
+<!-- penguins %>%  -->
+<!--   filter(is.na(body_mass_g)) -->
+<!-- ``` -->
 
 
-### Solution
-
-```{r "solutions-2"}
-## 2a
-penguins %>% 
-  mutate(body_type = if_else(body_mass_g < 4500, "normal", "large")) 
-
-# 2b
-penguins %>% 
-  mutate(biscoe = if_else(island == "Biscoe", TRUE, FALSE)) %>% 
-  select(species, island, biscoe)
-```
-
-
-# Add variables consecutively
+# Adding new variables, part three
 
 Now we know how to create new variables, and even how to make them if there are conditions on how to add the data.
 
 But, we often want to add several columns of different types, and maybe even add new variables based on other new columns!
-Oh, its starting to sound complicated, but it does not have to be!
+Oh, it's starting to sound complicated, but it does not have to be!
 
-mutate is so-called lazy-evaluated. This sounds weird, but it means that each new column you make is made in the sequence you make them. So as long as you think about the order of your mutate creations, you can do that in a single mutate call.
+`mutate()` is so-called lazy-evaluated. This sounds weird, but it means that each new column you make is made in the sequence you make them. So as long as you think about the order of your `mutate()` creations, you can do that in a single mutate call.
+
+```{r}
+penguins %>% 
+  mutate(bill_ratio = bill_depth_mm / bill_length_mm,
+         bill_type = if_else(condition = bill_ratio < 0.5, 
+                             true = "elongated", 
+                             false = "stumped")) %>% 
+  select(starts_with("bill"))
+```
+
+Now you've created two variables. One for `bill_ratio`, and then another one conditional on the values of the `bill_ratio`.
+
+If you switched the order of these two, R would produce an error, because there would be no bill ratio to create the other column.
+
+```{r,error=TRUE}
+penguins %>% 
+  mutate(bill_type = if_else(condition = bill_ratio < 0.5, 
+                             true = "elongated", 
+                             false = "stumped"),
+         bill_ratio = bill_depth_mm / bill_length_mm) %>% 
+  select(starts_with("bill"))
+```
+
+But what if we want to categorize based on more than one condition? Nested `if_else()`?
 
 ```{r}
 penguins %>% 
   mutate(
-    bill_ratio = bill_depth_mm/bill_length_mm,
-    bill_type = if_else(bill_ratio < .5, "elongated", "stumped")
-  ) %>% 
+    bill_ratio = bill_depth_mm / bill_length_mm,
+    bill_type = if_else(condition = bill_ratio < 0.35,
+                        true =  "elongated", 
+                        false = if_else(condition = bill_ratio < 0.45,
+                                        true = "normal",
+                                        false = "stumped"))) %>% 
   select(starts_with("bill"))
 ```
 
-Now you've created two variables. One for bill ratio, and then another one conditional on the values on the bill ratio.
+<!-- OK, so it worked we think. Let's plot it to see if we agree. -->
 
-If you switched the order of these two, R would produce and error, because there would be no bill ratio to create the other columnm
+<!-- ```{r} -->
+<!-- penguins %>%  -->
+<!--   mutate( -->
+<!--     bill_ratio = bill_depth_mm/bill_length_mm, -->
+<!--     bill_type = if_else(bill_ratio < .35,  -->
+<!--                        "elongated",  -->
+<!--                        if_else(bill_ratio < .45,  -->
+<!--                               "normal", -->
+<!--                               "stumped")) -->
+<!--   ) %>%  -->
+<!--   ggplot(aes(x = bill_length_mm,  -->
+<!--              y = bill_depth_mm,  -->
+<!--              colour = bill_type)) + -->
+<!--   geom_point() -->
+<!-- ``` -->
 
-```{r eval = FALSE}
-penguins %>% 
-  mutate(
-    bill_type = if_else(bill_ratio < .5, "elongated", "stumped"),
-    bill_ratio = bill_depth_mm/bill_length_mm
-  ) %>% 
-  select(starts_with("bill"))
-```
-```r
-Error: Problem with `mutate()` input `bill_type`. x object 'bill_ratio' not found ℹ Input `bill_type` is `if_else(bill_ratio > 1, "elongated", "stumped")
-```
-
-But what if we want to categorise based on more than one condition? Nested if_else?
-
-```{r}
-penguins %>% 
-  mutate(
-    bill_ratio = bill_depth_mm/bill_length_mm,
-    bill_type = if_else(bill_ratio < .35, 
-                       "elongated", 
-                       if_else(bill_ratio < .45, 
-                              "normal",
-                              "stumped"))
-  ) %>% 
-  select(starts_with("bill"))
-```
-
-ok, so it worked we think. Lets plot it to see if we agree.
-
-```{r}
-penguins %>% 
-  mutate(
-    bill_ratio = bill_depth_mm/bill_length_mm,
-    bill_type = if_else(bill_ratio < .35, 
-                       "elongated", 
-                       if_else(bill_ratio < .45, 
-                              "normal",
-                              "stumped"))
-  ) %>% 
-  ggplot(aes(x = bill_length_mm, 
-             y = bill_depth_mm, 
-             colour = bill_type)) +
-  geom_point()
-```
-
-that looks ok, but the code is horrible! And what if you have even more conditionals? Thankfully, dplyr has a smarter way of doing this, called `case_when`. This function is similar to `if_else`, but where you specify what each condition should be assigned.
+that looks good, but the code is horrible! And what if you have even more conditionals? Thankfully, {dplyr} has a smarter way of doing this, called `case_when()`. This function is similar to `if_else()`, but where you specify what each condition should be assigned.
 On the left you have the logical expression, and the on the right of the tilde (`~`) is the value to be assigned if that expression is `TRUE`
 
 ```{r}
 penguins %>% 
   mutate(
-    bill_ratio = bill_depth_mm/bill_length_mm,
-    bill_type = case_when(
-      bill_ratio < .35 ~ "elongated",
-      bill_ratio < .45 ~ "normal",
-      TRUE ~ "stumped")
-  ) %>% 
-  ggplot(aes(x = bill_length_mm, 
-             y = bill_depth_mm, 
-             colour = bill_type)) +
+    bill_ratio = bill_depth_mm / bill_length_mm,
+    bill_type = case_when(bill_ratio < 0.35 ~ "elongated",
+                          bill_ratio < 0.45 ~ "normal",
+                          TRUE ~ "stumped")) %>% 
+  ggplot(mapping = aes(x = bill_length_mm,
+                       y = bill_depth_mm,
+                       colour = bill_type)) +
   geom_point()
 ```
 
 
-That looks almost the same. The NA's are gone! That's not right. We cannot categorise values that are missing. Its our last statement that does this, which just says "make the remainder this value". Which is not what we want. We need the NAs to stay NA. 
-`case_when` like the `mutate` it self, evaluates the expressions in sequence. Which is why we can have two statements evaluating the same column with similar expressions (below .35 and then below .45). All values that are below .45 are also below .35. Since we first assign everything below .35, and then below .45, they do not collide. We can do the same for our last statement, saying that all values that are not NA should be given this category.
+That looks almost the same. The `NA`'s are gone! That's not right. We cannot categorize values that are missing. It's our last statement that does this, which just says "make the remainder this value". Which is not what we want. We need the `NA`s to stay `NA`'s. 
+
+`case_when()`, like the `mutate()`, evaluates the expressions in sequence. Which is why we can have two statements evaluating the same column with similar expressions (below 0.35 and then below 0.45). All values that are below 0.45 are also below 0.35. Since we first assign everything below 0.35, and then below 0.45, they do not collide. We can do the same for our last statement, saying that all values that are not `NA` should be given this category.
 
 ```{r}
 penguins %>% 
   mutate(
-    bill_ratio = bill_depth_mm/bill_length_mm,
-    bill_type = case_when(
-      bill_ratio < .35 ~ "elongated",
-      bill_ratio < .45 ~ "normal",
-      !is.na(bill_ratio) ~ "stumped")
-  ) %>% 
-  ggplot(aes(x = bill_length_mm, 
-             y = bill_depth_mm, 
-             colour = bill_type)) +
+    bill_ratio = bill_depth_mm / bill_length_mm,
+    bill_type = case_when(bill_ratio < 0.35 ~ "elongated",
+                          bill_ratio < 0.45 ~ "normal",
+                          !is.na(bill_ratio) ~ "stumped")) %>% 
+  ggplot(mapping = aes(x = bill_length_mm,
+                       y = bill_depth_mm,
+                       colour = bill_type)) +
   geom_point()
 ```
 
-Here, we use the `is.na()` function we saw earlier, on bill_ratio. But it also has an `!`  in front, what does that mean? In R logical expressions, the `!` is a negation specifier. It means it flips the logical so the `TRUE` becomes `FALSE`, and vice versa. So here, it means there bill_ratio is **not** `NA`.
+Here, we use the `is.na()` function we saw earlier, on `bill_ratio`. But it also has an `!` in front, what does that mean? In R's logical expressions, the `!` is a negation specifier. It means it flips the logical so the `TRUE` becomes `FALSE`, and *vice versa*. So here, it means the `bill_ratio` is **not** `NA`.
 
-## **Challenge 3.** {.tabset}
-
-You can run assignments in your own RStudio, or run the third challenge in the mutating tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("003-mutating", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
-> **3a**: Create a new column called `body_type` which should contain the categories "large" for penguins above 4 kilos, "petite" penguins below 3 kilos, and "normal" for all the remaining penguins that have their mass recorded.
-> 
-
-
-### Solution
-
-```{r "solutions-3"}
-## 3a
-penguins %>% 
-  mutate(
-    body_type = case_when(
-      body_mass_g > 4500 ~ "large",
-      body_mass_g < 3000 ~ "petite",
-      !is.na(body_mass_g) ~ "normal") # the rest
-  ) 
-```
-
-# Adding or altering variables en masse
+# Adding new variables, part four
 
 So far, we've been looking at adding variables one by one.
 This is of course something we do all the time, but some times we need to do the same change to multiple columns at once. Imagine you have a data set with 20 column and you want to scale them all to the same scale. Writing the same command with different columns 20 times is very tedious. 
-It is now the dplyr package truly starts to shine!
+It is now the {dplyr} package truly starts to shine!
 
-In our case, let us say we want to scale the three columns with millimetre measurements so that they have a mean of 0 and standard deviation of 1. We've alrady used the `scale` function once before, so we will do it again.
+In our case, let us say we want to scale the three columns with millimeter measurements so that they have a mean of 0 and standard deviation of 1. We've already used the `scale()` function once before, so we will do it again.
 
 In this simple example we might have done so:
 
 ```{r}
 penguins %>% 
-  mutate(
-    bill_depth_sc = scale(bill_depth_mm),
-    bill_length_sc = scale(bill_length_mm),
-    flipper_length_sc = scale(flipper_length_mm),
-  )
+  mutate(bill_depth_sc = scale(bill_depth_mm),
+         bill_length_sc = scale(bill_length_mm),
+         flipper_length_sc = scale(flipper_length_mm))
 ```
 
-Its just three columns, we can do that.But let us imagine we have 20 of these, typing all that out is tedious and error prone. You might forget to alter the name or keep the same type of naing convention. We are only human, we easily make mistakes.
+Its just three columns, we can do that. But let us imagine we have 20 of these, typing all that out is tedious and error prone. You might forget to alter the name or keep the same type of naming convention. We are only human, we easily make mistakes.
 
-With dplyr's `across()` we can combine our knowledge of tidy-selectors and mutate to create the entire transformation for these columns at once.
+With {dplyr}'s `across()` we can combine our knowledge of tidy-selectors and mutate to create the entire transformation for these columns at once.
 
 ```{r}
 penguins %>% 
-  mutate(across(ends_with("mm"),
-                scale))
+  mutate(across(.cols = ends_with("mm"), 
+                .fns = scale))
 ```
-whoa! So fast and so simple! Now the three columns are scaled. But oh no! The columns have been overwritten. Rather than creating new ones, we replaced the old ones.
 
-This might be your intention in some instances, or maybe you will just create a new dataset with the scaled variables. 
+Whoa! So fast and so simple! Now the three columns are scaled. But oh no! The columns have been overwritten. Rather than creating new ones, we replaced the old ones.
+
+This might be your intention in some instances, or maybe you will just create a new data set with the scaled variables. 
 
 ```{r}
 penguins_mm_sc <- penguins %>% 
-  mutate(across(ends_with("mm"),
-                scale))
+  mutate(across(.cols = ends_with("mm"), 
+                .fns = scale))
 ```
 
 but often, we'd like to keep the original but add the new variants. We can do that to within the across!
 
 ```{r}
 penguins %>% 
-  mutate(across(ends_with("mm"),
-                scale, 
+  mutate(across(.cols = ends_with("mm"),
+                .fns = scale, 
                 .names = "{.col}_sc")) %>% 
   select(contains("mm"))
 ```
 
-now they are all there! neat! But that `.names` argument is a little weird. what does it really mean?
+Now they are all there! neat! But that `.names` argument is a little weird. What does it really mean?
 
-Internally, `across` stores the column names in a vector it calls `.col`. We can use this knowledge to tell the across function what to name our new columns. In this case, we want to append the column name with `_sc`. 
+Internally, `across()` stores the column names in a vector it calls `.col`. We can use this knowledge to tell the across function what to name our new columns. In this case, we want to append the column name with `_sc`. 
 
+# **Adding new variables, challenges** {.tabset}
 
-
-## **Challenge 4.** {.tabset}
-
-You can run assignments in your own RStudio, or run the third challenge in the mutating tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("003-mutating", "swc.tidyverse")
-```
 (helpers, please paste this into the chat at the right time.)
 
-### Assignment
-> **4a**: Transform all the colmns with milimetres measurements so they are scaled, and the _prefix_ "sc_" to the columns names.
-> **4b**: Do the same, but now only for the bill measurements.
+## Assignment
+>
+> **1a**: Create a column named `bill_ld_ratio_log` that is the natural logarithm (using the `log()` function) of `bill_length_mm` divided by `bill_depth_mm`
+>
+> **1b**: Create a new column called `body_type`, where animals below 3 kg are `small`, animals between 3 and 4.5 kg are `normal`, and animals larger than 4.5 kg are `large`. In the same command, create a new column named `biscoe` and its content should be `TRUE` if the island is `Biscoe` and `FALSE` for everything else.
+>
+> **1c**: Transform all the colmns with milimetres measurements so they are scaled, and the _prefix_ `sc_` to the columns names.
 
+## Solution
 
-### Solution
-
-```{r "solutions-4"}
-## 4a
+```{r "solutions-1"}
+## 1a
 penguins %>% 
-  mutate(across(ends_with("mm"),
-                scale, 
+  mutate(bill_ld_ratio = log(bill_length_mm / bill_depth_mm))
+
+## 1b
+penguins %>% 
+  mutate(body_type = case_when(body_mass_g < 3000 ~ "small",
+                               body_mass_g >= 3000 ~ "normal",
+                               body_mass_g > 4500 ~ "large"),
+         biscoe = if_else(condition = island == "Biscoe", 
+                          true = TRUE, 
+                          false = FALSE)) 
+
+## 1c
+penguins %>% 
+  mutate(across(.cols = ends_with("mm"), 
+                .fns = scale, 
                 .names = "sc_{.col}")) %>% 
   select(contains("mm"))
-
-## 4b
-penguins %>% 
-  mutate(across(starts_with("mm"),
-                scale, 
-                .names = "sc_{.col}")) %>% 
-  select(starts_with("mm"))
-
-## 4c
-penguins %>% 
-  mutate(across(where(is.numeric),
-                scale, 
-                .names = "sc_{.col}")) %>% 
-  select(where(is.numeric))
 ```
 
 
-# Adding variables based on grouped data
+# Grouping and ungrouping, part one
 
 Sometimes, it makes sense to calculate values based on some grouping variable.
-In this case, for instance species, island or sex. For instance, 
+In this case, for instance species, island or sex. 
 
-With dplyr, we can utilise something called data grouping, to achieve what we are after. We can _group_ the data.
+With dplyr, we can utilize something called data grouping, to achieve what we are after. We can _group_ the data.
 
 When data is grouped by one or more columns in the data, one can apply calculations based on summary measures for the groups _on each individual_ score. 
 This is powerful when you want to calculate which percentile a score falls in, or other relational measures (like time since baseline).
 
 ```{r}
 penguins %>% 
-  ggplot(aes(x = bill_length_mm,
-             fill = species)) +
-  geom_density(alpha = .5)
+  ggplot(mapping = aes(x = bill_length_mm,
+                       fill = species)) +
+  geom_density(alpha = 0.5)
 ```
 
-Lets try that by calculating which percentile a measurement of bill length is within its species. We start by grouping the data, and looking at what might have changed.
+Let's try that by calculating which percentile a measurement of bill length is within its species. We start by grouping the data, and looking at what might have changed.
 
 ```{r}
 penguins %>% 
   group_by(species)
 ```
 
-This look very similar, but notice at the top, it now says `Groups: species (3)`. This is dplyr's way of telling us the data is grouped by the species column, and that there are three groups. We know that should be right since there are three species in the data set. 
+This look very similar, but notice at the top, it now says `Groups: species (3)`. This is {dplyr}'s way of telling us the data is grouped by the species column, and that there are three groups. We know that should be right since there are three species in the data set. 
 
 Now, let us calculate the species maximum value of bill length. And then use this maximum value to find where the bill length measurements fall relative to that.
 
 ```{r}
 penguins %>% 
   group_by(species) %>% 
-  mutate(
-    bill_length_sp_max = max(bill_length_mm, na.rm = TRUE),
-    bill_length_rel = bill_length_mm/bill_length_sp_max
-  ) %>% 
+  mutate(bill_length_sp_max = max(bill_length_mm, na.rm = TRUE),
+         bill_length_rel = bill_length_mm / bill_length_sp_max) %>% 
   select(species, island, starts_with("bill_length"))
 ```
 
-What are we looking at here? Our new column for species maximum seems to have just one value in it. Isnt that odd? On the top here, we are only look at "Adelie" penguins, so that is a single species, and they should all have the same value. We should check the others.
+What are we looking at here? Our new column for species maximum seems to have just one value in it. Isn't that odd? On the top here, we are only look at `Adelie` penguins, so that is a single species, and they should all have the same value. We should check the others.
 
 ```{r}
 penguins %>% 
   group_by(species) %>% 
-  mutate(
-    bill_length_sp_max = max(bill_length_mm, na.rm = TRUE),
-    bill_length_rel = bill_length_mm/bill_length_sp_max
-  ) %>% 
+  mutate(bill_length_sp_max = max(bill_length_mm, na.rm = TRUE),
+         bill_length_rel = bill_length_mm / bill_length_sp_max) %>% 
   select(species, bill_length_sp_max) %>% 
   distinct()
 ```
+
 Here, we selected only the species and the species maximum column, and used a function called `distinct()` which removes all rows that are duplicates. In this case, it leaves us with three rows. One for each species with a value for each. 
 
-Now that we have confirmed that there are different values for the different species, lets look at the rest in a plot.
+Now that we have confirmed that there are different values for the different species, let's look at the rest in a plot.
 
 ```{r}
 penguins %>% 
   group_by(species) %>% 
-  mutate(
-    bill_length_sp_max = max(bill_length_mm, na.rm = TRUE),
-    bill_length_rel = bill_length_mm/bill_length_sp_max
-  ) %>% 
-  
-    ggplot(aes(x = bill_length_rel,
-             fill = species)) +
-  geom_density(alpha = .5)
+  mutate(bill_length_sp_max = max(bill_length_mm, na.rm = TRUE),
+         bill_length_rel = bill_length_mm / bill_length_sp_max) %>%
+  ggplot(mapping = aes(x = bill_length_rel,
+                       fill = species)) +
+  geom_density(alpha = 0.5)
 ```
+
 Now we can see in our plot, that we have created columns as expected. 
 We can now see that the distributions have moved, while still maintaining their shape. 
 So they are now relative to each species.
 
-And we can even do that in `across`! Maybe you want to figure out how bill length and depth relate to each other regardless of which species of penguins. You'd somehow need to de-mean the data based on species, before doing analyses.
+And we can even do that in `across()`! Maybe you want to figure out how bill length and depth relate to each other regardless of which species of penguins. You'd somehow need to de-mean the data based on species, before doing analyses.
 
 Let us plot the data and see what things look like to begin with.
 
 ```{r}
 penguins %>% 
-  ggplot(aes(x = bill_length_mm,
-             y = bill_depth_mm,
-             colour = species)) +
+  ggplot(mapping = aes(x = bill_length_mm,
+                       y = bill_depth_mm,
+                       colour = species)) +
   geom_point() +
   geom_smooth(method = "lm")
 ```
 
-This looks quite similar between the species. But they are on slightly different scales, and we'd like an even clearer comparison basis. 
+This looks quite similar between the species. 
+<!-- But they are on slightly different scales, and we'd like an even clearer comparison basis.  -->
 
-```{r}
-penguins %>% 
-  group_by(species) %>% 
-  mutate(across(starts_with("bill"),
-                ~ .x - mean(.x, na.rm = TRUE)))
-```
+<!-- # ```{r} -->
+<!-- # penguins %>%  -->
+<!-- #   group_by(species) %>%  -->
+<!-- #   mutate(across(.cols = starts_with("bill"), -->
+<!-- #                 .fns = ~ .x - mean(.x, na.rm = TRUE))) -->
+<!-- # ``` -->
+<!-- #  -->
+<!-- # Break it down. First we group the data, then we mutate across all columns starting with "bill", and applying a strange function. -->
+<!-- #  -->
+<!-- # Remember how when you renamed the columns you learned about the across functions internal name for the column `.col`. Across also stores the input vector in the same way in a vector called `.x`. So when we create our own specification of what we want across to do (rather than applying a function like `scale`), we use the  tilde `~` which allows us to use this internal `.x` vector to specify our wanted behaviour. -->
+<!-- # When we demean data, we take the value and subtract the mean of the entire vector from that value. That means values larger than the mean stay positive, while values smaller than the mean become negative. -->
+<!-- #  -->
+<!-- # Let us plot it to see if it did what we expected. -->
+<!-- #  -->
+<!-- # ```{r} -->
+<!-- # penguins %>%  -->
+<!-- #   group_by(species) %>%  -->
+<!-- #   mutate(across(starts_with("bill"), -->
+<!-- #                 ~ .x - mean(.x, na.rm = TRUE))) %>%  -->
+<!-- #     ggplot(aes(x = bill_length_mm, -->
+<!-- #              y = bill_depth_mm, -->
+<!-- #              colour = species)) + -->
+<!-- #   geom_point() + -->
+<!-- #   geom_smooth(method = "lm") -->
+<!-- # ``` -->
+<!-- #  -->
+<!-- # hurrah! That looks right to me. Now all values are around 0, and we can clearly see that the relationship between bill length and depth is pretty much the same between the species.  -->
 
-Break it down. First we group the data, then we mutate across all columns starting with "bill", and applying a strange function.
 
-Remember how when you renamed the columns you learned about the across functions internal name for the column `.col`. Across also stores the input vector in the same way in a vector called `.x`. So when we create our own specification of what we want across to do (rather than applying a function like `scale`), we use the  tilde `~` which allows us to use this internal `.x` vector to specify our wanted behaviour.
-When we demean data, we take the value and subtract the mean of the entire vector from that value. That means values larger than the mean stay positive, while values smaller than the mean become negative.
+# Grouping and ungrouping, part two
 
-Let us plot it to see if it did what we expected.
-
-```{r}
-penguins %>% 
-  group_by(species) %>% 
-  mutate(across(starts_with("bill"),
-                ~ .x - mean(.x, na.rm = TRUE))) %>% 
-    ggplot(aes(x = bill_length_mm,
-             y = bill_depth_mm,
-             colour = species)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-```
-
-hurrah! That looks right to me. Now all values are around 0, and we can clearly see that the relationship between bill length and depth is pretty much the same between the species. 
-
-
-## **Challenge 5.** {.tabset}
-
-You can run assignments in your own RStudio, or run the third challenge in the mutating tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("003-mutating", "swc.tidyverse")
-```
-(helpers, please paste this into the chat at the right time.)
-
-### Assignment
-
-> **5a**: De-mean the bill length column. Do it in two steps, first by making a column for the species means, then using that data to de-mean the bill length.
-
-> **5b**: Do the same, but now in a single step (i.e. do not store the species mean in its own column)
-
-> **5c**: Based on the code in the previous example, adapt it to be grouped by island in stead of species.
-
-> **5d**: De-mean all the numerical columns, and give them a suffix of "dm".
-
-### Solution
-
-```{r "solutions-5"}
-## 5a
-penguins %>% 
-  group_by(species) %>% 
-  mutate(
-    bill_length_sp_mean = mean(bill_length_mm, na.rm = TRUE),
-    bill_length_cent = bill_length_mm - bill_length_sp_mean
-  ) %>% 
-  select(species, island, starts_with("bill"))
-
-## 5b
-penguins %>% 
-  group_by(species) %>% 
-  mutate(
-    bill_length_cent = bill_length_mm - mean(bill_length_mm, na.rm = TRUE)
-  ) %>% 
-  select(species, island, starts_with("bill"))
-
-## 5c
-penguins %>% 
-  group_by(species) %>% 
-  mutate(
-    across(where(is.numeric),
-           ~ .x - mean(.x, na.rm = TRUE),
-           .names = "{.col}_dm")
-  ) %>% 
-  select(species, where(is.numeric))
-```
-
-## Ungrouping
-
-Now that we have learned to group, its also a good stage to learn to ungroup.
+Now that we have learned to group, its also a good stage to learn to `ungroup()`.
 When data is grouped in R, all operations on it happen in a grouped fashion.
 In most cases, this will not really create any real problems for you, but you might find yourself getting results you were not expecting because the data is grouped when you expect it not to be.
 
@@ -681,10 +470,8 @@ Thankfully, ungrouping data is quite simple.
 ```{r}
 penguins %>% 
   group_by(species) %>% 
-  mutate(
-    bill_length_sp_mean = mean(bill_length_mm, na.rm = TRUE),
-    bill_length_cent = bill_length_mm - bill_length_sp_mean
-  ) %>% 
+  mutate(bill_length_sp_mean = mean(bill_length_mm, na.rm = TRUE),
+         bill_length_cent = bill_length_mm - bill_length_sp_mean) %>% 
   select(species, island, starts_with("bill")) %>% 
   ungroup()
 ```
@@ -692,30 +479,58 @@ penguins %>%
 The last line there ungroups the data. And you can see from the output, that the lines explaining the grouping of the data are now gone.
 If you have been grouping your data and at some point discover things are not happening as expected, remember to ungroup your data! 
 
-## **Challenge 6.** {.tabset}
+# **Grouping and ungrouping, challenges.** {.tabset}
 
-You can run assignments in your own RStudio, or run the third challenge in the mutating tutorial by entering the following in the R console:
-```r
-learnr::run_tutorial("003-mutating", "swc.tidyverse")
-```
 (helpers, please paste this into the chat at the right time.)
 
-### Assignment
+## Assignment
 
-> **6a**: What is the difference in the minimum body mass for the penguins data sat if the data is grouped by species, and when it is ungrouped?
+> **2a**: Center the bill length column. Do it in two steps, first by making a column for the species means, then using that data to center ("de-mean") the bill length.
+>
+> **2b**: Do the same, but now in a single step, *i.e.*, do not store the species mean in its own column.
+>
+> **2c**: Based on the code in the previous example, adapt it to be grouped by island in stead of species.
+>
+> **2d**: Calaculate the centered bill length again, but this time also include a new column `n` with the number of *total* observations (hint: you can use the `n()` function). Why does the inclusion of an `ungroup()` step a difference?
 
-### Solution
+## Solution
 
-```{r "solutions-6"}
-## 6a
+```{r "solutions-2"}
+## 2a
 penguins %>% 
   group_by(species) %>% 
+  mutate(bill_length_sp_mean = mean(bill_length_mm, na.rm = TRUE),
+         bill_length_cent = bill_length_mm - bill_length_sp_mean) %>% 
+  select(species, island, starts_with("bill"))
+
+## 2b
+penguins %>% 
+  group_by(species) %>% 
+  mutate(bill_length_cent = bill_length_mm - mean(bill_length_mm, na.rm = TRUE)) %>% 
+  select(species, island, starts_with("bill"))
+
+## 2c
+penguins %>% 
+  group_by(island) %>% 
+  mutate(bill_length_cent = bill_length_mm - mean(bill_length_mm, na.rm = TRUE)) %>% 
+  select(species, island, starts_with("bill"))
+
+## 2d
+penguins %>% 
+  group_by(species) %>% 
+  mutate(body_mass_cent = body_mass_g - mean(body_mass_g, na.rm = TRUE),
+         n = n()) %>% 
+  select(species, island, year, starts_with("body_mass"), n)
+
+penguins %>% 
+  group_by(species) %>% 
+  mutate(body_mass_cent = body_mass_g - mean(body_mass_g, na.rm = TRUE)) %>% 
   ungroup() %>% 
-  mutate(
-    body_mass_min = min(body_mass_g, na.rm = TRUE)
-  )
+  mutate(n = n()) %>% 
+  select(species, island, year, starts_with("body_mass"), n)
 ```
 
-## Wrap up
-Now we've learned a little about adding and altering variables in data sets using dplyr's `mutate` function. Both alone, and also together with `across` and `group_by`. 
+# Wrap up
+
+Now we've learned a little about adding and altering variables in data sets using {dplyr}'s `mutate()` function. Both alone, and also together with `across()` and `group_by()`. 
 You should be able to play around with the examples provided and learn more about how things work through trial and error. 
