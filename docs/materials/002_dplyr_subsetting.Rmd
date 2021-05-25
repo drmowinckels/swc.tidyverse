@@ -146,19 +146,18 @@ select(penguins, where(is.factor))
 
 # **Selecting columns, challenges** {.tabset}
 
+Room: break-out  
+Duration: 10 minutes  
+
 (helpers, please paste this into the chat at the right time.)
 
 ## Assignment
 
-Room: break-out  
-Duration: 10minutes  
-
+> **1a**: Select only the columns that are factors from the `penguins` data set.
 >
-> **1a**: Select from the penguins data set only columns that are factors.
+> **1b**: Select only the columns from the `penguins` data set that end with `"mm"`.
 >
-> **1b**: Now we lost flipper length! To make sure we keep flipper length, instead select columns what end with "mm".
->
-> **1c**: Now select the columns island, species, and all numeric columns
+> **1c**: Select the columns `island`, `species`, as well as all numeric columns from the `penguins` data set.
 
 ## Solution
 
@@ -243,19 +242,18 @@ By combining AND and OR statements this way, we can slowly create the filtering 
 
 # **Filtering rows, challenges** {.tabset}
 
+Room: break-out  
+Duration: 10 minutes  
+
 (helpers, please paste this into the chat at the right time.)
 
 ## Assignment
 
-Room: Break-out  
-Curation: 5 minutes
-
+> **2a**: Using a comma (`,`), each expression must be `TRUE` for the end result. Choose all data where `flipper_length_mm` is larger than or equal to `180`, and the `species` is `"Gentoo"`.
 >
-> **2a**: Using a comma (','), each expression must be TRUE for the end result. Choose all data where flipper length is larger or equal to 180, and the species is "Gentoo"
+> **2b**: Modify assignment 2, using the and sign (`&`) instead of a comma.
 >
-> **2b**: Do the same using the `&` (and)  sign.
->
-> **2c**: Filter the penguins data so that you have either chinstrap penguins, or penguins with body mass below or equal to 3 kilos.
+> **2c**: Filter the penguins data set so that you have either `"Chinstrap"` penguins, or penguins with `body_mass_g` smaller than or equal to 3 kilos.
 
 ## Solution
 
@@ -392,15 +390,18 @@ penguins %>%
 
 # **Sorting rows, challenges** {.tabset}
 
+Room: break-out  
+Duration: 10 minutes  
+
 (helpers, please paste this into the chat at the right time.)
 
 ## Assignment
+
+> **3a**: Arrange the penguins data set by `body_mass_g`.
 >
-> **3a**: Arrange the penguins data by body mass.
+> **3b**: Arrange the penguins data set by descending order of `flipper_length_mm`.
 >
-> **3b**: Arrange the penguins data by descending order of flipper length.
->
-> **3c**: You can arrange on multiple columns. Try arranging the data by ascending island and descending flipper length, using a comma between the two arguments.
+> **3c**: You can arrange on multiple columns! Try arranging the penguins data set by ascending `island` and descending `flipper_length_mm`, using a comma between the two arguments.
 
 ## Solution
 
@@ -415,8 +416,7 @@ penguins %>%
 
 ## 3c
 penguins %>% 
-  arrange(island,
-          desc(flipper_length_mm))
+  arrange(island, desc(flipper_length_mm))
 ```
 
 
