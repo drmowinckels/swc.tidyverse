@@ -134,33 +134,6 @@ That shows us clearly that we have grouped the penguins based on their size. But
 
 In R, missing values are usually given the value `NA` which stands for `Not applicable`, *i.e.*, missing data. This is a very special name in R. Like `TRUE` and `FALSE` are capitalized, RStudio immediately recognizes the combination of capital letters and gives it another color than all other values. 
 
-<!-- Let us just explore that a bit. -->
-
-<!-- `NA` is great, because it can be used in any vector as a missing value placeholder. Remember we mentioned yesterday that a column in a data set must contain all the same type of data. Either factor, or numeric, or string etc. It cannot be a combination. So missing values must be something a little special, to still fit into all those categories. Let us do a couple of tests. -->
-
-<!-- We will use the `c` function in R to create new vectors. It stands for either "combine" or "concatenate". -->
-
-<!-- ```{r} -->
-<!-- c("this", "is", "a", "string", "vector" ,NA) -->
-<!-- c(1:4, NA, 5:8) -->
-<!-- factor(c("fct1", "fct2", NA)) -->
-<!-- ``` -->
-
-<!-- Notice how the `NA` is never quoted, its displayed in plain letters. This lets us know its not stored as a string, but as a special `NA` missing value. We will come across this `NA` especially tomorrow when we create summaries. -->
-
-<!-- Since it's not quoted we can also not look for it like a string, and we also cannot look for it with an equals. `NA`'s are special, and therefore have their own function to locate them. -->
-
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   filter(body_mass_g == "NA") -->
-
-<!-- penguins %>%  -->
-<!--   filter(body_mass_g == NA) -->
-
-<!-- penguins %>%  -->
-<!--   filter(is.na(body_mass_g)) -->
-<!-- ``` -->
-
 
 # Adding new variables, part three
 
@@ -207,25 +180,7 @@ penguins %>%
   select(starts_with("bill"))
 ```
 
-<!-- OK, so it worked we think. Let's plot it to see if we agree. -->
-
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   mutate( -->
-<!--     bill_ratio = bill_depth_mm/bill_length_mm, -->
-<!--     bill_type = if_else(bill_ratio < .35,  -->
-<!--                        "elongated",  -->
-<!--                        if_else(bill_ratio < .45,  -->
-<!--                               "normal", -->
-<!--                               "stumped")) -->
-<!--   ) %>%  -->
-<!--   ggplot(aes(x = bill_length_mm,  -->
-<!--              y = bill_depth_mm,  -->
-<!--              colour = bill_type)) + -->
-<!--   geom_point() -->
-<!-- ``` -->
-
-that looks good, but the code is horrible! And what if you have even more conditionals? Thankfully, {dplyr} has a smarter way of doing this, called `case_when()`. This function is similar to `if_else()`, but where you specify what each condition should be assigned.
+what if you have even more conditionals? Thankfully, {dplyr} has a smarter way of doing this, called `case_when()`. This function is similar to `if_else()`, but where you specify what each condition should be assigned.
 On the left you have the logical expression, and the on the right of the tilde (`~`) is the value to be assigned if that expression is `TRUE`
 
 ```{r}
@@ -312,22 +267,20 @@ Now they are all there! neat! But that `.names` argument is a little weird. What
 
 Internally, `across()` stores the column names in a vector it calls `.col`. We can use this knowledge to tell the across function what to name our new columns. In this case, we want to append the column name with `_sc`. 
 
-# **Adding new variables, challenges** {.tabset}
+## **Adding new variables, challenges** {.tabset}
+### Assignment
 
-Room: break-out  
-Duration: 10 minutes
+Room: Break-out  
+Duration: 10 minutes  
 
-(helpers, please paste this into the chat at the right time.)
-
-## Assignment
 >
 > **1a**: Create a column named `bill_ld_ratio_log` that is the natural logarithm (using the `log()` function) of `bill_length_mm` divided by `bill_depth_mm`
 >
 > **1b**: Create a new column called `body_type`, where animals below 3 kg are `small`, animals between 3 and 4.5 kg are `normal`, and animals larger than 4.5 kg are `large`. In the same command, create a new column named `biscoe` and its content should be `TRUE` if the island is `Biscoe` and `FALSE` for everything else.
 >
-> **1c**: Transform all the columns with milimetres measurements so they are scaled, and the _prefix_ `sc_` is added to the columns names.
+> **1c**: Transform all the colmns with milimetres measurements so they are scaled, and add the _prefix_ `sc_` to the columns names.
 
-## Solution
+### Solution
 
 ```{r "solutions-1"}
 ## 1a
@@ -431,35 +384,6 @@ penguins %>%
 ```
 
 This looks quite similar between the species. 
-<!-- But they are on slightly different scales, and we'd like an even clearer comparison basis.  -->
-
-<!-- # ```{r} -->
-<!-- # penguins %>%  -->
-<!-- #   group_by(species) %>%  -->
-<!-- #   mutate(across(.cols = starts_with("bill"), -->
-<!-- #                 .fns = ~ .x - mean(.x, na.rm = TRUE))) -->
-<!-- # ``` -->
-<!-- #  -->
-<!-- # Break it down. First we group the data, then we mutate across all columns starting with "bill", and applying a strange function. -->
-<!-- #  -->
-<!-- # Remember how when you renamed the columns you learned about the across functions internal name for the column `.col`. Across also stores the input vector in the same way in a vector called `.x`. So when we create our own specification of what we want across to do (rather than applying a function like `scale`), we use the  tilde `~` which allows us to use this internal `.x` vector to specify our wanted behaviour. -->
-<!-- # When we demean data, we take the value and subtract the mean of the entire vector from that value. That means values larger than the mean stay positive, while values smaller than the mean become negative. -->
-<!-- #  -->
-<!-- # Let us plot it to see if it did what we expected. -->
-<!-- #  -->
-<!-- # ```{r} -->
-<!-- # penguins %>%  -->
-<!-- #   group_by(species) %>%  -->
-<!-- #   mutate(across(starts_with("bill"), -->
-<!-- #                 ~ .x - mean(.x, na.rm = TRUE))) %>%  -->
-<!-- #     ggplot(aes(x = bill_length_mm, -->
-<!-- #              y = bill_depth_mm, -->
-<!-- #              colour = species)) + -->
-<!-- #   geom_point() + -->
-<!-- #   geom_smooth(method = "lm") -->
-<!-- # ``` -->
-<!-- #  -->
-<!-- # hurrah! That looks right to me. Now all values are around 0, and we can clearly see that the relationship between bill length and depth is pretty much the same between the species.  -->
 
 
 # Grouping and ungrouping, part two
@@ -482,14 +406,11 @@ penguins %>%
 The last line there ungroups the data. And you can see from the output, that the lines explaining the grouping of the data are now gone.
 If you have been grouping your data and at some point discover things are not happening as expected, remember to ungroup your data! 
 
-# **Grouping and ungrouping, challenges.** {.tabset}
+## **Grouping and ungrouping, challenges.** {.tabset}
+### Assignment
 
 Room: break-out  
-Duration: 15 minutes
-
-(helpers, please paste this into the chat at the right time.)
-
-## Assignment
+Duration: 10 minutes
 
 > **2a**: Center the `bill_length_mm` column for each `species`. Do it in two steps, first by making a column for the species means, then using that data to center ("de-mean") the bill length.
 >
@@ -499,7 +420,7 @@ Duration: 15 minutes
 >
 > **2d**: Calaculate the centered `body_mass_g` for each `species`, but also include a new column `n` with the number of *total* observations (hint: you can use the `n()` function). Why does the inclusion of an `ungroup()` step make a difference?
 
-## Solution
+### Solution
 
 ```{r "solutions-2"}
 ## 2a

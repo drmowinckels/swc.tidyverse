@@ -30,85 +30,6 @@ knitr::opts_chunk$set(echo = TRUE)
 > To be able to apply multiple functions to a single summary call to create complex summaries quickly.
 
 
-
-<!-- ## Short recap of previous sessions {.tabset} -->
-
-<!-- Welcome back to the second day! Yesterday we covered how to use ggplot to create publication quality visualisations, and dplyr to subset our data.  -->
-<!-- Let's just look at a couple of exmples of what we did. -->
-
-<!-- ### ggplot2 1 -->
-
-<!-- ```{r} -->
-<!-- library(tidyverse) -->
-<!-- penguins <- palmerpenguins::penguins -->
-
-<!-- penguins %>%  -->
-<!--   ggplot(aes(x = bill_length_mm, -->
-<!--              y = bill_depth_mm, -->
-<!--              colour = species)) + -->
-<!--   geom_jitter() + -->
-<!--   geom_smooth(method = "lm") +  -->
-<!--   geom_smooth(method = "lm", colour = "black") -->
-<!-- ``` -->
-
-<!-- ### ggplot2 2 -->
-
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   ggplot(aes(x = bill_length_mm, -->
-<!--              y = bill_depth_mm, -->
-<!--              colour = species)) + -->
-<!--   geom_density2d() + -->
-<!--   labs( -->
-<!--     title = "Penguin bill length and depth association", -->
-<!--     subtitle = "of three species of penguin", -->
-<!--     color = "Species",  -->
-<!--     y = "Bill depth (mm)", -->
-<!--     x = "Bill length (mm)", -->
-<!--     caption = "Source: DOI 10.1371/journal.pone.0090081" -->
-<!--   ) -->
-<!-- ``` -->
-
-<!-- ### reading in data -->
-<!-- ```{r} -->
-<!-- penguin_path <- palmerpenguins::path_to_file("penguins.csv" ) -->
-<!-- read_csv(penguin_path) -->
-<!-- ``` -->
-
-<!-- ### mutating 1 -->
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   mutate( -->
-<!--     bill_ratio = bill_depth_mm/bill_length_mm, -->
-<!--     bill_type = if_else(bill_ratio < .5, "elongated", "stumped") -->
-<!--   ) %>%  -->
-<!--   select(starts_with("bill")) -->
-<!-- ``` -->
-
-<!-- ### mutating 2 -->
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   mutate(across(ends_with("mm"), -->
-<!--                 scale,  -->
-<!--                 .names = "sc_{.col}")) %>%  -->
-<!--   select(contains("mm")) -->
-<!-- ``` -->
-
-<!-- ### pivot longer -->
-<!-- ```{r} -->
-<!-- penguins_long_simple <- penguins %>%  -->
-<!--   mutate(sample = row_number()) %>%  -->
-<!--   pivot_longer(starts_with("bill")) -->
-<!-- penguins_long_simple -->
-<!-- ``` -->
-
-<!-- ### pivot wider -->
-<!-- ```{r} -->
-<!-- penguins_long_simple %>%  -->
-<!--   pivot_wider(names_from = name, -->
-<!--               values_from = value) -->
-<!-- ``` -->
-
 # Data summaries
 
 Next to visualizing data, creating summaries of the data in tables is a quick way to get an idea of what type of data you have at hand. It might help you spot incorrect data or extreme values, or whether specific analysis approaches are needed.
@@ -166,13 +87,11 @@ penguins %>%
 ```
 
 # **Data summaries, challenges.** {.tabset}
+## Assignment
 
 Room: break-out  
 Duration: 10 minutes
 
-(helpers, please paste this into the chat at the right time.)
-
-## Assignment
 >
 > **1a**: First start by trying to summarise a single column, `bill_length_mm` by calculating its mean.
 >
@@ -266,13 +185,11 @@ But remember, this trick only works when using functions that have this same arg
 
 
 # **Summarizing multiple columns, challenges.** {.tabset}
+## Assignment
 
 Room: break-out  
-Duration: 10 minutes
+Duration: 10 minutes  
 
-(helpers, please paste this into the chat at the right time.)
-
-## Assignment
 >
 > **2a**: Calculate the mean of all columns containing an underscore ("_")
 >
@@ -336,43 +253,6 @@ penguins %>%
 Now we are suddenly able to easily compare groups within our data, since they are so neatly summarized here. 
 
 
-<!-- ## **Challenge 3.** {.tabset} -->
-
-<!-- (helpers, please paste this into the chat at the right time.) -->
-
-<!-- ### Assignment -->
-<!-- > -->
-<!-- > **3a**: Group the data by species and get the mean of the `bill_length_mm` column -->
-<!-- > -->
-<!-- > **3b**: Group the data by island instead, and take the summary of the bill length and bill depth columns -->
-<!-- > -->
-<!-- > **3c**: Group the data by island AND species, what happened?  -->
-<!-- > -->
-
-<!-- ### Solution -->
-
-<!-- ```{r "solutions-3"} -->
-<!-- ## 3a -->
-<!-- penguins %>%  -->
-<!--   drop_na(bill_length_mm) %>%  -->
-<!--   group_by(species) %>%  -->
-<!--   summarise(mean(bill_length_mm)) -->
-
-<!-- # 3b -->
-<!-- penguins %>%  -->
-<!--   group_by(island) %>%  -->
-<!--   summarise(bill_length_mm = mean(bill_length_mm, na.rm = TRUE), -->
-<!--             bill_depth_mm = mean(bill_depth_mm, na.rm = TRUE)) -->
-
-<!-- ## 3c -->
-<!-- penguins %>%  -->
-<!--   group_by(island, species) %>%  -->
-<!--   summarise( -->
-<!--     bill_length_mm = mean(bill_length_mm, na.rm = TRUE), -->
-<!--     bill_depth_mm = mean(bill_depth_mm, na.rm = TRUE) -->
-<!--   ) -->
-<!-- ``` -->
-
 Since we know how to apply the group by function now, we should also be able to apply it before summarizing across columns. There is no real difference in the summarize function with or without the across. It basically does the same. So let us also try summarizing based on groups using across!
 Before we had this code:
 
@@ -415,13 +295,11 @@ Look at the last column `n`! Now, together with all the bill column and function
 
 
 # **Summarizing grouped data, challenges.** {.tabset}
+## Assignment
 
 Room: break-out  
-Duration: 10 minutes
+Duration: 10 minutes  
 
-(helpers, please paste this into the chat at the right time.)
-
-## Assignment
 >
 > **3a**: Get the descriptive statistics (*i.e.*, `mean`, `sd`, `min` and `max`) for all the columns ending with `"mm"`, for each `species`. Also add a count of how many observations there are of each species in a column named `n`. 
 >
@@ -464,6 +342,7 @@ penguins %>%
   group_by(species) %>% 
   summarise(n = n())
 ```
+
 When we group by a single column and summarize, the output data is no longer grouped. In a way, the `summarize()` uses up one group while summarizing, as based on species, the data can not be condensed any further than this.
 
 ```{r}
@@ -471,6 +350,7 @@ penguins %>%
   group_by(species, island) %>% 
   summarise(n = n())
 ```
+
 When we group by two columns, it actually has the same behavior. But because we used to have two groups, we now are left with one. In this case "species" is still a  grouping variable. Lets say we want a column now, that counts the total number of penguins observations. That would be the sum of the "n" column.
 
 ```{r}
@@ -490,111 +370,3 @@ penguins %>%
   mutate(N = sum(n))
 ```
 
-<!-- # Pivoting summaries to get better overview -->
-
-<!-- We now have outputs with lots of information, but its not in the tidiest format. There are just so many columns! We keep having to change lines to see more and more output, and this is just not convenient. We would like to create a more condensed table, but still retaining all the information. We learned about pivoting tables yesterday, so we could to that to our summaries too! -->
-
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   group_by(species, island, sex) %>%  -->
-<!--   summarise(across(.cols = ends_with("mm"),  -->
-<!--                    .fns = list("mean" = mean, -->
-<!--                                "sd" = sd, -->
-<!--                                "min" = min, -->
-<!--                                "max" = max),  -->
-<!--                    na.rm = TRUE), -->
-<!--             n = n()) %>%  -->
-<!--   ungroup() %>%  -->
-<!--   pivot_longer(cols = contains("mm")) -->
-<!-- ``` -->
-
-<!-- OK, so now everything is back into this pivoting format where things are in two columns. That is still not very satisfactory though. Let's try to make it better. The naming of columns is still very convenient, so let us try to split the `name` column up like we did yesterday.  -->
-
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   group_by(species, island, sex) %>%  -->
-<!--   summarise(across(.cols = ends_with("mm"),  -->
-<!--                    .fns = list("mean" = mean, -->
-<!--                                "sd" = sd, -->
-<!--                                "min" = min, -->
-<!--                                "max" = max),  -->
-<!--                    na.rm = TRUE), -->
-<!--             n = n()) %>%  -->
-<!--   ungroup() %>% -->
-<!--   pivot_longer(cols = contains("mm"), -->
-<!--                names_to = c("part", "measurement", "unit", "stat"), -->
-<!--                names_sep = "_") -->
-<!-- ``` -->
-
-<!-- OK, it's slightly better, but its still not convenient. Ideally, we'd like the different statistics as different columns, and have the rest in rows. Now that we have split the columns up, we have a column with _just_ the statistics names. Lets try pivoting wider again, using that column to create the column names, -->
-
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   group_by(species, island, sex) %>%  -->
-<!--   summarise(across(.cols = ends_with("mm"),  -->
-<!--                    .fns = list("mean" = mean, -->
-<!--                                "sd" = sd, -->
-<!--                                "min" = min, -->
-<!--                                "max" = max),  -->
-<!--                    na.rm = TRUE), -->
-<!--             n = n()) %>%  -->
-<!--   ungroup() %>% -->
-<!--   pivot_longer(cols = contains("mm"), -->
-<!--                names_to = c("part", "measurement", "unit", "stat"), -->
-<!--                names_sep = "_") %>%  -->
-<!--   pivot_wider(names_from = stat,  -->
-<!--               values_from  = value) -->
-<!-- ``` -->
-
-<!-- Look at that! Its starting to become so much better! Now each grouping combination and type of measurement is in its own row, but each summary statistic is in different columns. Slowly, the data are becoming more easy to compare.  -->
-
-
-<!-- # **Pivoting summaries, challenges.** {.tabset} -->
-
-<!-- Room: break-out   -->
-<!-- Duration: 10 minutes -->
-
-<!-- (helpers, please paste this into the chat at the right time.) -->
-
-<!-- ## Assignment -->
-<!-- > -->
-<!-- > **4a**: Pivot longer a grouped summary over species, island and sex for the columns containing underscores, with the metrics mean, standard deviation, minimum and maximum values, as well as the total number of observations per group. When you pivot the data, split the column names up into 4 parts describing the part, measurement, unit and statistic used.  -->
-<!-- > -->
-<!-- > **4b**: Add to the code you just wrote and pivot the data wider again by the statistic column. -->
-<!-- > -->
-
-<!-- ## Solution -->
-
-<!-- ```{r "solutions-5"} -->
-<!-- ## 5a -->
-<!-- penguins %>%  -->
-<!--   group_by(species, island, sex) %>%  -->
-<!--   summarise(across(.cols = contains("_"),  -->
-<!--                    .fns = list("mean" = mean, -->
-<!--                                "sd" = sd, -->
-<!--                                "min" = min, -->
-<!--                                "max" = max),  -->
-<!--                    na.rm = TRUE), -->
-<!--             n = n()) %>%  -->
-<!--   ungroup() %>%  -->
-<!--   pivot_longer(cols = contains("_"), -->
-<!--                names_to = c("part", "measurement", "unit", "stat"), -->
-<!--                names_sep = "_")  -->
-
-<!-- # 5b -->
-<!-- penguins %>%  -->
-<!--   group_by(species, island, sex) %>%  -->
-<!--   summarise(across(.cols = contains("_"),  -->
-<!--                    .fns = list("mean" = mean, -->
-<!--                                "sd" = sd, -->
-<!--                                "min" = min, -->
-<!--                                "max" = max),  -->
-<!--                    na.rm = TRUE), -->
-<!--             n = n()) %>%  -->
-<!--   ungroup() %>%  -->
-<!--   pivot_longer(cols = contains("_"), -->
-<!--                names_to = c("part", "measurement", "unit", "stat"), -->
-<!--                names_sep = "_") %>%  -->
-<!--   pivot_wider(names_from = stat,  -->
-<!--               values_from  = value) -->
-<!-- ``` -->
