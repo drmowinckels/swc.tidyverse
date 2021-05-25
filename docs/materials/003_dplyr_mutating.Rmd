@@ -312,19 +312,20 @@ Now they are all there! neat! But that `.names` argument is a little weird. What
 
 Internally, `across()` stores the column names in a vector it calls `.col`. We can use this knowledge to tell the across function what to name our new columns. In this case, we want to append the column name with `_sc`. 
 
-# **Adding new variables, challenges** {.tabset}
+## **Adding new variables, challenges** {.tabset}
+### Assignment
 
-(helpers, please paste this into the chat at the right time.)
+Room: Break-out  
+Duration: 10 minutes  
 
-## Assignment
 >
 > **1a**: Create a column named `bill_ld_ratio_log` that is the natural logarithm (using the `log()` function) of `bill_length_mm` divided by `bill_depth_mm`
 >
 > **1b**: Create a new column called `body_type`, where animals below 3 kg are `small`, animals between 3 and 4.5 kg are `normal`, and animals larger than 4.5 kg are `large`. In the same command, create a new column named `biscoe` and its content should be `TRUE` if the island is `Biscoe` and `FALSE` for everything else.
 >
-> **1c**: Transform all the colmns with milimetres measurements so they are scaled, and the _prefix_ `sc_` to the columns names.
+> **1c**: Transform all the colmns with milimetres measurements so they are scaled, and add the _prefix_ `sc_` to the columns names.
 
-## Solution
+### Solution
 
 ```{r "solutions-1"}
 ## 1a
@@ -479,11 +480,12 @@ penguins %>%
 The last line there ungroups the data. And you can see from the output, that the lines explaining the grouping of the data are now gone.
 If you have been grouping your data and at some point discover things are not happening as expected, remember to ungroup your data! 
 
-# **Grouping and ungrouping, challenges.** {.tabset}
+## **Grouping and ungrouping, challenges.** {.tabset}
 
-(helpers, please paste this into the chat at the right time.)
+### Assignment
 
-## Assignment
+Room: break-out  
+Duration: 10 minutes
 
 > **2a**: Center the bill length column. Do it in two steps, first by making a column for the species means, then using that data to center ("de-mean") the bill length.
 >
@@ -491,9 +493,9 @@ If you have been grouping your data and at some point discover things are not ha
 >
 > **2c**: Based on the code in the previous example, adapt it to be grouped by island in stead of species.
 >
-> **2d**: Calaculate the centered bill length again, but this time also include a new column `n` with the number of *total* observations (hint: you can use the `n()` function). Why does the inclusion of an `ungroup()` step a difference?
+> **2d**: Calaculate the centered bill length again, but this time also include a new column `n` with the number of *total* observations (hint: you can use the `n()` function). Why does the inclusion of an `ungroup()` step make a difference?
 
-## Solution
+### Solution
 
 ```{r "solutions-2"}
 ## 2a

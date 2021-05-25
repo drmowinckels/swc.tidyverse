@@ -167,9 +167,11 @@ penguins %>%
 
 # **Data summaries, challenges.** {.tabset}
 
-(helpers, please paste this into the chat at the right time.)
-
 ## Assignment
+
+Room: break-out  
+Duration: 10 minutes
+
 >
 > **1a**: First start by trying to summarise a single column, `bill_length_mm` by calculating its mean.
 >
@@ -264,9 +266,11 @@ But remember, this trick only works when using functions that have this same arg
 
 # **Summarizing multiple columns, challenges.** {.tabset}
 
-(helpers, please paste this into the chat at the right time.)
-
 ## Assignment
+
+Room: break-out  
+Duration: 10 minutes  
+
 >
 > **2a**: Get the mean of all columns containing an underscore ("_")
 >
@@ -410,9 +414,11 @@ Look at the last column `n`! Now, together with all the bill column and function
 
 # **Summarizing grouped data, challenges.** {.tabset}
 
-(helpers, please paste this into the chat at the right time.)
-
 ## Assignment
+
+Room: break-out  
+Duration: 10 minutes  
+
 >
 > **3a**: Get the descriptive statistics (mean, sd, min and max) for all the columns ending with "mm", grouped by species. Add a count of how many observations there are of each species in a column named `n`. 
 >
@@ -499,7 +505,7 @@ penguins %>%
   pivot_longer(cols = contains("mm"))
 ```
 
-Ok so now everything is back into this pivoting format where things are in two columns. Ok, that is still not very satisfactory though. Let's try to make it better. The naming of columns is still very convenient, so let ut try to split the `name` column up like we did yesterday. 
+Ok so now everything is back into this pivoting format where things are in two columns. Ok, that is still not very satisfactory though. Let's try to make it better. The naming of columns is still very convenient, so let us try to split the `name` column up like we did yesterday. 
 
 ```{r}
 penguins %>% 
@@ -542,9 +548,11 @@ Look at that! Its starting to become so much better! Now each grouping combinati
 
 # **Pivoting summaries, challenges.** {.tabset}
 
-(helpers, please paste this into the chat at the right time.)
-
 ## Assignment
+
+Room: break-out  
+Duration: 10 minutes
+
 >
 > **4a**: Pivot longer a grouped summary over species, island and sex for the columns containing underscores, with the metrics mean, standard deviation, minimum and maximum values, as well as the total number of observations per group. When you pivot the data, split the column names up into 4 parts describing the part, measurement, unit and statistic used. 
 >

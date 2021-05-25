@@ -380,9 +380,10 @@ div.tocify {
 </div>
 <div id="data-summaries-challenges." class="section level1 tabset">
 <h1 class="tabset"><strong>Data summaries, challenges.</strong></h1>
-<p>(helpers, please paste this into the chat at the right time.)</p>
 <div id="assignment" class="section level2">
 <h2>Assignment</h2>
+<p>Room: break-out<br />
+Duration: 10 minutes</p>
 <blockquote>
 <p><strong>1a</strong>: First start by trying to summarise a single column, <code>bill_length_mm</code> by calculating its mean.</p>
 <p><strong>1b</strong>: Add a column with the standard deviation of bill length.</p>
@@ -486,9 +487,10 @@ penguins %&gt;%
 </div>
 <div id="summarizing-multiple-columns-challenges." class="section level1 tabset">
 <h1 class="tabset"><strong>Summarizing multiple columns, challenges.</strong></h1>
-<p>(helpers, please paste this into the chat at the right time.)</p>
 <div id="assignment-1" class="section level2">
 <h2>Assignment</h2>
+<p>Room: break-out<br />
+Duration: 10 minutes</p>
 <blockquote>
 <p><strong>2a</strong>: Get the mean of all columns containing an underscore (&quot;_&quot;)</p>
 <p><strong>2b</strong>: Get the mean, minimum and maximum of all columns containing an underscore (&quot;_&quot;)</p>
@@ -637,9 +639,10 @@ penguins %&gt;%
 </div>
 <div id="summarizing-grouped-data-challenges." class="section level1 tabset">
 <h1 class="tabset"><strong>Summarizing grouped data, challenges.</strong></h1>
-<p>(helpers, please paste this into the chat at the right time.)</p>
 <div id="assignment-2" class="section level2">
 <h2>Assignment</h2>
+<p>Room: break-out<br />
+Duration: 10 minutes</p>
 <blockquote>
 <p><strong>3a</strong>: Get the descriptive statistics (mean, sd, min and max) for all the columns ending with “mm”, grouped by species. Add a count of how many observations there are of each species in a column named <code>n</code>.</p>
 <p><strong>3b</strong>: Try grouping by more variables. Like sex, or island. or add more summary variables.</p>
@@ -787,7 +790,7 @@ penguins %&gt;%
 ##  9 Adelie  Biscoe female    22 flipper_length_mm_mean 187.  
 ## 10 Adelie  Biscoe female    22 flipper_length_mm_sd     6.74
 ## # … with 146 more rows</code></pre>
-<p>Ok so now everything is back into this pivoting format where things are in two columns. Ok, that is still not very satisfactory though. Let’s try to make it better. The naming of columns is still very convenient, so let ut try to split the <code>name</code> column up like we did yesterday.</p>
+<p>Ok so now everything is back into this pivoting format where things are in two columns. Ok, that is still not very satisfactory though. Let’s try to make it better. The naming of columns is still very convenient, so let us try to split the <code>name</code> column up like we did yesterday.</p>
 <pre class="r"><code>penguins %&gt;% 
   group_by(species, island, sex) %&gt;% 
   summarise(across(.cols = ends_with(&quot;mm&quot;), 
@@ -851,9 +854,10 @@ penguins %&gt;%
 </div>
 <div id="pivoting-summaries-challenges." class="section level1 tabset">
 <h1 class="tabset"><strong>Pivoting summaries, challenges.</strong></h1>
-<p>(helpers, please paste this into the chat at the right time.)</p>
 <div id="assignment-3" class="section level2">
 <h2>Assignment</h2>
+<p>Room: break-out<br />
+Duration: 10 minutes</p>
 <blockquote>
 <p><strong>4a</strong>: Pivot longer a grouped summary over species, island and sex for the columns containing underscores, with the metrics mean, standard deviation, minimum and maximum values, as well as the total number of observations per group. When you pivot the data, split the column names up into 4 parts describing the part, measurement, unit and statistic used.</p>
 <p><strong>4b</strong>: Add to the code you just wrote and pivot the data wider again by the statistic column.</p>
