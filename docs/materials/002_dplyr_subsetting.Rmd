@@ -149,6 +149,10 @@ select(penguins, where(is.factor))
 (helpers, please paste this into the chat at the right time.)
 
 ## Assignment
+
+Room: break-out  
+Duration: 10minutes  
+
 >
 > **1a**: Select from the penguins data set only columns that are factors.
 >
@@ -163,7 +167,7 @@ select(penguins, where(is.factor))
 select(penguins, where(is.factor))
 
 # 1b
-select(penguins, where(is.integer))
+select(penguins, ends_with("mm"))
 
 ## 1c
 select(penguins, island, species, where(is.numeric))
@@ -242,6 +246,10 @@ By combining AND and OR statements this way, we can slowly create the filtering 
 (helpers, please paste this into the chat at the right time.)
 
 ## Assignment
+
+Room: Break-out  
+Curation: 5 minutes
+
 >
 > **2a**: Using a comma (','), each expression must be TRUE for the end result. Choose all data where flipper length is larger or equal to 180, and the species is "Gentoo"
 >
@@ -265,7 +273,7 @@ filter(penguins,
 ## 2c
 filter(penguins, 
        species == "Chinstrap" | 
-         body_mass_g < 3000)
+         body_mass_g <= 3000)
 ```
 
 
@@ -321,7 +329,7 @@ chinstraps <- penguins %>%
   select(-starts_with("bill"))
 ```
 
-The end result is the same, but there is less typing and we can "read" the pipeline of data subsetting more like language, if we know how. You can read the pipe operator as "and then". 
+The end result is the same, but there is less typing and we can "read" the pipeline of data subsetting more like language, if we know how. You can read the pipe operator as **"and then"**. 
 
 So if we translate the code above to human language we could read it as:
 

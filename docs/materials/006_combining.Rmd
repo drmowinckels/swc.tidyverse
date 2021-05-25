@@ -101,8 +101,10 @@ SO we substitute the tidy selector with just the name of the column  we want to 
 
 ## **Challenge 1.** {.tabset}
 ### Assignment
+
 Room: break-out  
 Duration: 10 minutes
+
 >
 > **1a**: In our new summary function, alter the code so that the columns are no longer prefixed with `value_`. 
 >
@@ -289,8 +291,10 @@ penguins_sum %>%
 
 ## **Challenge 3.** {.tabset}
 ### Assignment
+
 Room: plenary  
 Duration: 5 minutes
+
 >
 > **3a**: Try pivoting the data even longer! Pivot longer all the stats columns so that the column names are in a column named "stat". Now, create another plot using the "value" column on the y-axis, and creating subplots based on both the observation name AND the stat!
 >
@@ -371,6 +375,7 @@ penguins_sum %>%
 
 ## **Challenge 4.** {.tabset}
 ### Assignment
+
 Room: break-out  
 Duration: 10 minutes
 

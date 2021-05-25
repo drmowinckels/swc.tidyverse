@@ -106,6 +106,7 @@ Note that in order to create a plot using `ggplot2` system, you should start you
 
 ## **Challenge 1.** {.tabset}
 ### Assignment
+
 Room: plenary  
 Duration: 5 minutes
 
@@ -153,6 +154,7 @@ ggplot(data = penguins) +
 
 ## **Challenge 2.** {.tabset}
 ### Assignment
+
 Room: break-out   
 Duration: 10 minutes
 
@@ -229,8 +231,10 @@ Once more, observe that the colour is now not mapped to any particular variable 
 
 ## **Challenge 4.** {.tabset}
 ### Assignment
+
 Room: break-out   
 Duration: 10 minutes
+
 > 
 > **4a**: Change the transparency (alpha) of the data points by year. 
 > _Hint: `alpha` takes a value from 0 (transparent) to 1 (solid).
@@ -260,23 +264,9 @@ Controlling the transparency can be a great way to "mute" the visual effect of c
 
 # Geometrical objects
 
-Next, we will consider different options for `geoms`. Using different `geom_` functions user can highlight different aspects of data. For example, we could connect individual data points belonging to the same species into a line and illustrate the development of body mass over time for each species separately using `geom_line()` function. 
+Next, we will consider different options for `geoms`. Using different `geom_` functions user can highlight different aspects of data. 
 
-Some `geom_` functions allow additional aesthetics, such as aesthetic `group` in the `geom_line()` function. This aesthetic may not have any meaning in other geoms, but here it allows us to draw multiple lines, one per species. To keep the lines organized, we will colour them by island. 
-
-```{r}
-ggplot(data = penguins) + 
-  geom_line(
-    mapping = aes(x = bill_depth_mm, 
-                  y = bill_length_mm, 
-                  group = species, 
-                  colour = species)
-  )
-```
-
-That looks crazy! Line plots are not ideal for this data, as there are multiple lines per species and year, so the lines do not line up nicely.
-
-Another useful geom function is `geom_boxplot()`. It adds a layer with the "box and whiskers" plot illustrating the distribution of values within categories. The following chart breaks down bill length by island, where the box represents first and third quartile (the 25th and 75th percentiles), the middle bar signifies the median value and the whiskers extent to cover 95% confidence interval. Outliers (outside of the 95% confidence interval range) are shown separately.
+A useful geom function is `geom_boxplot()`. It adds a layer with the "box and whiskers" plot illustrating the distribution of values within categories. The following chart breaks down bill length by island, where the box represents first and third quartile (the 25th and 75th percentiles), the middle bar signifies the median value and the whiskers extent to cover 95% confidence interval. Outliers (outside of the 95% confidence interval range) are shown separately.
 
 ```{r}
 ggplot(data = penguins) + 
@@ -329,8 +319,10 @@ ggplot(data = penguins,
 
 ## **Challenge 5.** {.tabset}
 ### Assignment
+
 Room: Break-out  
 Duration: 10 minutes
+
 > 
 > **5a.** Modify the plot so the the points are coloured by island, but there is a single regression line.
 >

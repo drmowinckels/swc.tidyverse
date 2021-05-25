@@ -119,6 +119,7 @@ penguins <- read_csv(penguin_path)
 
 ## **Challenge 1.** {.tabset}
 ### Assignment
+
 Room: break-out  
 Duration: 10 minutes
 
@@ -223,8 +224,10 @@ That's pretty neat. By pivoting the data into this longer shape we are able to c
 ## **Challenge 2.** {.tabset}
 
 ### Assignment
+
 Room: Plenary  
 Duration: 10 minutes
+
 >
 > **2a**: Pivot longer all columns containing an underscore (_) in their name.
 >
@@ -276,6 +279,7 @@ now, the pivot gave us 4 columns in stead of two! We told pivot that the column 
 
 ## **Challenge 3.** {.tabset}
 ### Assignment
+
 Room: Break-out  
 Duration: 10 minutes
 
@@ -401,8 +405,10 @@ penguins_long
 
 ## **Challenge 4.** {.tabset}
 ### Assignment
+
 Room: plenary  
 Duration: 5 minutes
+
 >
 > **4a**: Turn the penguins_long_simple dataset back to its original state
 >
@@ -439,8 +445,10 @@ Those arguments and inputs should be familiar to the call from pivot_longer. So 
 ## **Challenge 5.** {.tabset}
 
 ### Assignment
+
 Room: break-out  
 Duration: 10 minutes
+
 >
 > **5a**: Turn the penguins_long dataset back to its original state
 >
