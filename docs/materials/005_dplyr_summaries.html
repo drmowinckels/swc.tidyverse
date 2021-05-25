@@ -386,8 +386,8 @@ div.tocify {
 Duration: 10 minutes</p>
 <blockquote>
 <p><strong>1a</strong>: First start by trying to summarise a single column, <code>bill_length_mm</code> by calculating its mean.</p>
-<p><strong>1b</strong>: Add a column with the standard deviation of bill length.</p>
-<p><strong>1c</strong>: Now add the same two metrics for bill depth and give the columns clear names. Why could the <code>drop_na()</code> step give us wrong results?</p>
+<p><strong>1b</strong>: Add a column with the standard deviation of <code>bill_length_mm</code>.</p>
+<p><strong>1c</strong>: Now add the same two metrics for <code>bill_depth_mm</code> and give the columns clear names. Why could the <code>drop_na()</code> step give us wrong results?</p>
 </blockquote>
 </div>
 <div id="solution" class="section level2">
@@ -460,7 +460,7 @@ penguins %&gt;%
 ##   bill_length_mm_mean bill_depth_mm_mean
 ##                 &lt;dbl&gt;              &lt;dbl&gt;
 ## 1                43.9               17.2</code></pre>
-<p>And like with <code>across()</code> before, we can control how the column names are made by the use of the <code>.names</code> argument and knowing the internal placeholders for the names of the columns (<code>.col</code>) and the functions (<code>.fn</code>).</p>
+<p>And like with <code>across()</code> before, we can control how the column names are made by the use of the <code>.names</code> argument and knowing the internal placeholders for the names of the columns (<code>{.col}</code>) and the functions (<code>{.fn}</code>).</p>
 <pre class="r"><code>penguins %&gt;% 
   summarise(across(.cols = starts_with(&quot;bill&quot;),
                    .fns = list(&quot;mean&quot; = mean,
@@ -492,8 +492,8 @@ penguins %&gt;%
 <p>Room: break-out<br />
 Duration: 10 minutes</p>
 <blockquote>
-<p><strong>2a</strong>: Get the mean of all columns containing an underscore (&quot;_&quot;)</p>
-<p><strong>2b</strong>: Get the mean, minimum and maximum of all columns containing an underscore (&quot;_&quot;)</p>
+<p><strong>2a</strong>: Calculate the mean of all columns containing an underscore (&quot;_&quot;)</p>
+<p><strong>2b</strong>: Calculate the mean, minimum and maximum of all columns containing an underscore (&quot;_&quot;)</p>
 </blockquote>
 </div>
 <div id="solution-1" class="section level2">
@@ -644,7 +644,7 @@ penguins %&gt;%
 <p>Room: break-out<br />
 Duration: 10 minutes</p>
 <blockquote>
-<p><strong>3a</strong>: Get the descriptive statistics (mean, sd, min and max) for all the columns ending with “mm”, grouped by species. Add a count of how many observations there are of each species in a column named <code>n</code>.</p>
+<p><strong>3a</strong>: Get the descriptive statistics (<em>i.e.</em>, <code>mean</code>, <code>sd</code>, <code>min</code> and <code>max</code>) for all the columns ending with <code>&quot;mm&quot;</code>, for each <code>species</code>. Also add a count of how many observations there are of each species in a column named <code>n</code>.</p>
 <p><strong>3b</strong>: Try grouping by more variables. Like sex, or island. or add more summary variables.</p>
 </blockquote>
 </div>
@@ -760,172 +760,120 @@ penguins %&gt;%
 ## 3 Adelie    Torgersen    52   344
 ## 4 Chinstrap Dream        68   344
 ## 5 Gentoo    Biscoe      124   344</code></pre>
-</div>
-<div id="pivoting-summaries-to-get-better-overview" class="section level1">
-<h1>Pivoting summaries to get better overview</h1>
-<p>We now have outputs with lots of information, but its not in the tidiest format. There are just so many columns! We keep having to change lines to see more and more output, and this is just not convenient. We would like to create a more condensed table, but still retaining all the information. We learned about pivoting tables yesterday, so we could to that to our summaries too!</p>
-<pre class="r"><code>penguins %&gt;% 
-  group_by(species, island, sex) %&gt;% 
-  summarise(across(.cols = ends_with(&quot;mm&quot;), 
-                   .fns = list(&quot;mean&quot; = mean,
-                               &quot;sd&quot; = sd,
-                               &quot;min&quot; = min,
-                               &quot;max&quot; = max), 
-                   na.rm = TRUE),
-            n = n()) %&gt;% 
-  ungroup() %&gt;% 
-  pivot_longer(cols = contains(&quot;mm&quot;))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;species&#39;, &#39;island&#39;. You can override using the `.groups` argument.</code></pre>
-<pre><code>## # A tibble: 156 x 6
-##    species island sex        n name                    value
-##    &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  &lt;int&gt; &lt;chr&gt;                   &lt;dbl&gt;
-##  1 Adelie  Biscoe female    22 bill_length_mm_mean     37.4 
-##  2 Adelie  Biscoe female    22 bill_length_mm_sd        1.76
-##  3 Adelie  Biscoe female    22 bill_length_mm_min      34.5 
-##  4 Adelie  Biscoe female    22 bill_length_mm_max      40.5 
-##  5 Adelie  Biscoe female    22 bill_depth_mm_mean      17.7 
-##  6 Adelie  Biscoe female    22 bill_depth_mm_sd         1.09
-##  7 Adelie  Biscoe female    22 bill_depth_mm_min       16   
-##  8 Adelie  Biscoe female    22 bill_depth_mm_max       20.7 
-##  9 Adelie  Biscoe female    22 flipper_length_mm_mean 187.  
-## 10 Adelie  Biscoe female    22 flipper_length_mm_sd     6.74
-## # … with 146 more rows</code></pre>
-<p>Ok so now everything is back into this pivoting format where things are in two columns. Ok, that is still not very satisfactory though. Let’s try to make it better. The naming of columns is still very convenient, so let us try to split the <code>name</code> column up like we did yesterday.</p>
-<pre class="r"><code>penguins %&gt;% 
-  group_by(species, island, sex) %&gt;% 
-  summarise(across(.cols = ends_with(&quot;mm&quot;), 
-                   .fns = list(&quot;mean&quot; = mean,
-                               &quot;sd&quot; = sd,
-                               &quot;min&quot; = min,
-                               &quot;max&quot; = max), 
-                   na.rm = TRUE),
-            n = n()) %&gt;% 
-  ungroup() %&gt;%
-  pivot_longer(cols = contains(&quot;mm&quot;),
-               names_to = c(&quot;part&quot;, &quot;measurement&quot;, &quot;unit&quot;, &quot;stat&quot;),
-               names_sep = &quot;_&quot;)</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;species&#39;, &#39;island&#39;. You can override using the `.groups` argument.</code></pre>
-<pre><code>## # A tibble: 156 x 9
-##    species island sex        n part    measurement unit  stat   value
-##    &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
-##  1 Adelie  Biscoe female    22 bill    length      mm    mean   37.4 
-##  2 Adelie  Biscoe female    22 bill    length      mm    sd      1.76
-##  3 Adelie  Biscoe female    22 bill    length      mm    min    34.5 
-##  4 Adelie  Biscoe female    22 bill    length      mm    max    40.5 
-##  5 Adelie  Biscoe female    22 bill    depth       mm    mean   17.7 
-##  6 Adelie  Biscoe female    22 bill    depth       mm    sd      1.09
-##  7 Adelie  Biscoe female    22 bill    depth       mm    min    16   
-##  8 Adelie  Biscoe female    22 bill    depth       mm    max    20.7 
-##  9 Adelie  Biscoe female    22 flipper length      mm    mean  187.  
-## 10 Adelie  Biscoe female    22 flipper length      mm    sd      6.74
-## # … with 146 more rows</code></pre>
-<p>OK, it’s slightly better, but its still not convenient. Ideally, we’d like the different statistics as different columns, and have the rest in rows. Now that we have split the columns up, we have a column with <em>just</em> the statistics names. Lets try pivoting wider again, using that column to create the column names,</p>
-<pre class="r"><code>penguins %&gt;% 
-  group_by(species, island, sex) %&gt;% 
-  summarise(across(.cols = ends_with(&quot;mm&quot;), 
-                   .fns = list(&quot;mean&quot; = mean,
-                               &quot;sd&quot; = sd,
-                               &quot;min&quot; = min,
-                               &quot;max&quot; = max), 
-                   na.rm = TRUE),
-            n = n()) %&gt;% 
-  ungroup() %&gt;%
-  pivot_longer(cols = contains(&quot;mm&quot;),
-               names_to = c(&quot;part&quot;, &quot;measurement&quot;, &quot;unit&quot;, &quot;stat&quot;),
-               names_sep = &quot;_&quot;) %&gt;% 
-  pivot_wider(names_from = stat, 
-              values_from  = value)</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;species&#39;, &#39;island&#39;. You can override using the `.groups` argument.</code></pre>
-<pre><code>## # A tibble: 39 x 11
-##    species island sex        n part    measurement unit   mean    sd   min   max
-##    &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 Adelie  Biscoe female    22 bill    length      mm     37.4 1.76   34.5  40.5
-##  2 Adelie  Biscoe female    22 bill    depth       mm     17.7 1.09   16    20.7
-##  3 Adelie  Biscoe female    22 flipper length      mm    187.  6.74  172   199  
-##  4 Adelie  Biscoe male      22 bill    length      mm     40.6 2.01   37.6  45.6
-##  5 Adelie  Biscoe male      22 bill    depth       mm     19.0 0.880  17.2  21.1
-##  6 Adelie  Biscoe male      22 flipper length      mm    190.  6.46  180   203  
-##  7 Adelie  Dream  female    27 bill    length      mm     36.9 2.09   32.1  42.2
-##  8 Adelie  Dream  female    27 bill    depth       mm     17.6 0.897  15.5  19.3
-##  9 Adelie  Dream  female    27 flipper length      mm    188.  5.51  178   202  
-## 10 Adelie  Dream  male      28 bill    length      mm     40.1 1.75   36.3  44.1
-## # … with 29 more rows</code></pre>
-<p>Look at that! Its starting to become so much better! Now each grouping combination and type of measurement is in its own row, but each summary statistic is in different columns. Slowly, the data are becoming more easy to compare.</p>
-</div>
-<div id="pivoting-summaries-challenges." class="section level1 tabset">
-<h1 class="tabset"><strong>Pivoting summaries, challenges.</strong></h1>
-<div id="assignment-3" class="section level2">
-<h2>Assignment</h2>
+<!-- # Pivoting summaries to get better overview -->
+<!-- We now have outputs with lots of information, but its not in the tidiest format. There are just so many columns! We keep having to change lines to see more and more output, and this is just not convenient. We would like to create a more condensed table, but still retaining all the information. We learned about pivoting tables yesterday, so we could to that to our summaries too! -->
+<!-- ```{r} -->
+<!-- penguins %>%  -->
+<!--   group_by(species, island, sex) %>%  -->
+<!--   summarise(across(.cols = ends_with("mm"),  -->
+<!--                    .fns = list("mean" = mean, -->
+<!--                                "sd" = sd, -->
+<!--                                "min" = min, -->
+<!--                                "max" = max),  -->
+<!--                    na.rm = TRUE), -->
+<!--             n = n()) %>%  -->
+<!--   ungroup() %>%  -->
+<!--   pivot_longer(cols = contains("mm")) -->
+<!-- ``` -->
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD Ok so now everything is back into this pivoting format where things are in two columns. Ok, that is still not very satisfactory though. Let’s try to make it better. The naming of columns is still very convenient, so let us try to split the <code>name</code> column up like we did yesterday. ======= <!-- OK, so now everything is back into this pivoting format where things are in two columns. That is still not very satisfactory though. Let's try to make it better. The naming of columns is still very convenient, so let us try to split the `name` column up like we did yesterday.  --> &gt;&gt;&gt;&gt;&gt;&gt;&gt; RaoulWolf/main</p>
+<!-- ```{r} -->
+<!-- penguins %>%  -->
+<!--   group_by(species, island, sex) %>%  -->
+<!--   summarise(across(.cols = ends_with("mm"),  -->
+<!--                    .fns = list("mean" = mean, -->
+<!--                                "sd" = sd, -->
+<!--                                "min" = min, -->
+<!--                                "max" = max),  -->
+<!--                    na.rm = TRUE), -->
+<!--             n = n()) %>%  -->
+<!--   ungroup() %>% -->
+<!--   pivot_longer(cols = contains("mm"), -->
+<!--                names_to = c("part", "measurement", "unit", "stat"), -->
+<!--                names_sep = "_") -->
+<!-- ``` -->
+<!-- OK, it's slightly better, but its still not convenient. Ideally, we'd like the different statistics as different columns, and have the rest in rows. Now that we have split the columns up, we have a column with _just_ the statistics names. Lets try pivoting wider again, using that column to create the column names, -->
+<!-- ```{r} -->
+<!-- penguins %>%  -->
+<!--   group_by(species, island, sex) %>%  -->
+<!--   summarise(across(.cols = ends_with("mm"),  -->
+<!--                    .fns = list("mean" = mean, -->
+<!--                                "sd" = sd, -->
+<!--                                "min" = min, -->
+<!--                                "max" = max),  -->
+<!--                    na.rm = TRUE), -->
+<!--             n = n()) %>%  -->
+<!--   ungroup() %>% -->
+<!--   pivot_longer(cols = contains("mm"), -->
+<!--                names_to = c("part", "measurement", "unit", "stat"), -->
+<!--                names_sep = "_") %>%  -->
+<!--   pivot_wider(names_from = stat,  -->
+<!--               values_from  = value) -->
+<!-- ``` -->
+<!-- Look at that! Its starting to become so much better! Now each grouping combination and type of measurement is in its own row, but each summary statistic is in different columns. Slowly, the data are becoming more easy to compare.  -->
+<!-- # **Pivoting summaries, challenges.** {.tabset} -->
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD ## Assignment</p>
 <p>Room: break-out<br />
 Duration: 10 minutes</p>
 <blockquote>
 <p><strong>4a</strong>: Pivot longer a grouped summary over species, island and sex for the columns containing underscores, with the metrics mean, standard deviation, minimum and maximum values, as well as the total number of observations per group. When you pivot the data, split the column names up into 4 parts describing the part, measurement, unit and statistic used.</p>
 <p><strong>4b</strong>: Add to the code you just wrote and pivot the data wider again by the statistic column.</p>
+<p>======= <!-- Room: break-out   --> <!-- Duration: 10 minutes --></p>
 </blockquote>
-</div>
-<div id="solution-3" class="section level2">
-<h2>Solution</h2>
-<pre class="r"><code>## 5a
-penguins %&gt;% 
-  group_by(species, island, sex) %&gt;% 
-  summarise(across(.cols = contains(&quot;_&quot;), 
-                   .fns = list(&quot;mean&quot; = mean,
-                               &quot;sd&quot; = sd,
-                               &quot;min&quot; = min,
-                               &quot;max&quot; = max), 
-                   na.rm = TRUE),
-            n = n()) %&gt;% 
-  ungroup() %&gt;% 
-  pivot_longer(cols = contains(&quot;_&quot;),
-               names_to = c(&quot;part&quot;, &quot;measurement&quot;, &quot;unit&quot;, &quot;stat&quot;),
-               names_sep = &quot;_&quot;) </code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;species&#39;, &#39;island&#39;. You can override using the `.groups` argument.</code></pre>
-<pre><code>## # A tibble: 208 x 9
-##    species island sex        n part    measurement unit  stat   value
-##    &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
-##  1 Adelie  Biscoe female    22 bill    length      mm    mean   37.4 
-##  2 Adelie  Biscoe female    22 bill    length      mm    sd      1.76
-##  3 Adelie  Biscoe female    22 bill    length      mm    min    34.5 
-##  4 Adelie  Biscoe female    22 bill    length      mm    max    40.5 
-##  5 Adelie  Biscoe female    22 bill    depth       mm    mean   17.7 
-##  6 Adelie  Biscoe female    22 bill    depth       mm    sd      1.09
-##  7 Adelie  Biscoe female    22 bill    depth       mm    min    16   
-##  8 Adelie  Biscoe female    22 bill    depth       mm    max    20.7 
-##  9 Adelie  Biscoe female    22 flipper length      mm    mean  187.  
-## 10 Adelie  Biscoe female    22 flipper length      mm    sd      6.74
-## # … with 198 more rows</code></pre>
-<pre class="r"><code># 5b
-penguins %&gt;% 
-  group_by(species, island, sex) %&gt;% 
-  summarise(across(.cols = contains(&quot;_&quot;), 
-                   .fns = list(&quot;mean&quot; = mean,
-                               &quot;sd&quot; = sd,
-                               &quot;min&quot; = min,
-                               &quot;max&quot; = max), 
-                   na.rm = TRUE),
-            n = n()) %&gt;% 
-  ungroup() %&gt;% 
-  pivot_longer(cols = contains(&quot;_&quot;),
-               names_to = c(&quot;part&quot;, &quot;measurement&quot;, &quot;unit&quot;, &quot;stat&quot;),
-               names_sep = &quot;_&quot;) %&gt;% 
-  pivot_wider(names_from = stat, 
-              values_from  = value)</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;species&#39;, &#39;island&#39;. You can override using the `.groups` argument.</code></pre>
-<pre><code>## # A tibble: 52 x 11
-##    species island sex        n part    measurement unit    mean      sd    min
-##    &lt;fct&gt;   &lt;fct&gt;  &lt;fct&gt;  &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
-##  1 Adelie  Biscoe female    22 bill    length      mm      37.4   1.76    34.5
-##  2 Adelie  Biscoe female    22 bill    depth       mm      17.7   1.09    16  
-##  3 Adelie  Biscoe female    22 flipper length      mm     187.    6.74   172  
-##  4 Adelie  Biscoe female    22 body    mass        g     3369.  343.    2850  
-##  5 Adelie  Biscoe male      22 bill    length      mm      40.6   2.01    37.6
-##  6 Adelie  Biscoe male      22 bill    depth       mm      19.0   0.880   17.2
-##  7 Adelie  Biscoe male      22 flipper length      mm     190.    6.46   180  
-##  8 Adelie  Biscoe male      22 body    mass        g     4050   356.    3550  
-##  9 Adelie  Dream  female    27 bill    length      mm      36.9   2.09    32.1
-## 10 Adelie  Dream  female    27 bill    depth       mm      17.6   0.897   15.5
-## # … with 42 more rows, and 1 more variable: max &lt;dbl&gt;</code></pre>
-</div>
+<!-- (helpers, please paste this into the chat at the right time.) -->
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>RaoulWolf/main</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<!-- ## Assignment -->
+<!-- > -->
+<!-- > **4a**: Pivot longer a grouped summary over species, island and sex for the columns containing underscores, with the metrics mean, standard deviation, minimum and maximum values, as well as the total number of observations per group. When you pivot the data, split the column names up into 4 parts describing the part, measurement, unit and statistic used.  -->
+<!-- > -->
+<!-- > **4b**: Add to the code you just wrote and pivot the data wider again by the statistic column. -->
+<!-- > -->
+<!-- ## Solution -->
+<!-- ```{r "solutions-5"} -->
+<!-- ## 5a -->
+<!-- penguins %>%  -->
+<!--   group_by(species, island, sex) %>%  -->
+<!--   summarise(across(.cols = contains("_"),  -->
+<!--                    .fns = list("mean" = mean, -->
+<!--                                "sd" = sd, -->
+<!--                                "min" = min, -->
+<!--                                "max" = max),  -->
+<!--                    na.rm = TRUE), -->
+<!--             n = n()) %>%  -->
+<!--   ungroup() %>%  -->
+<!--   pivot_longer(cols = contains("_"), -->
+<!--                names_to = c("part", "measurement", "unit", "stat"), -->
+<!--                names_sep = "_")  -->
+<!-- # 5b -->
+<!-- penguins %>%  -->
+<!--   group_by(species, island, sex) %>%  -->
+<!--   summarise(across(.cols = contains("_"),  -->
+<!--                    .fns = list("mean" = mean, -->
+<!--                                "sd" = sd, -->
+<!--                                "min" = min, -->
+<!--                                "max" = max),  -->
+<!--                    na.rm = TRUE), -->
+<!--             n = n()) %>%  -->
+<!--   ungroup() %>%  -->
+<!--   pivot_longer(cols = contains("_"), -->
+<!--                names_to = c("part", "measurement", "unit", "stat"), -->
+<!--                names_sep = "_") %>%  -->
+<!--   pivot_wider(names_from = stat,  -->
+<!--               values_from  = value) -->
+<!-- ``` -->
 </div>
 
 

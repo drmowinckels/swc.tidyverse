@@ -166,7 +166,6 @@ penguins %>%
 ```
 
 # **Data summaries, challenges.** {.tabset}
-
 ## Assignment
 
 Room: break-out  
@@ -175,9 +174,9 @@ Duration: 10 minutes
 >
 > **1a**: First start by trying to summarise a single column, `bill_length_mm` by calculating its mean.
 >
-> **1b**: Add a column with the standard deviation of bill length.
+> **1b**: Add a column with the standard deviation of `bill_length_mm`.
 >
-> **1c**: Now add the same two metrics for  bill depth and give the columns clear names. Why could the `drop_na()` step give us wrong results? 
+> **1c**: Now add the same two metrics for `bill_depth_mm` and give the columns clear names. Why could the `drop_na()` step give us wrong results? 
 >
 
 ## Solution
@@ -240,7 +239,7 @@ penguins %>%
                    na.rm = TRUE))
 ```
 
-And like with `across()` before, we can control how the column names are made by the use of the `.names` argument and knowing the internal placeholders for the names of the columns (`.col`) and the functions (`.fn`).
+And like with `across()` before, we can control how the column names are made by the use of the `.names` argument and knowing the internal placeholders for the names of the columns (`{.col}`) and the functions (`{.fn}`).
 
 ```{r}
 penguins %>% 
@@ -265,16 +264,15 @@ But remember, this trick only works when using functions that have this same arg
 
 
 # **Summarizing multiple columns, challenges.** {.tabset}
-
 ## Assignment
 
 Room: break-out  
 Duration: 10 minutes  
 
 >
-> **2a**: Get the mean of all columns containing an underscore ("_")
+> **2a**: Calculate the mean of all columns containing an underscore ("_")
 >
-> **2b**: Get the mean, minimum and maximum of all columns containing an underscore ("_")
+> **2b**: Calculate the mean, minimum and maximum of all columns containing an underscore ("_")
 
 ## Solution
 
@@ -413,14 +411,13 @@ Look at the last column `n`! Now, together with all the bill column and function
 
 
 # **Summarizing grouped data, challenges.** {.tabset}
-
 ## Assignment
 
 Room: break-out  
 Duration: 10 minutes  
 
 >
-> **3a**: Get the descriptive statistics (mean, sd, min and max) for all the columns ending with "mm", grouped by species. Add a count of how many observations there are of each species in a column named `n`. 
+> **3a**: Get the descriptive statistics (*i.e.*, `mean`, `sd`, `min` and `max`) for all the columns ending with `"mm"`, for each `species`. Also add a count of how many observations there are of each species in a column named `n`. 
 >
 > **3b**: Try grouping by more variables. Like sex, or island. or add more summary variables. 
 >
@@ -487,67 +484,72 @@ penguins %>%
   mutate(N = sum(n))
 ```
 
-# Pivoting summaries to get better overview
+<!-- # Pivoting summaries to get better overview -->
 
-We now have outputs with lots of information, but its not in the tidiest format. There are just so many columns! We keep having to change lines to see more and more output, and this is just not convenient. We would like to create a more condensed table, but still retaining all the information. We learned about pivoting tables yesterday, so we could to that to our summaries too!
+<!-- We now have outputs with lots of information, but its not in the tidiest format. There are just so many columns! We keep having to change lines to see more and more output, and this is just not convenient. We would like to create a more condensed table, but still retaining all the information. We learned about pivoting tables yesterday, so we could to that to our summaries too! -->
 
-```{r}
-penguins %>% 
-  group_by(species, island, sex) %>% 
-  summarise(across(.cols = ends_with("mm"), 
-                   .fns = list("mean" = mean,
-                               "sd" = sd,
-                               "min" = min,
-                               "max" = max), 
-                   na.rm = TRUE),
-            n = n()) %>% 
-  ungroup() %>% 
-  pivot_longer(cols = contains("mm"))
-```
+<!-- ```{r} -->
+<!-- penguins %>%  -->
+<!--   group_by(species, island, sex) %>%  -->
+<!--   summarise(across(.cols = ends_with("mm"),  -->
+<!--                    .fns = list("mean" = mean, -->
+<!--                                "sd" = sd, -->
+<!--                                "min" = min, -->
+<!--                                "max" = max),  -->
+<!--                    na.rm = TRUE), -->
+<!--             n = n()) %>%  -->
+<!--   ungroup() %>%  -->
+<!--   pivot_longer(cols = contains("mm")) -->
+<!-- ``` -->
 
+<<<<<<< HEAD
 Ok so now everything is back into this pivoting format where things are in two columns. Ok, that is still not very satisfactory though. Let's try to make it better. The naming of columns is still very convenient, so let us try to split the `name` column up like we did yesterday. 
+=======
+<!-- OK, so now everything is back into this pivoting format where things are in two columns. That is still not very satisfactory though. Let's try to make it better. The naming of columns is still very convenient, so let us try to split the `name` column up like we did yesterday.  -->
+>>>>>>> RaoulWolf/main
 
-```{r}
-penguins %>% 
-  group_by(species, island, sex) %>% 
-  summarise(across(.cols = ends_with("mm"), 
-                   .fns = list("mean" = mean,
-                               "sd" = sd,
-                               "min" = min,
-                               "max" = max), 
-                   na.rm = TRUE),
-            n = n()) %>% 
-  ungroup() %>%
-  pivot_longer(cols = contains("mm"),
-               names_to = c("part", "measurement", "unit", "stat"),
-               names_sep = "_")
-```
+<!-- ```{r} -->
+<!-- penguins %>%  -->
+<!--   group_by(species, island, sex) %>%  -->
+<!--   summarise(across(.cols = ends_with("mm"),  -->
+<!--                    .fns = list("mean" = mean, -->
+<!--                                "sd" = sd, -->
+<!--                                "min" = min, -->
+<!--                                "max" = max),  -->
+<!--                    na.rm = TRUE), -->
+<!--             n = n()) %>%  -->
+<!--   ungroup() %>% -->
+<!--   pivot_longer(cols = contains("mm"), -->
+<!--                names_to = c("part", "measurement", "unit", "stat"), -->
+<!--                names_sep = "_") -->
+<!-- ``` -->
 
-OK, it's slightly better, but its still not convenient. Ideally, we'd like the different statistics as different columns, and have the rest in rows. Now that we have split the columns up, we have a column with _just_ the statistics names. Lets try pivoting wider again, using that column to create the column names,
+<!-- OK, it's slightly better, but its still not convenient. Ideally, we'd like the different statistics as different columns, and have the rest in rows. Now that we have split the columns up, we have a column with _just_ the statistics names. Lets try pivoting wider again, using that column to create the column names, -->
 
-```{r}
-penguins %>% 
-  group_by(species, island, sex) %>% 
-  summarise(across(.cols = ends_with("mm"), 
-                   .fns = list("mean" = mean,
-                               "sd" = sd,
-                               "min" = min,
-                               "max" = max), 
-                   na.rm = TRUE),
-            n = n()) %>% 
-  ungroup() %>%
-  pivot_longer(cols = contains("mm"),
-               names_to = c("part", "measurement", "unit", "stat"),
-               names_sep = "_") %>% 
-  pivot_wider(names_from = stat, 
-              values_from  = value)
-```
+<!-- ```{r} -->
+<!-- penguins %>%  -->
+<!--   group_by(species, island, sex) %>%  -->
+<!--   summarise(across(.cols = ends_with("mm"),  -->
+<!--                    .fns = list("mean" = mean, -->
+<!--                                "sd" = sd, -->
+<!--                                "min" = min, -->
+<!--                                "max" = max),  -->
+<!--                    na.rm = TRUE), -->
+<!--             n = n()) %>%  -->
+<!--   ungroup() %>% -->
+<!--   pivot_longer(cols = contains("mm"), -->
+<!--                names_to = c("part", "measurement", "unit", "stat"), -->
+<!--                names_sep = "_") %>%  -->
+<!--   pivot_wider(names_from = stat,  -->
+<!--               values_from  = value) -->
+<!-- ``` -->
 
-Look at that! Its starting to become so much better! Now each grouping combination and type of measurement is in its own row, but each summary statistic is in different columns. Slowly, the data are becoming more easy to compare. 
+<!-- Look at that! Its starting to become so much better! Now each grouping combination and type of measurement is in its own row, but each summary statistic is in different columns. Slowly, the data are becoming more easy to compare.  -->
 
 
-# **Pivoting summaries, challenges.** {.tabset}
+<!-- # **Pivoting summaries, challenges.** {.tabset} -->
 
+<<<<<<< HEAD
 ## Assignment
 
 Room: break-out  
@@ -558,39 +560,52 @@ Duration: 10 minutes
 >
 > **4b**: Add to the code you just wrote and pivot the data wider again by the statistic column.
 >
+=======
+<!-- Room: break-out   -->
+<!-- Duration: 10 minutes -->
 
-## Solution
+<!-- (helpers, please paste this into the chat at the right time.) -->
+>>>>>>> RaoulWolf/main
 
-```{r "solutions-5"}
-## 5a
-penguins %>% 
-  group_by(species, island, sex) %>% 
-  summarise(across(.cols = contains("_"), 
-                   .fns = list("mean" = mean,
-                               "sd" = sd,
-                               "min" = min,
-                               "max" = max), 
-                   na.rm = TRUE),
-            n = n()) %>% 
-  ungroup() %>% 
-  pivot_longer(cols = contains("_"),
-               names_to = c("part", "measurement", "unit", "stat"),
-               names_sep = "_") 
+<!-- ## Assignment -->
+<!-- > -->
+<!-- > **4a**: Pivot longer a grouped summary over species, island and sex for the columns containing underscores, with the metrics mean, standard deviation, minimum and maximum values, as well as the total number of observations per group. When you pivot the data, split the column names up into 4 parts describing the part, measurement, unit and statistic used.  -->
+<!-- > -->
+<!-- > **4b**: Add to the code you just wrote and pivot the data wider again by the statistic column. -->
+<!-- > -->
 
-# 5b
-penguins %>% 
-  group_by(species, island, sex) %>% 
-  summarise(across(.cols = contains("_"), 
-                   .fns = list("mean" = mean,
-                               "sd" = sd,
-                               "min" = min,
-                               "max" = max), 
-                   na.rm = TRUE),
-            n = n()) %>% 
-  ungroup() %>% 
-  pivot_longer(cols = contains("_"),
-               names_to = c("part", "measurement", "unit", "stat"),
-               names_sep = "_") %>% 
-  pivot_wider(names_from = stat, 
-              values_from  = value)
-```
+<!-- ## Solution -->
+
+<!-- ```{r "solutions-5"} -->
+<!-- ## 5a -->
+<!-- penguins %>%  -->
+<!--   group_by(species, island, sex) %>%  -->
+<!--   summarise(across(.cols = contains("_"),  -->
+<!--                    .fns = list("mean" = mean, -->
+<!--                                "sd" = sd, -->
+<!--                                "min" = min, -->
+<!--                                "max" = max),  -->
+<!--                    na.rm = TRUE), -->
+<!--             n = n()) %>%  -->
+<!--   ungroup() %>%  -->
+<!--   pivot_longer(cols = contains("_"), -->
+<!--                names_to = c("part", "measurement", "unit", "stat"), -->
+<!--                names_sep = "_")  -->
+
+<!-- # 5b -->
+<!-- penguins %>%  -->
+<!--   group_by(species, island, sex) %>%  -->
+<!--   summarise(across(.cols = contains("_"),  -->
+<!--                    .fns = list("mean" = mean, -->
+<!--                                "sd" = sd, -->
+<!--                                "min" = min, -->
+<!--                                "max" = max),  -->
+<!--                    na.rm = TRUE), -->
+<!--             n = n()) %>%  -->
+<!--   ungroup() %>%  -->
+<!--   pivot_longer(cols = contains("_"), -->
+<!--                names_to = c("part", "measurement", "unit", "stat"), -->
+<!--                names_sep = "_") %>%  -->
+<!--   pivot_wider(names_from = stat,  -->
+<!--               values_from  = value) -->
+<!-- ``` -->
