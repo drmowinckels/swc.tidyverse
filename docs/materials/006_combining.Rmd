@@ -100,10 +100,9 @@ SO we substitute the tidy selector with just the name of the column  we want to 
 
 
 ## **Challenge 1.** {.tabset}
-Room: break-out
-Duration: 10 minutes
-
 ### Assignment
+Room: break-out  
+Duration: 10 minutes
 >
 > **1a**: In our new summary function, alter the code so that the columns are no longer prefixed with `value_`. 
 >
@@ -234,10 +233,10 @@ penguins_sum %>%
 
 
 ## **Challenge 2.** {.tabset}
-Room: break-out
-Duration: 10 minutes
 
 ### Assignment
+Room: break-out   
+Duration: 10 minutes
 >
 > **2a**: Create a bar chart based om the penguins summary data, where the mean values are on the x axis and species are on the y axis. Make sure to dodge the bar for easier comparisons. Create subplots on the different metrics (_Hint: use facet_wrap()_.
 >
@@ -289,14 +288,16 @@ penguins_sum %>%
 ```
 
 ## **Challenge 3.** {.tabset}
-Room: plenary
+### Assignment
+Room: plenary  
 Duration: 5 minutes
-
 >
 > **3a**: Try pivoting the data even longer! Pivot longer all the stats columns so that the column names are in a column named "stat". Now, create another plot using the "value" column on the y-axis, and creating subplots based on both the observation name AND the stat!
 >
 > **3b**: Try adding the argument 'scales = "free"' to the facet_grid function. What does that do?
 
+
+### Solution
 ```{r}
 ## 3a
 penguins_sum %>% 
@@ -369,7 +370,8 @@ penguins_sum %>%
 ```
 
 ## **Challenge 4.** {.tabset}
-Room: break-out
+### Assignment
+Room: break-out  
 Duration: 10 minutes
 
 >
@@ -377,7 +379,7 @@ Duration: 10 minutes
 >
 > **4b**: Can you think of a way to simplify this? Look at how the code 'c("mean", "sd", "min", "max")' is typed out twice. Is there a way we can save that code to an object, and then use that object for the code in stead?
 
-
+### Solution
 ```{r}
 # 4a
 penguins_sum %>% 

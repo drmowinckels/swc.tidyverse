@@ -118,10 +118,10 @@ penguins <- read_csv(penguin_path)
 ```
 
 ## **Challenge 1.** {.tabset}
-Room: break-out
+### Assignment
+Room: break-out  
 Duration: 10 minutes
 
-### Assignment
 >
 > **1a**: Read in the penguins data set from file.
 >
@@ -221,10 +221,10 @@ penguins %>%
 That's pretty neat. By pivoting the data into this longer shape we are able to create sub-plots for all measurements easily with the same ggplot call and have them consistent, and nicely aligned. This longer format is also great for summaries, which we will be covering tomorrow.
 
 ## **Challenge 2.** {.tabset}
-Room: Plenary
-Duration: 10 minutes
 
 ### Assignment
+Room: Plenary  
+Duration: 10 minutes
 >
 > **2a**: Pivot longer all columns containing an underscore (_) in their name.
 >
@@ -275,10 +275,10 @@ penguins %>%
 now, the pivot gave us 4 columns in stead of two! We told pivot that the column name could be split into the columns part, measure and unit, and that these were separated by underscore. Again we see how great consistent and logical naming of columns can be such a great help when working with data!
 
 ## **Challenge 3.** {.tabset}
-Room: Break-out
+### Assignment
+Room: Break-out  
 Duration: 10 minutes
 
-### Assignment
 >
 > **3a**: Pivot longer all the bill measurements, and alter the names in one go, so that there are three columns named "part", "measure" and "unit" after the pivot.
 >
@@ -400,10 +400,9 @@ penguins_long
 
 
 ## **Challenge 4.** {.tabset}
-Room: plenary
-Duration: 5 minutes
-
 ### Assignment
+Room: plenary  
+Duration: 5 minutes
 >
 > **4a**: Turn the penguins_long_simple dataset back to its original state
 >
@@ -438,10 +437,10 @@ penguins_long %>%
 Those arguments and inputs should be familiar to the call from pivot_longer. So we are lucky that if you understand one of them, it is easier to understand the other.
 
 ## **Challenge 5.** {.tabset}
-Room: break-out
-Duration: 10 minutes
 
 ### Assignment
+Room: break-out  
+Duration: 10 minutes
 >
 > **5a**: Turn the penguins_long dataset back to its original state
 >

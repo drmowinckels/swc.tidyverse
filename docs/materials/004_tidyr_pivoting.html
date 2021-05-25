@@ -335,9 +335,10 @@ read_csv(penguin_path)</code></pre>
 ## )</code></pre>
 <div id="challenge-1." class="section level2 tabset">
 <h2 class="tabset"><strong>Challenge 1.</strong></h2>
-<p>Room: break-out Duration: 10 minutes</p>
 <div id="assignment" class="section level3">
 <h3>Assignment</h3>
+<p>Room: break-out<br />
+Duration: 10 minutes</p>
 <blockquote>
 <p><strong>1a</strong>: Read in the penguins data set from file.</p>
 <p><strong>1b</strong>: Read in the penguins raw data set from file. How does this file look different from the penguins data set we have been using?</p>
@@ -490,14 +491,10 @@ penguins &lt;- palmerpenguins::penguins</code></pre>
 <p>That’s pretty neat. By pivoting the data into this longer shape we are able to create sub-plots for all measurements easily with the same ggplot call and have them consistent, and nicely aligned. This longer format is also great for summaries, which we will be covering tomorrow.</p>
 <div id="challenge-2." class="section level2 tabset">
 <h2 class="tabset"><strong>Challenge 2.</strong></h2>
-<p>Room: Plenary Duration: 10 minutes</p>
 <div id="assignment-1" class="section level3">
 <h3>Assignment</h3>
-<blockquote>
-<p><strong>2a</strong>: Pivot longer all columns containing an underscore (_) in their name.</p>
-<p><strong>2b</strong>: Pivot the penguins data so that all the bill measurements (starts with “bill”) are in the same column.</p>
-<p><strong>2c</strong>: As mentioned, pivot_longer accepts tidy-selectors. Pivot longer all numerical columns.</p>
-</blockquote>
+<p>Room: Plenary<br />
+Duration: 10 minutes &gt; &gt; <strong>2a</strong>: Pivot longer all columns containing an underscore (_) in their name. &gt; &gt; <strong>2b</strong>: Pivot the penguins data so that all the bill measurements (starts with “bill”) are in the same column. &gt; &gt; <strong>2c</strong>: As mentioned, pivot_longer accepts tidy-selectors. Pivot longer all numerical columns. &gt;</p>
 </div>
 <div id="solution-1" class="section level3">
 <h3>Solution</h3>
@@ -599,9 +596,10 @@ penguins %&gt;%
 <p>now, the pivot gave us 4 columns in stead of two! We told pivot that the column name could be split into the columns part, measure and unit, and that these were separated by underscore. Again we see how great consistent and logical naming of columns can be such a great help when working with data!</p>
 <div id="challenge-3." class="section level2 tabset">
 <h2 class="tabset"><strong>Challenge 3.</strong></h2>
-<p>Room: Break-out Duration: 10 minutes</p>
 <div id="assignment-2" class="section level3">
 <h3>Assignment</h3>
+<p>Room: Break-out<br />
+Duration: 10 minutes</p>
 <blockquote>
 <p><strong>3a</strong>: Pivot longer all the bill measurements, and alter the names in one go, so that there are three columns named “part”, “measure” and “unit” after the pivot.</p>
 <p><strong>3b</strong>: Pivot longer all the bill measurements, and use the <code>names_prefix</code> argument. Give it the string “bill_”. What did that do?</p>
@@ -838,12 +836,10 @@ penguins_long</code></pre>
 ## # … with 1,358 more rows</code></pre>
 <div id="challenge-4." class="section level2 tabset">
 <h2 class="tabset"><strong>Challenge 4.</strong></h2>
-<p>Room: plenary Duration: 5 minutes</p>
 <div id="assignment-3" class="section level3">
 <h3>Assignment</h3>
-<blockquote>
-<p><strong>4a</strong>: Turn the penguins_long_simple dataset back to its original state</p>
-</blockquote>
+<p>Room: plenary<br />
+Duration: 5 minutes &gt; &gt; <strong>4a</strong>: Turn the penguins_long_simple dataset back to its original state &gt;</p>
 </div>
 <div id="solution-3" class="section level3">
 <h3>Solution</h3>
@@ -910,12 +906,10 @@ penguins_long_simple %&gt;%
 <p>Those arguments and inputs should be familiar to the call from pivot_longer. So we are lucky that if you understand one of them, it is easier to understand the other.</p>
 <div id="challenge-5." class="section level2 tabset">
 <h2 class="tabset"><strong>Challenge 5.</strong></h2>
-<p>Room: break-out Duration: 10 minutes</p>
 <div id="assignment-4" class="section level3">
 <h3>Assignment</h3>
-<blockquote>
-<p><strong>5a</strong>: Turn the penguins_long dataset back to its original state</p>
-</blockquote>
+<p>Room: break-out<br />
+Duration: 10 minutes &gt; &gt; <strong>5a</strong>: Turn the penguins_long dataset back to its original state &gt;</p>
 </div>
 <div id="solution-4" class="section level3">
 <h3>Solution</h3>
