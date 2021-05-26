@@ -324,7 +324,7 @@ penguins_sum %>%
              fill = island)) +
   geom_bar(stat = "identity",
            position = "dodge") +
-  facet_grid(stat ~ name, scales = "free")
+  facet_grid(name ~ stat, scales = "free")
 ```
 
 They are ordered alphabetically. To override this, we need to let ggplot know somehow the order that they should be in.
@@ -347,7 +347,7 @@ penguins_sum %>%
              fill = island)) +
   geom_bar(stat = "identity",
            position = "dodge") +
-  facet_grid(stat ~ name, scales = "free")
+  facet_grid(name ~ stat, scales = "free")
 ```
 
 ## **Challenge 4.** {.tabset}
@@ -374,7 +374,7 @@ penguins_sum %>%
              fill = island)) +
   geom_bar(stat = "identity",
            position = "dodge") +
-  facet_grid(stat ~ name, scales = "free")
+  facet_grid(name ~ stat, scales = "free")
 
 # 4b
 stats <- c("mean", "sd", "min", "max")
@@ -389,7 +389,7 @@ penguins_sum %>%
              fill = island)) +
   geom_bar(stat = "identity",
            position = "dodge") +
-  facet_grid(stat ~ name, scales = "free")
+  facet_grid(name ~ stat, scales = "free")
 ```
 
 # Wrap-up
