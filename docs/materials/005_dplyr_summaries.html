@@ -259,7 +259,8 @@ div.tocify {
 <p>If you have not worked with a similar program like R before, the notion of <em>where the program runs from</em> is an unfamiliar one. We never really think about where SPSS or excel is running from, we have a file open and work on it. but hopefully, you know where the file is being saved? This is basically where your program is running from. We call this “the working directory”. In R, this concept is important for when reading in os saving (writing) files out from R.</p>
 <p>The difference in R is that where R is running and where you save, for instance your script, are <em>not</em> necessarily the same thing. And this can be confusing and lead to difficulties in managing your analysis project. We have ways of setting this working directory for R, but the absolutely best way to manage your project, is to utilise Rprojects! Rprojects set your working directory for you, and RStudio makes it easy to open your projects and begin where you left off last. Cleverly organised Rprojects are on of the best ways to ensure reproducibility in R.</p>
 <p>Let us create an Rproject for this course. When you maybe start you analysis project later, create a new one and start fresh!</p>
-<p>Create a project by going to File -&gt; New Project … -&gt; New directory -&gt; New project</p>
+<p>Create a project by going to<br />
+File -&gt; New Project … -&gt; New directory -&gt; New project</p>
 <p>Select the main directory you want to create your project in, and give the new folder a name, like “swc_tidyverse”. Click “Create project”.</p>
 <p>RStudio will restart in a fresh instance. Notice where the breadcrumbs in the navigation in the Files pane in RStudio. You should be able to recognise the file path to what you specified in the gui.</p>
 <p>For you projects we recommend structuring your projects in a clear fashion. Some guiding rules:</p>
@@ -275,24 +276,24 @@ my_data &lt;- read_csv(&quot;data/my_data.csv&quot;)</code></pre>
 <p>We can also check the working directory in the console to be sure</p>
 <pre class="r"><code>getwd()</code></pre>
 <p>Rprojects are also great if you ever need to share your entire workflow with a colleague. If you are only using relative paths in your project, and all your scripts are safely stored in the project, giving your colleague the entire project folder should work without extra effort other than them installing the necessary packages you have used in your scripts.</p>
-</div>
-<div id="rproject-challenges." class="section level1 tabset">
-<h1 class="tabset"><strong>Rproject, challenges.</strong></h1>
-<div id="assignment" class="section level2">
-<h2>Assignment</h2>
+<div id="rproject-challenges" class="section level2 tabset">
+<h2 class="tabset"><strong>Rproject, challenges</strong></h2>
+<div id="assignment" class="section level3">
+<h3>Assignment</h3>
 <p>Room: plenary<br />
 Duration: 5 minutes</p>
 <blockquote>
 <p><strong>1</strong> Close RStudio. Find the <code>.Rproject</code> file in the folder you made before for this project (i.e. navigate to the folder you made). Double click it. Did RStudio open your project for you?</p>
 </blockquote>
 </div>
-<div id="solution" class="section level2">
-<h2>Solution</h2>
+<div id="solution" class="section level3">
+<h3>Solution</h3>
 <ul>
 <li>Double clicking <code>.Rproject</code> files will open them in RStudio.<br />
 </li>
 <li>If you don’t remember exactly where you put your project, try opening RStudio and looking for it in <code>Files -&gt; Recent projects</code>. This is the list of your most recently used projects. Hopefully it is in that list!</li>
 </ul>
+</div>
 </div>
 </div>
 <div id="data-summaries" class="section level1">
@@ -342,11 +343,10 @@ Duration: 5 minutes</p>
 ##   bill_length_mean bill_length_min bill_length_max
 ##              &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
 ## 1             43.9            32.1            59.6</code></pre>
-</div>
-<div id="data-summaries-challenges." class="section level1 tabset">
-<h1 class="tabset"><strong>Data summaries, challenges.</strong></h1>
-<div id="assignment-1" class="section level2">
-<h2>Assignment</h2>
+<div id="data-summaries-challenges." class="section level2 tabset">
+<h2 class="tabset"><strong>Data summaries, challenges.</strong></h2>
+<div id="assignment-1" class="section level3">
+<h3>Assignment</h3>
 <p>Room: break-out<br />
 Duration: 10 minutes</p>
 <blockquote>
@@ -355,8 +355,8 @@ Duration: 10 minutes</p>
 <p><strong>1c</strong>: Now add the same two metrics for <code>flipper_length_mm</code> on <em>centimeter</em> scale and give the columns clear names. Why could the <code>drop_na()</code> step give us wrong results?</p>
 </blockquote>
 </div>
-<div id="solution-1" class="section level2">
-<h2>Solution</h2>
+<div id="solution-1" class="section level3">
+<h3>Solution</h3>
 <pre class="r"><code>## 1a
 penguins %&gt;% 
   drop_na(body_mass_g) %&gt;% 
@@ -395,91 +395,7 @@ penguins %&gt;%
 ##               &lt;dbl&gt;           &lt;dbl&gt;                  &lt;dbl&gt;                &lt;dbl&gt;
 ## 1              4.20           0.802                   20.1                 1.41</code></pre>
 <p>Here, we also added some extra space after the column names, to align the functions up. This is a fairly common coding practice for this type of code, that usually makes it easier for others to read.</p>
-<!-- # Summarising multiple columns -->
-<!-- We've already mentioned that `summarize()` accepts arguments much like `mutate()` does. Which means that it might also work with across? That would be convenient when we'd like to summarize across many columns at once.  -->
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = starts_with("bill"), -->
-<!--                    .fns = mean)) -->
-<!-- ``` -->
-<!-- We still have the problem with `NA`s. But, we can use the `...` argument! -->
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = starts_with("bill"), -->
-<!--                    .fns = mean,  -->
-<!--                    na.rm = TRUE)) -->
-<!-- ``` -->
-<!-- The name of the columns are a little unsatisfactory though, they give us no real indication of what the metric is. We can add names , but we'll need to place the function inside a `list()` first.  -->
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = starts_with("bill"), -->
-<!--                    .fns = list("mean" = mean), -->
-<!--                    na.rm = TRUE)) -->
-<!-- ``` -->
-<!-- And like with `across()` before, we can control how the column names are made by the use of the `.names` argument and knowing the internal placeholders for the names of the columns (`{.col}`) and the functions (`{.fn}`). -->
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = starts_with("bill"), -->
-<!--                    .fns = list("mean" = mean, -->
-<!--                                "sd" = sd), -->
-<!--                    na.rm = TRUE, -->
-<!--                    .names = "{.fn}_{.col}")) -->
-<!-- ``` -->
-<!-- Now we know how to summarize several columns at once, and we can even do that with several functions. The last examples we saw, are actually a little over-complicated, because we wanted to make sure you got a feel for how things work. Notice how all the functions we are using take the `na.rm = TRUE` argument to remove NA. This consistency across the three functions makes is possible to let `across()` know in one line that all the functions should use this setting. -->
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = ends_with("mm") | ends_with("g"),  -->
-<!--                    .fns = list("mean" = mean, -->
-<!--                                "sd" = sd),  -->
-<!--                    na.rm = TRUE)) -->
-<!-- ``` -->
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD <!-- But remember, this trick only works when using functions that have this same argument in them, and not all functions do. --></p>
-<!-- # **Summarizing multiple columns, challenges.** {.tabset} -->
 </div>
-</div>
-<div id="section" class="section level1">
-<h1><!-- ## Assignment --></h1>
-</div>
-<div id="summarizing-multiple-columns-challenges." class="section level1 tabset">
-<h1 class="tabset"><strong>Summarizing multiple columns, challenges.</strong></h1>
-<div id="assignment-2" class="section level2">
-<h2>Assignment</h2>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>main</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-<!-- Room: break-out   -->
-<!-- Duration: 10 minutes   -->
-<!-- > -->
-<!-- > **2a**: Calculate the mean of all columns containing an underscore ("_") -->
-<!-- > -->
-<!-- > **2b**: Calculate the mean, minimum and maximum of all columns containing an underscore ("_") -->
-<!-- ## Solution -->
-<!-- ```{r "solutions-2"} -->
-<!-- ## 2a -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = contains("_"),  -->
-<!--                    .fns = mean, -->
-<!--                    na.rm = TRUE)) -->
-<!-- # 2b -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = contains("_"),  -->
-<!--                    .fns = list("mean" = mean, -->
-<!--                                "min" = min, -->
-<!--                                "max" = max),  -->
-<!--                    na.rm = TRUE)) -->
-<!-- ``` -->
 </div>
 </div>
 <div id="summarising-grouped-data" class="section level1">

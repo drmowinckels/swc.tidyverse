@@ -38,7 +38,7 @@ The difference in R is that where R is running and where you save, for instance 
 
 Let us create an Rproject for this course. When you maybe start you analysis project later, create a new one and start fresh!
 
-Create a project by going to 
+Create a project by going to  
 File -> New Project ... -> New directory -> New project 
 
 Select the main directory you want to create your project in, and give the new folder a name, like "swc_tidyverse". Click "Create project".
@@ -68,8 +68,8 @@ getwd()
 
 Rprojects are also great if you ever need to share your entire workflow with a colleague. If you are only using relative paths in your project, and all your scripts are safely stored in the project, giving your colleague the entire project folder should work without extra effort other than them installing the necessary packages you have used in your scripts.
 
-# **Rproject, challenges.** {.tabset}
-## Assignment
+## **Rproject, challenges** {.tabset}
+### Assignment
 
 Room: plenary  
 Duration: 5 minutes
@@ -78,7 +78,7 @@ Duration: 5 minutes
 > **1** Close RStudio. Find the `.Rproject` file in the folder you made before for this project (i.e. navigate to the folder you made). Double click it. Did RStudio open your project for you? 
 >
 
-## Solution
+### Solution
 
 - Double clicking `.Rproject` files will open them in RStudio.  
 - If you don't remember exactly where you put your project, try opening RStudio and looking for it in `Files -> Recent projects`. This is the list of your most recently used projects. Hopefully it is in that list!
@@ -130,8 +130,8 @@ penguins %>%
             bill_length_max = max(bill_length_mm))
 ```
 
-# **Data summaries, challenges.** {.tabset}
-## Assignment
+## **Data summaries, challenges.** {.tabset}
+### Assignment
 
 Room: break-out  
 Duration: 10 minutes
@@ -144,7 +144,7 @@ Duration: 10 minutes
 > **1c**: Now add the same two metrics for `flipper_length_mm` on *centimeter* scale and give the columns clear names. Why could the `drop_na()` step give us wrong results? 
 >
 
-## Solution
+### Solution
 
 ```{r "solutions-1"}
 ## 1a
@@ -175,94 +175,6 @@ penguins %>%
 
 Here, we also added some extra space after the column names, to align the functions up.
 This is a fairly common coding practice for this type of code, that usually makes it easier for others to read.
-
-<!-- # Summarising multiple columns -->
-
-<!-- We've already mentioned that `summarize()` accepts arguments much like `mutate()` does. Which means that it might also work with across? That would be convenient when we'd like to summarize across many columns at once.  -->
-
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = starts_with("bill"), -->
-<!--                    .fns = mean)) -->
-<!-- ``` -->
-
-<!-- We still have the problem with `NA`s. But, we can use the `...` argument! -->
-
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = starts_with("bill"), -->
-<!--                    .fns = mean,  -->
-<!--                    na.rm = TRUE)) -->
-<!-- ``` -->
-
-<!-- The name of the columns are a little unsatisfactory though, they give us no real indication of what the metric is. We can add names , but we'll need to place the function inside a `list()` first.  -->
-
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = starts_with("bill"), -->
-<!--                    .fns = list("mean" = mean), -->
-<!--                    na.rm = TRUE)) -->
-<!-- ``` -->
-
-<!-- And like with `across()` before, we can control how the column names are made by the use of the `.names` argument and knowing the internal placeholders for the names of the columns (`{.col}`) and the functions (`{.fn}`). -->
-
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = starts_with("bill"), -->
-<!--                    .fns = list("mean" = mean, -->
-<!--                                "sd" = sd), -->
-<!--                    na.rm = TRUE, -->
-<!--                    .names = "{.fn}_{.col}")) -->
-<!-- ``` -->
-
-<!-- Now we know how to summarize several columns at once, and we can even do that with several functions. The last examples we saw, are actually a little over-complicated, because we wanted to make sure you got a feel for how things work. Notice how all the functions we are using take the `na.rm = TRUE` argument to remove NA. This consistency across the three functions makes is possible to let `across()` know in one line that all the functions should use this setting. -->
-
-<!-- ```{r} -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = ends_with("mm") | ends_with("g"),  -->
-<!--                    .fns = list("mean" = mean, -->
-<!--                                "sd" = sd),  -->
-<!--                    na.rm = TRUE)) -->
-<!-- ``` -->
-
-<<<<<<< HEAD
-<!-- But remember, this trick only works when using functions that have this same argument in them, and not all functions do. -->
-
-
-
-<!-- # **Summarizing multiple columns, challenges.** {.tabset} -->
-<!-- ## Assignment -->
-=======
-# **Summarizing multiple columns, challenges.** {.tabset}
-## Assignment
->>>>>>> main
-
-<!-- Room: break-out   -->
-<!-- Duration: 10 minutes   -->
-
-<!-- > -->
-<!-- > **2a**: Calculate the mean of all columns containing an underscore ("_") -->
-<!-- > -->
-<!-- > **2b**: Calculate the mean, minimum and maximum of all columns containing an underscore ("_") -->
-
-<!-- ## Solution -->
-
-<!-- ```{r "solutions-2"} -->
-<!-- ## 2a -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = contains("_"),  -->
-<!--                    .fns = mean, -->
-<!--                    na.rm = TRUE)) -->
-
-<!-- # 2b -->
-<!-- penguins %>%  -->
-<!--   summarise(across(.cols = contains("_"),  -->
-<!--                    .fns = list("mean" = mean, -->
-<!--                                "min" = min, -->
-<!--                                "max" = max),  -->
-<!--                    na.rm = TRUE)) -->
-
-<!-- ``` -->
 
 
 # Summarising grouped data
