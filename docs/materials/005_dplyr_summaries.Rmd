@@ -81,7 +81,7 @@ Duration: 5 minutes
 ## Solution
 
 - Double clicking `.Rproject` files will open them in RStudio.  
-- If you dont remember exactly where you put your project, try looking for it in `Files -> Recent projects`. This is the list of your most recently used projects. Hopefully it is in that list!
+- If you don't remember exactly where you put your project, try opening RStudio and looking for it in `Files -> Recent projects`. This is the list of your most recently used projects. Hopefully it is in that list!
 
 
 # Data summaries
