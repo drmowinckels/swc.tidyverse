@@ -30,6 +30,60 @@ penguins <- palmerpenguins::penguins
 > To be able to search for more information about the tidyverse and its functions
 >
 
+# R projects
+
+If you have not worked with a similar program like R before, the notion of _where the program runs from_ is an unfamiliar one. We never really think about where SPSS or excel is running from, we have a file open and work on it. but hopefully, you know where the file is being saved? This is basically where your program is running from. We call this "the working directory". In R, this concept is important for when reading in os saving (writing) files out from R.
+
+The difference in R is that where R is running and where you save, for instance your script, are _not_ necessarily the same thing. And this can be confusing and lead to difficulties in managing your analysis project. We have ways of setting this working directory for R, but the absolutely best way to manage your project, is to utilise Rprojects! Rprojects set your working directory for you, and RStudio makes it easy to open your projects and begin where you left off last. Cleverly organised Rprojects are on of the best ways to ensure reproducibility in R.
+
+Let us create an Rproject for this course. When you maybe start you analysis project later, create a new one and start fresh!
+
+Create a project by going to  
+File -> New Project ... -> New directory -> New project 
+
+Select the main directory you want to create your project in, and give the new folder a name, like "swc_tidyverse". Click "Create project".
+
+RStudio will restart in a fresh instance. Notice where the breadcrumbs in the navigation in the Files pane in RStudio. You should be able to recognise the file path to what you specified in the gui.
+
+For you projects we recommend structuring your projects in a clear fashion. Some guiding rules:
+
+- `data/` to keep all your raw data. To be read from, never written to.
+- `ouput` to keep your analysis results. To be written to and treated like disposable. Your results should be reproducible by your scripts.
+- `scripts` where you place your scripts, i.e. files with R code running your data handling and analyses.
+
+For instance, if you place your input data in `data/my_data.csv`, in your processing script saved in `scripts/linear_models.R`, and you have started RStudio by opening your project, you can read in the data with:
+
+```{r eval = FALSE}
+library(tidyverse)
+my_data <- read_csv("data/my_data.csv")
+```
+
+This is called a _relative path_ because the path to your data is _relative_ to where your working directory is. And your working directory is the folder where the `my_project.Rproject` file is. 
+
+We can also check the working directory in the console to be sure
+
+```{r eval = FALSE}
+getwd()
+```
+
+Rprojects are also great if you ever need to share your entire workflow with a colleague. If you are only using relative paths in your project, and all your scripts are safely stored in the project, giving your colleague the entire project folder should work without extra effort other than them installing the necessary packages you have used in your scripts.
+
+## **Rproject, challenges** {.tabset}
+### Assignment
+
+Room: plenary  
+Duration: 5 minutes
+
+>
+> **1** Close RStudio. Find the `.Rproject` file in the folder you made before for this project (i.e. navigate to the folder you made). Double click it. Did RStudio open your project for you? 
+>
+
+### Solution
+
+- Double clicking `.Rproject` files will open them in RStudio.  
+- If you don't remember exactly where you put your project, try opening RStudio and looking for it in `Files -> Recent projects`. This is the list of your most recently used projects. Hopefully it is in that list!
+
+
 # Pivoted summaries 
 
 This session is going to be a little different than the others. We will be working with more challenges and exploring different way of combining the things we have learned these days. So we will spend more time in break-out rooms solving challenges and being "hands-on" while in the plenary session we will talk about how we solved the challenges and if things are behaving as we expect or not and why.
@@ -305,92 +359,92 @@ penguins_sum %>%
 
 `facet_grid` is more complex than `facet_wrap` as it will always force the y-axis for rows, and x-axis for columns remain the same. So wile setting scales to free will help a little, it will only do so within each row and column, not each subplot. When the results do not look as you like, swapping what are rows and columns in the grid can often create better results. 
 
-# Fixing factors for plots
+<!-- # Fixing factors for plots -->
 
-This is starting to look really cool, but its still not perfect.
-I dont know about you, but the order of the stats rows in the plot is a little weird.
-In the sum file, they were nicely ordered by mean, sd, min and then max.
-But this order is lost in the plot. 
-Can you discern how the plot rows are ordered?
+<!-- This is starting to look really cool, but its still not perfect. -->
+<!-- I dont know about you, but the order of the stats rows in the plot is a little weird. -->
+<!-- In the sum file, they were nicely ordered by mean, sd, min and then max. -->
+<!-- But this order is lost in the plot.  -->
+<!-- Can you discern how the plot rows are ordered? -->
 
-```{r}
-penguins_sum
+<!-- ```{r} -->
+<!-- penguins_sum -->
 
-penguins_sum %>% 
-  pivot_longer(all_of(c("mean", "sd", "min", "max")),
-               names_to = "stat") %>% 
-  ggplot(aes(x = species, 
-             y = value,
-             fill = island)) +
-  geom_bar(stat = "identity",
-           position = "dodge") +
-  facet_grid(name ~ stat, scales = "free")
-```
+<!-- penguins_sum %>%  -->
+<!--   pivot_longer(all_of(c("mean", "sd", "min", "max")), -->
+<!--                names_to = "stat") %>%  -->
+<!--   ggplot(aes(x = species,  -->
+<!--              y = value, -->
+<!--              fill = island)) + -->
+<!--   geom_bar(stat = "identity", -->
+<!--            position = "dodge") + -->
+<!--   facet_grid(name ~ stat, scales = "free") -->
+<!-- ``` -->
 
-They are ordered alphabetically. To override this, we need to let ggplot know somehow the order that they should be in.
-We do that using `factors` and a `mutate`
+<!-- They are ordered alphabetically. To override this, we need to let ggplot know somehow the order that they should be in. -->
+<!-- We do that using `factors` and a `mutate` -->
 
-```{r}
-penguins_sum %>% 
-  pivot_longer(all_of(c("mean", "sd", "min", "max")),
-               names_to = "stat") %>% 
-  mutate(stat = factor(stat, levels = c("mean", "sd", "min", "max")))
+<!-- ```{r} -->
+<!-- penguins_sum %>%  -->
+<!--   pivot_longer(all_of(c("mean", "sd", "min", "max")), -->
+<!--                names_to = "stat") %>%  -->
+<!--   mutate(stat = factor(stat, levels = c("mean", "sd", "min", "max"))) -->
 
 
-penguins_sum %>% 
-  pivot_longer(all_of(c("mean", "sd", "min", "max")),
-               names_to = "stat") %>% 
-  mutate(stat = factor(stat, levels = c("mean", "sd", "min", "max"))) %>% 
-  
-  ggplot(aes(x = species, 
-             y = value,
-             fill = island)) +
-  geom_bar(stat = "identity",
-           position = "dodge") +
-  facet_grid(name ~ stat, scales = "free")
-```
+<!-- penguins_sum %>%  -->
+<!--   pivot_longer(all_of(c("mean", "sd", "min", "max")), -->
+<!--                names_to = "stat") %>%  -->
+<!--   mutate(stat = factor(stat, levels = c("mean", "sd", "min", "max"))) %>%  -->
 
-## **Challenge 4.** {.tabset}
-### Assignment
+<!--   ggplot(aes(x = species,  -->
+<!--              y = value, -->
+<!--              fill = island)) + -->
+<!--   geom_bar(stat = "identity", -->
+<!--            position = "dodge") + -->
+<!--   facet_grid(name ~ stat, scales = "free") -->
+<!-- ``` -->
 
-Room: break-out  
-Duration: 10 minutes
+<!-- ## **Challenge 4.** {.tabset} -->
+<!-- ### Assignment -->
 
->
-> **4a**: Try adapting the code we have been using, by adding a `mutate` in between the pivot_longer and the ggplot function, that changes the "stat" column into a factor with the levels in the order mean, sd, min then max.
->
-> **4b**: Can you think of a way to simplify this? Look at how the code 'c("mean", "sd", "min", "max")' is typed out twice. Is there a way we can save that code to an object, and then use that object for the code in stead?
+<!-- Room: break-out   -->
+<!-- Duration: 10 minutes -->
 
-### Solution
-```{r}
-# 4a
-penguins_sum %>% 
-  pivot_longer(all_of(c("mean", "sd", "min", "max")),
-               names_to = "stat") %>% 
-  mutate(stat = factor(stat, levels = c("mean", "sd", "min", "max"))) %>% 
-  
-  ggplot(aes(x = species, 
-             y = value,
-             fill = island)) +
-  geom_bar(stat = "identity",
-           position = "dodge") +
-  facet_grid(name ~ stat, scales = "free")
+<!-- > -->
+<!-- > **4a**: Try adapting the code we have been using, by adding a `mutate` in between the pivot_longer and the ggplot function, that changes the "stat" column into a factor with the levels in the order mean, sd, min then max. -->
+<!-- > -->
+<!-- > **4b**: Can you think of a way to simplify this? Look at how the code 'c("mean", "sd", "min", "max")' is typed out twice. Is there a way we can save that code to an object, and then use that object for the code in stead? -->
 
-# 4b
-stats <- c("mean", "sd", "min", "max")
+<!-- ### Solution -->
+<!-- ```{r} -->
+<!-- # 4a -->
+<!-- penguins_sum %>%  -->
+<!--   pivot_longer(all_of(c("mean", "sd", "min", "max")), -->
+<!--                names_to = "stat") %>%  -->
+<!--   mutate(stat = factor(stat, levels = c("mean", "sd", "min", "max"))) %>%  -->
 
-penguins_sum %>% 
-  pivot_longer(all_of(stats),
-               names_to = "stat") %>% 
-  mutate(stat = factor(stat, levels = stats)) %>% 
-  
-  ggplot(aes(x = species, 
-             y = value,
-             fill = island)) +
-  geom_bar(stat = "identity",
-           position = "dodge") +
-  facet_grid(name ~ stat, scales = "free")
-```
+<!--   ggplot(aes(x = species,  -->
+<!--              y = value, -->
+<!--              fill = island)) + -->
+<!--   geom_bar(stat = "identity", -->
+<!--            position = "dodge") + -->
+<!--   facet_grid(name ~ stat, scales = "free") -->
+
+<!-- # 4b -->
+<!-- stats <- c("mean", "sd", "min", "max") -->
+
+<!-- penguins_sum %>%  -->
+<!--   pivot_longer(all_of(stats), -->
+<!--                names_to = "stat") %>%  -->
+<!--   mutate(stat = factor(stat, levels = stats)) %>%  -->
+
+<!--   ggplot(aes(x = species,  -->
+<!--              y = value, -->
+<!--              fill = island)) + -->
+<!--   geom_bar(stat = "identity", -->
+<!--            position = "dodge") + -->
+<!--   facet_grid(name ~ stat, scales = "free") -->
+<!-- ``` -->
 
 # Wrap-up
 

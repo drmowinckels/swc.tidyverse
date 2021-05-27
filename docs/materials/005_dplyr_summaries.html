@@ -249,53 +249,11 @@ div.tocify {
 <blockquote>
 <p><strong>Questions</strong></p>
 <p>How can I create summary tables of my data?</p>
-<!-- > How do I format my data so I get the tidy summaries? -->
-<!-- > -->
-<p><strong>Objectives</strong></p>
-<p>To be able to understand how to group data to create convenient summaries. <!-- > --> <!-- > To be able to reshape data to create convenient summaries. --> <!-- > --> <!-- > To be able to apply multiple functions to a single summary call to create complex summaries quickly. --></p>
 </blockquote>
-<div id="r-projects" class="section level1">
-<h1>R projects</h1>
-<p>If you have not worked with a similar program like R before, the notion of <em>where the program runs from</em> is an unfamiliar one. We never really think about where SPSS or excel is running from, we have a file open and work on it. but hopefully, you know where the file is being saved? This is basically where your program is running from. We call this “the working directory”. In R, this concept is important for when reading in os saving (writing) files out from R.</p>
-<p>The difference in R is that where R is running and where you save, for instance your script, are <em>not</em> necessarily the same thing. And this can be confusing and lead to difficulties in managing your analysis project. We have ways of setting this working directory for R, but the absolutely best way to manage your project, is to utilise Rprojects! Rprojects set your working directory for you, and RStudio makes it easy to open your projects and begin where you left off last. Cleverly organised Rprojects are on of the best ways to ensure reproducibility in R.</p>
-<p>Let us create an Rproject for this course. When you maybe start you analysis project later, create a new one and start fresh!</p>
-<p>Create a project by going to<br />
-File -&gt; New Project … -&gt; New directory -&gt; New project</p>
-<p>Select the main directory you want to create your project in, and give the new folder a name, like “swc_tidyverse”. Click “Create project”.</p>
-<p>RStudio will restart in a fresh instance. Notice where the breadcrumbs in the navigation in the Files pane in RStudio. You should be able to recognise the file path to what you specified in the gui.</p>
-<p>For you projects we recommend structuring your projects in a clear fashion. Some guiding rules:</p>
-<ul>
-<li><code>data/</code> to keep all your raw data. To be read from, never written to.</li>
-<li><code>ouput</code> to keep your analysis results. To be written to and treated like disposable. Your results should be reproducible by your scripts.</li>
-<li><code>scripts</code> where you place your scripts, i.e. files with R code running your data handling and analyses.</li>
-</ul>
-<p>For instance, if you place your input data in <code>data/my_data.csv</code>, in your processing script saved in <code>scripts/linear_models.R</code>, and you have started RStudio by opening your project, you can read in the data with:</p>
-<pre class="r"><code>library(tidyverse)
-my_data &lt;- read_csv(&quot;data/my_data.csv&quot;)</code></pre>
-<p>This is called a <em>relative path</em> because the path to your data is <em>relative</em> to where your working directory is. And your working directory is the folder where the <code>my_project.Rproject</code> file is.</p>
-<p>We can also check the working directory in the console to be sure</p>
-<pre class="r"><code>getwd()</code></pre>
-<p>Rprojects are also great if you ever need to share your entire workflow with a colleague. If you are only using relative paths in your project, and all your scripts are safely stored in the project, giving your colleague the entire project folder should work without extra effort other than them installing the necessary packages you have used in your scripts.</p>
-<div id="rproject-challenges" class="section level2 tabset">
-<h2 class="tabset"><strong>Rproject, challenges</strong></h2>
-<div id="assignment" class="section level3">
-<h3>Assignment</h3>
-<p>Room: plenary<br />
-Duration: 5 minutes</p>
 <blockquote>
-<p><strong>1</strong> Close RStudio. Find the <code>.Rproject</code> file in the folder you made before for this project (i.e. navigate to the folder you made). Double click it. Did RStudio open your project for you?</p>
+<p><strong>Objectives</strong></p>
+<p>To be able to understand how to group data to create convenient summaries.</p>
 </blockquote>
-</div>
-<div id="solution" class="section level3">
-<h3>Solution</h3>
-<ul>
-<li>Double clicking <code>.Rproject</code> files will open them in RStudio.<br />
-</li>
-<li>If you don’t remember exactly where you put your project, try opening RStudio and looking for it in <code>Files -&gt; Recent projects</code>. This is the list of your most recently used projects. Hopefully it is in that list!</li>
-</ul>
-</div>
-</div>
-</div>
 <div id="data-summaries" class="section level1">
 <h1>Data summaries</h1>
 <p>Next to visualizing data, creating summaries of the data in tables is a quick way to get an idea of what type of data you have at hand. It might help you spot incorrect data or extreme values, or whether specific analysis approaches are needed.</p>
@@ -345,7 +303,7 @@ Duration: 5 minutes</p>
 ## 1             43.9            32.1            59.6</code></pre>
 <div id="data-summaries-challenges." class="section level2 tabset">
 <h2 class="tabset"><strong>Data summaries, challenges.</strong></h2>
-<div id="assignment-1" class="section level3">
+<div id="assignment" class="section level3">
 <h3>Assignment</h3>
 <p>Room: break-out<br />
 Duration: 10 minutes</p>
@@ -355,7 +313,7 @@ Duration: 10 minutes</p>
 <p><strong>1c</strong>: Now add the same two metrics for <code>flipper_length_mm</code> on <em>centimeter</em> scale and give the columns clear names. Why could the <code>drop_na()</code> step give us wrong results?</p>
 </blockquote>
 </div>
-<div id="solution-1" class="section level3">
+<div id="solution" class="section level3">
 <h3>Solution</h3>
 <pre class="r"><code>## 1a
 penguins %&gt;% 
